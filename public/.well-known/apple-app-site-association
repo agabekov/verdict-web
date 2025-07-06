@@ -1,15 +1,15 @@
-{
-  "applinks": {
-    "details": [
-      {
-        "appIDs": ["P2Z3C5SG9X.verdict-app"],
-        "components": [
-          {
-            "path": "/movie/*",
-            "comment": "Movie pages"
-          }
-        ]
-      }
-    ]
+  {
+    "applinks": {
+      "details": [
+        {
+          "appIDs": ["H6HQCQZD5M.verdict-app"],
+          "components": [
+            {
+              "path": "/movie/*",
+              "comment": "Movie pages"
+            }
+          ]
+        }
+      ]
+    }
   }
-}
