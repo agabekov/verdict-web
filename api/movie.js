@@ -11,10 +11,7 @@ export default async function handler(req, res) {
 
   try {
     // Fetch movie data from TMDB
-    const [movieResponse, creditsResponse] = await Promise.all([
-      fetch(`${TMDB_BASE_URL}/movie/${id}?api_key=${TMDB_API_KEY}&language=en-US`),
-      fetch(`${TMDB_BASE_URL}/movie/${id}/credits?api_key=${TMDB_API_KEY}`)
-    ]);
+    const movieResponse = await fetch(`${TMDB_BASE_URL}/movie/${id}?api_key=${TMDB_API_KEY}&language=en-US`);
     
     if (!movieResponse.ok) {
       if (movieResponse.status === 404) {
@@ -32,10 +29,9 @@ export default async function handler(req, res) {
     }
     
     const movie = await movieResponse.json();
-    const credits = creditsResponse.ok ? await creditsResponse.json() : { cast: [] };
     
     // Generate HTML page matching iOS design
-    const html = generateMovieHTML(movie, credits.cast);
+    const html = generateMovieHTML(movie);
     
     res.setHeader('Content-Type', 'text/html');
     res.status(200).send(html);
@@ -46,7 +42,7 @@ export default async function handler(req, res) {
   }
 }
 
-function generateMovieHTML(movie, cast = []) {
+function generateMovieHTML(movie) {
   const posterUrl = movie.poster_path 
     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
     : 'https://via.placeholder.com/300x450/cccccc/666666?text=No+Image';
@@ -55,11 +51,7 @@ function generateMovieHTML(movie, cast = []) {
     ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
     : posterUrl;
     
-  const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
   const year = movie.release_date ? new Date(movie.release_date).getFullYear() : 'Unknown';
-  
-  // Get top 6 cast members
-  const topCast = cast.slice(0, 6);
 
   return `
 <!DOCTYPE html>
@@ -117,31 +109,42 @@ function generateMovieHTML(movie, cast = []) {
         }
         
         .app-banner {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             color: white;
-            padding: 16px 20px;
+            padding: 20px;
             text-align: center;
             font-size: 16px;
             position: relative;
             z-index: 100;
         }
         
+        .banner-text {
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: rgba(255,255,255,0.9);
+        }
+        
         .download-btn {
-            background: rgba(255,255,255,0.9);
-            color: #667eea;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
             padding: 12px 24px;
-            border-radius: 8px;
+            border-radius: 12px;
             text-decoration: none;
             font-weight: 600;
             display: inline-block;
-            margin-top: 12px;
-            transition: all 0.2s ease;
-            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            font-size: 15px;
         }
         
         .download-btn:hover {
-            transform: translateY(-2px);
-            background: rgba(255,255,255,1);
+            background: rgba(255,255,255,0.25);
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
         
         .content-container {
@@ -190,47 +193,11 @@ function generateMovieHTML(movie, cast = []) {
             margin-bottom: 24px;
         }
         
-        .title-row {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            gap: 16px;
-        }
-        
         .movie-title {
             font-size: 28px;
             font-weight: 700;
             line-height: 1.2;
-            flex: 1;
-            min-width: 0;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-        
-        .action-btn {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            font-size: 20px;
-        }
-        
-        .action-btn:hover {
-            background: rgba(255,255,255,0.2);
-            transform: scale(1.05);
+            margin-bottom: 8px;
         }
         
         .release-year {
@@ -246,74 +213,6 @@ function generateMovieHTML(movie, cast = []) {
             margin-top: 8px;
         }
         
-        .rate-button {
-            margin: 24px;
-            padding: 16px;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 16px;
-            text-align: center;
-            color: #fff;
-            font-size: 16px;
-            font-weight: 600;
-            text-decoration: none;
-            display: block;
-            transition: all 0.2s ease;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        }
-        
-        .rate-button:hover {
-            background: rgba(255,255,255,0.15);
-            transform: translateY(-2px);
-        }
-        
-        .cast-section {
-            padding: 24px;
-        }
-        
-        .section-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            color: #fff;
-        }
-        
-        .cast-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 16px;
-            max-width: 600px;
-        }
-        
-        .cast-member {
-            text-align: center;
-        }
-        
-        .cast-photo {
-            width: 80px;
-            height: 80px;
-            border-radius: 40px;
-            object-fit: cover;
-            margin: 0 auto 8px;
-            background: rgba(255,255,255,0.1);
-            display: block;
-        }
-        
-        .cast-name {
-            font-size: 14px;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 4px;
-            line-height: 1.2;
-        }
-        
-        .cast-character {
-            font-size: 12px;
-            color: rgba(255,255,255,0.7);
-            line-height: 1.2;
-        }
-        
         .footer {
             text-align: center;
             padding: 40px 24px;
@@ -321,16 +220,6 @@ function generateMovieHTML(movie, cast = []) {
             font-size: 14px;
         }
         
-        .rating-badge {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            display: inline-block;
-            margin: 8px 0;
-        }
         
         @media (max-width: 768px) {
             .content-container {
@@ -340,31 +229,10 @@ function generateMovieHTML(movie, cast = []) {
             .movie-title {
                 font-size: 24px;
             }
-            
-            .title-row {
-                flex-direction: column;
-                gap: 12px;
-            }
-            
-            .action-buttons {
-                align-self: flex-start;
-            }
-            
-            .cast-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
-            .cast-photo {
-                width: 60px;
-                height: 60px;
-                border-radius: 30px;
-            }
         }
         
         @media (max-width: 480px) {
-            .movie-info,
-            .rate-button,
-            .cast-section {
+            .movie-info {
                 padding-left: 16px;
                 padding-right: 16px;
             }
@@ -380,9 +248,8 @@ function generateMovieHTML(movie, cast = []) {
     <div class="background-overlay"></div>
     
     <div class="app-banner">
-        🎬 Open this in Verdict app for the best experience!
-        <br>
-        <a href="https://apps.apple.com/app/verdict" class="download-btn">
+        <div class="banner-text">🎬 Open this in Verdict app for the best experience!</div>
+        <a href="https://go.daniyar.link/verdict-web" class="download-btn">
             Download from App Store
         </a>
     </div>
@@ -396,76 +263,18 @@ function generateMovieHTML(movie, cast = []) {
         </div>
         
         <div class="movie-info">
-            <div class="title-row">
-                <h1 class="movie-title">${movie.title}</h1>
-                <div class="action-buttons">
-                    <a href="#" class="action-btn" onclick="copyLink(); return false;" title="Copy link">
-                        <span id="link-icon">🔗</span>
-                    </a>
-                    <a href="#" class="action-btn" title="Add to watchlist">
-                        🔖
-                    </a>
-                </div>
-            </div>
+            <h1 class="movie-title">${movie.title}</h1>
             
             ${year !== 'Unknown' ? `<div class="release-year">${year}</div>` : ''}
-            
-            <div class="rating-badge">⭐ ${rating}/10</div>
             
             ${movie.overview ? `<div class="overview">${movie.overview}</div>` : ''}
         </div>
         
-        <a href="https://apps.apple.com/app/verdict" class="rate-button">
-            Rate this movie
-        </a>
-        
-        ${topCast.length > 0 ? `
-        <div class="cast-section">
-            <h2 class="section-title">Cast</h2>
-            <div class="cast-grid">
-                ${topCast.map(actor => `
-                    <div class="cast-member">
-                        <img src="${actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : 'https://via.placeholder.com/80x80/444444/ffffff?text=?'}" 
-                             alt="${actor.name}" class="cast-photo">
-                        <div class="cast-name">${actor.name}</div>
-                        <div class="cast-character">${actor.character}</div>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-        ` : ''}
-        
         <div class="footer">
-            Verdict - Rate and share your movie opinions
+            made in Verdict
         </div>
     </div>
 
-    <script>
-        function copyLink() {
-            const url = window.location.href;
-            navigator.clipboard.writeText(url).then(() => {
-                const icon = document.getElementById('link-icon');
-                icon.textContent = '✅';
-                setTimeout(() => {
-                    icon.textContent = '🔗';
-                }, 2000);
-            }).catch(() => {
-                // Fallback for older browsers
-                const textArea = document.createElement('textarea');
-                textArea.value = url;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                
-                const icon = document.getElementById('link-icon');
-                icon.textContent = '✅';
-                setTimeout(() => {
-                    icon.textContent = '🔗';
-                }, 2000);
-            });
-        }
-    </script>
 </body>
 </html>
   `;
