@@ -289,7 +289,6 @@ function generateTvSeriesHTML(tvSeries) {
             <div class="tv-details">
                 ${tvSeries.number_of_seasons ? `<div class="detail-item">📺 ${tvSeries.number_of_seasons} Season${tvSeries.number_of_seasons > 1 ? 's' : ''}</div>` : ''}
                 ${tvSeries.number_of_episodes ? `<div class="detail-item">🎬 ${tvSeries.number_of_episodes} Episodes</div>` : ''}
-                ${tvSeries.genres && tvSeries.genres.length > 0 ? `<div class="detail-item">🎭 ${tvSeries.genres.map(g => g.name).join(', ')}</div>` : ''}
             </div>
             
             ${tvSeries.overview ? `<div class="overview">${tvSeries.overview}</div>` : ''}
