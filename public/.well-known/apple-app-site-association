@@ -7,6 +7,10 @@
             {
               "path": "/movie/*",
               "comment": "Movie pages"
+            },
+            {
+              "path": "/tv/*",
+              "comment": "TV series pages"
             }
           ]
         }
