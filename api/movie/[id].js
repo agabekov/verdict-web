@@ -1,28 +1,36 @@
-import axios from 'axios';
-
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 export default async function handler(req, res) {
   const { id } = req.query;
   
-  // Проверяем наличие API ключа
+  // Check if API key is configured
   if (!TMDB_API_KEY) {
     return res.status(500).json({ error: 'TMDB API key not configured' });
   }
 
   try {
-    // Получаем данные фильма из TMDB
-    const response = await axios.get(`${TMDB_BASE_URL}/movie/${id}`, {
-      params: {
-        api_key: TMDB_API_KEY,
-        language: 'ru-RU'
+    // Fetch movie data from TMDB
+    const response = await fetch(`${TMDB_BASE_URL}/movie/${id}?api_key=${TMDB_API_KEY}&language=en-US`);
+    
+    if (!response.ok) {
+      if (response.status === 404) {
+        return res.status(404).send(`
+          <html>
+            <head><title>Movie Not Found</title></head>
+            <body>
+              <h1>Movie Not Found</h1>
+              <p>Movie with ID ${id} does not exist.</p>
+            </body>
+          </html>
+        `);
       }
-    });
-
-    const movie = response.data;
-
-    // Генерируем HTML страницу
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const movie = await response.json();
+    
+    // Generate HTML page
     const html = generateMovieHTML(movie);
     
     res.setHeader('Content-Type', 'text/html');
@@ -30,20 +38,6 @@ export default async function handler(req, res) {
     
   } catch (error) {
     console.error('Error fetching movie:', error);
-    
-    // Если фильм не найден
-    if (error.response?.status === 404) {
-      return res.status(404).send(`
-        <html>
-          <head><title>Фильм не найден</title></head>
-          <body>
-            <h1>Фильм не найден</h1>
-            <p>Фильм с ID ${id} не существует.</p>
-          </body>
-        </html>
-      `);
-    }
-    
     res.status(500).json({ error: 'Failed to fetch movie data' });
   }
 }
@@ -54,19 +48,19 @@ function generateMovieHTML(movie) {
     : 'https://via.placeholder.com/300x450/cccccc/666666?text=No+Image';
     
   const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
-  const year = movie.release_date ? new Date(movie.release_date).getFullYear() : 'Неизвестно';
+  const year = movie.release_date ? new Date(movie.release_date).getFullYear() : 'Unknown';
 
   return `
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${movie.title} - Verdict</title>
     
-    <!-- Open Graph для красивых превью -->
+    <!-- Open Graph for rich previews -->
     <meta property="og:title" content="${movie.title}">
-    <meta property="og:description" content="${movie.overview || 'Описание отсутствует'}">
+    <meta property="og:description" content="${movie.overview || 'No description available'}">
     <meta property="og:image" content="${posterUrl}">
     <meta property="og:url" content="https://verdict.daniyar.link/movie/${movie.id}">
     <meta property="og:type" content="video.movie">
@@ -169,10 +163,10 @@ function generateMovieHTML(movie) {
 </head>
 <body>
     <div class="app-banner">
-        🎬 Откройте это в приложении Verdict для лучшего опыта!
+        🎬 Open this in Verdict app for the best experience!
         <br>
         <a href="https://apps.apple.com/app/verdict" class="download-btn">
-            Скачать из App Store
+            Download from App Store
         </a>
     </div>
     
@@ -184,24 +178,24 @@ function generateMovieHTML(movie) {
                 <div class="rating">⭐ ${rating}/10</div>
                 
                 <div class="info-row">
-                    <span class="info-label">Год:</span> ${year}
+                    <span class="info-label">Year:</span> ${year}
                 </div>
                 
                 ${movie.genres && movie.genres.length > 0 ? `
                 <div class="info-row">
-                    <span class="info-label">Жанры:</span> ${movie.genres.map(g => g.name).join(', ')}
+                    <span class="info-label">Genres:</span> ${movie.genres.map(g => g.name).join(', ')}
                 </div>
                 ` : ''}
                 
                 ${movie.runtime ? `
                 <div class="info-row">
-                    <span class="info-label">Продолжительность:</span> ${movie.runtime} мин
+                    <span class="info-label">Runtime:</span> ${movie.runtime} min
                 </div>
                 ` : ''}
                 
                 ${movie.overview ? `
                 <div class="description">
-                    <div class="info-label">Описание:</div>
+                    <div class="info-label">Overview:</div>
                     ${movie.overview}
                 </div>
                 ` : ''}
@@ -210,7 +204,7 @@ function generateMovieHTML(movie) {
     </div>
 
     <script>
-        // Попытка открыть в приложении (для устройств без Universal Links)
+        // Try to open in app (fallback for devices without Universal Links)
         setTimeout(() => {
             if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
                 window.location.href = 'verdict://movie/${movie.id}';
