@@ -1,20 +1,20 @@
 {
   "functions": {
-    "api/movie/[id].js": {
+    "api/movie.js": {
       "maxDuration": 10
     },
-    "api/tv/[id].js": {
+    "api/tv.js": {
       "maxDuration": 10
     }
   },
   "rewrites": [
     {
       "source": "/movie/(.*)",
-      "destination": "/api/movie/$1"
+      "destination": "/api/movie?id=$1"
     },
     {
       "source": "/tv/(.*)",
-      "destination": "/api/tv/$1"
+      "destination": "/api/tv?id=$1"
     }
   ],
   "headers": [
