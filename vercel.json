@@ -1,9 +1,15 @@
 {
   "functions": {
-    "api/movie/[id].js": {
+    "api/[id].js": {
       "maxDuration": 10
     }
   },
+  "rewrites": [
+    {
+      "source": "/movie/(.*)",
+      "destination": "/api/$1"
+    }
+  ],
   "headers": [
     {
       "source": "/.well-known/apple-app-site-association",
