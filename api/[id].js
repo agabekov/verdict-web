@@ -203,14 +203,6 @@ function generateMovieHTML(movie) {
         </div>
     </div>
 
-    <script>
-        // Try to open in app (fallback for devices without Universal Links)
-        setTimeout(() => {
-            if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-                window.location.href = 'verdict://movie/${movie.id}';
-            }
-        }, 100);
-    </script>
 </body>
 </html>
   `;
