@@ -180,7 +180,7 @@
         }
     </style>
     <script>
-        // Массив постеров для заполнения (проверенные рабочие URL)
+        // Array of posters for filling (verified working URLs)
         const posters = [
             'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
             'https://image.tmdb.org/t/p/w500/6CoRTJTmijhBLJTUNoVSUNxZMEI.jpg',
@@ -207,7 +207,7 @@
             'https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg',
             'https://image.tmdb.org/t/p/w500/vB8o2p4ETnrfiWEgVxHmHWP9yRl.jpg',
             'https://image.tmdb.org/t/p/w500/cvsXj3I9Q2iyyIo95AecSd1tad7.jpg',
-            // Добавляем новые проверенные постеры
+            // Adding new verified posters
             'https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg',
             'https://image.tmdb.org/t/p/w500/gKkl37BQuKTanygYQG1pyYgLVgf.jpg',
             'https://image.tmdb.org/t/p/w500/6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg',
@@ -228,53 +228,53 @@
             const screenWidth = window.innerWidth;
             const screenHeight = window.innerHeight;
             
-            // Рассчитываем количество постеров для полного заполнения с запасом
+            // Calculate number of posters for full screen coverage with buffer
             const posterWidth = 122; // 120 + 2px gap
             const posterHeight = 182; // 180 + 2px gap
             const cols = Math.ceil((screenWidth * 1.3) / posterWidth);
             const rows = Math.ceil((screenHeight * 1.3) / posterHeight);
             const totalPosters = cols * rows;
             
-            // Очищаем существующие постеры
+            // Clear existing posters
             mosaic.innerHTML = '';
             
-            // Создаем постеры одинакового размера
+            // Create posters of equal size
             for (let i = 0; i < totalPosters; i++) {
                 const poster = document.createElement('div');
                 poster.className = 'poster';
                 
-                // Используем постер из массива (циклично)
+                // Use poster from array (cyclically)
                 const posterUrl = posters[i % posters.length];
                 
-                // Предзагружаем изображение
+                // Preload image
                 const img = new Image();
                 img.onload = function() {
                     poster.style.backgroundImage = `url('${posterUrl}')`;
                 };
                 img.onerror = function() {
-                    // Если картинка не загрузилась, используем резервную
+                    // If image failed to load, use fallback
                     console.log('Failed to load:', posterUrl);
                     poster.style.backgroundColor = '#444';
                 };
                 img.src = posterUrl;
                 
-                // Добавляем заглушку на случай если картинка не загрузится
+                // Add fallback in case image doesn't load
                 poster.style.backgroundColor = '#2a2a2a';
                 
                 mosaic.appendChild(poster);
             }
         }
 
-        // Создаем мозаику при загрузке страницы
+        // Create mosaic on page load
         window.addEventListener('load', createMosaic);
         
-        // Пересоздаем мозаику при изменении размера окна
+        // Recreate mosaic on window resize
         window.addEventListener('resize', createMosaic);
     </script>
 </head>
 <body>
     <div class="background-mosaic">
-        <!-- Postory будут созданы JavaScript'ом -->
+        <!-- Posters will be created by JavaScript -->
     </div>
     <div class="overlay"></div>
     <div class="container">
@@ -288,5 +288,7 @@
             <a href="https://x.com/daniyar_ag" target="_blank">made by Daniyar Agabekov</a>
         </p>
     </div>
+    <!-- 100% privacy-first analytics -->
+    <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
 </body>
 </html>
