@@ -271,6 +271,11 @@
         // Recreate mosaic on window resize
         window.addEventListener('resize', createMosaic);
     </script>
+    
+    <script type="module">
+        import { inject } from '@vercel/analytics';
+        inject();
+    </script>
 </head>
 <body>
     <div class="background-mosaic">
@@ -288,7 +293,5 @@
             <a href="https://x.com/daniyar_ag" target="_blank">made by Daniyar Agabekov</a>
         </p>
     </div>
-    <!-- 100% privacy-first analytics -->
-    <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
 </body>
 </html>

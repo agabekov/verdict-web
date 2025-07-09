@@ -274,7 +274,11 @@ function generateMovieHTML(movie) {
             made in Verdict
         </div>
     </div>
-
+    
+    <script type="module">
+        import { inject } from '@vercel/analytics';
+        inject();
+    </script>
 </body>
 </html>
   `;
