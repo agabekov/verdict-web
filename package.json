@@ -1,0 +1,13 @@
+{
+  "name": "verdict-web",
+  "version": "1.0.0",
+  "description": "Verdict web server for Universal Links",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Build complete'"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^1.5.0",
+    "axios": "^1.6.0"
+  }
+}

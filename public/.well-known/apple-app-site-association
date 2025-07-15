@@ -1,0 +1,19 @@
+  {
+    "applinks": {
+      "details": [
+        {
+          "appIDs": ["H6HQCQZD5M.verdict-app"],
+          "components": [
+            {
+              "path": "/movie/*",
+              "comment": "Movie pages"
+            },
+            {
+              "path": "/tv/*",
+              "comment": "TV series pages"
+            }
+          ]
+        }
+      ]
+    }
+  }

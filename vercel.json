@@ -1,0 +1,31 @@
+{
+  "functions": {
+    "api/movie.js": {
+      "maxDuration": 10
+    },
+    "api/tv.js": {
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/movie/(.*)",
+      "destination": "/api/movie?id=$1"
+    },
+    {
+      "source": "/tv/(.*)",
+      "destination": "/api/tv?id=$1"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/.well-known/apple-app-site-association",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    }
+  ]
+}
