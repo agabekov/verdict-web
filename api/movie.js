@@ -279,6 +279,7 @@ function generateMovieHTML(movie) {
         import { inject } from '@vercel/analytics';
         inject();
     </script>
+    <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
 </body>
 </html>
   `;
