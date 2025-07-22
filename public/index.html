@@ -57,10 +57,18 @@
             height: 120%;
             top: -10%;
             left: -10%;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            grid-template-rows: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 2px;
+            background-image: 
+                url('https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'),
+                url('https://image.tmdb.org/t/p/w500/6CoRTJTmijhBLJTUNoVSUNxZMEI.jpg'),
+                url('https://image.tmdb.org/t/p/w500/cxevDYdeFkiixRShbObdwAHBZry.jpg'),
+                url('https://image.tmdb.org/t/p/w500/1BIoJGKbXjdFDAqUEiA2VHqkK1Z.jpg'),
+                url('https://image.tmdb.org/t/p/w500/aQvJ5WPzZgYVDrxLX4R6cLJCEaQ.jpg'),
+                url('https://image.tmdb.org/t/p/w500/iQFcwSGbZXMkeyKrxbPnwnRo5fl.jpg'),
+                url('https://image.tmdb.org/t/p/w500/pThyQovXQrw2m0s9x82twj48Jq4.jpg'),
+                url('https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg');
+            background-size: 122px 182px;
+            background-repeat: repeat;
+            background-position: 0 0, 122px 0, 244px 0, 366px 0, 0 182px, 122px 182px, 244px 182px, 366px 182px;
             filter: blur(6px) saturate(1.2);
             opacity: 0.4;
             z-index: -1;
@@ -73,20 +81,6 @@
             50% { transform: rotate(-2deg) translateY(-10px); }
         }
         
-        .poster {
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            border-radius: 4px;
-            transition: transform 0.3s ease;
-            background-color: #333;
-            min-width: 120px;
-            min-height: 180px;
-        }
-        
-        .poster:hover {
-            transform: scale(1.05);
-        }
         
         
         .overlay {
@@ -182,104 +176,10 @@
             transform: translateY(-1px);
         }
     </style>
-    <script>
-        // Array of posters for filling (verified working URLs)
-        const posters = [
-            'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
-            'https://image.tmdb.org/t/p/w500/6CoRTJTmijhBLJTUNoVSUNxZMEI.jpg',
-            'https://image.tmdb.org/t/p/w500/cxevDYdeFkiixRShbObdwAHBZry.jpg',
-            'https://image.tmdb.org/t/p/w500/1BIoJGKbXjdFDAqUEiA2VHqkK1Z.jpg',
-            'https://image.tmdb.org/t/p/w500/aQvJ5WPzZgYVDrxLX4R6cLJCEaQ.jpg',
-            'https://image.tmdb.org/t/p/w500/iQFcwSGbZXMkeyKrxbPnwnRo5fl.jpg',
-            'https://image.tmdb.org/t/p/w500/pThyQovXQrw2m0s9x82twj48Jq4.jpg',
-            'https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg',
-            'https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg',
-            'https://image.tmdb.org/t/p/w500/8UlWHLMpgZm9bx6QYh0NFoq67TZ.jpg',
-            'https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg',
-            'https://image.tmdb.org/t/p/w500/mKOBdgaEFguADkJhfFslY7TYxIh.jpg',
-            'https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg',
-            'https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg',
-            'https://image.tmdb.org/t/p/w500/vfrQk5IPloGg1v9Rzbh2Eg3VGyM.jpg',
-            'https://image.tmdb.org/t/p/w500/9Gtg2DzBhmYamXBS1hKAhiwbBKS.jpg',
-            'https://image.tmdb.org/t/p/w500/3bhkrj58Vtu7enYsRolD1fZdja1.jpg',
-            'https://image.tmdb.org/t/p/w500/dkokENeY5Ka30BFgWAqk14mbnGs.jpg',
-            'https://image.tmdb.org/t/p/w500/xBHvZcjRiWyobQ9kxBhO6B2dtRI.jpg',
-            'https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg',
-            'https://image.tmdb.org/t/p/w500/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg',
-            'https://image.tmdb.org/t/p/w500/sKCr78MXSLixwmZ8DyJLrpMsd15.jpg',
-            'https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg',
-            'https://image.tmdb.org/t/p/w500/vB8o2p4ETnrfiWEgVxHmHWP9yRl.jpg',
-            'https://image.tmdb.org/t/p/w500/cvsXj3I9Q2iyyIo95AecSd1tad7.jpg',
-            // Adding new verified posters
-            'https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg',
-            'https://image.tmdb.org/t/p/w500/gKkl37BQuKTanygYQG1pyYgLVgf.jpg',
-            'https://image.tmdb.org/t/p/w500/6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg',
-            'https://image.tmdb.org/t/p/w500/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg',
-            'https://image.tmdb.org/t/p/w500/pIkRyD18kl4FhoCNQuWxWu5cBLM.jpg',
-            'https://image.tmdb.org/t/p/w500/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg',
-            'https://image.tmdb.org/t/p/w500/kGzFbGhp99zva6oZODW5atUtnqi.jpg',
-            'https://image.tmdb.org/t/p/w500/v1QQKq8M0fWxMgSdGOX1aCv8qMB.jpg',
-            'https://image.tmdb.org/t/p/w500/zLudbPueg8CxGhMS2tyDh3p0TdK.jpg',
-            'https://image.tmdb.org/t/p/w500/qNBAXBIQlnOThrVvA6mA2B5ggV6.jpg',
-            'https://image.tmdb.org/t/p/w500/jrgifaYeUtTnaH7NF5Drkgjg2MB.jpg',
-            'https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg',
-            'https://image.tmdb.org/t/p/w500/aosm8NMQ3UyoBVpSxyimorCQykC.jpg'
-        ];
-
-        function createMosaic() {
-            const mosaic = document.querySelector('.background-mosaic');
-            const screenWidth = window.innerWidth;
-            const screenHeight = window.innerHeight;
-            
-            // Calculate number of posters for full screen coverage with buffer
-            const posterWidth = 122; // 120 + 2px gap
-            const posterHeight = 182; // 180 + 2px gap
-            const cols = Math.ceil((screenWidth * 1.3) / posterWidth);
-            const rows = Math.ceil((screenHeight * 1.3) / posterHeight);
-            const totalPosters = cols * rows;
-            
-            // Clear existing posters
-            mosaic.innerHTML = '';
-            
-            // Create posters of equal size
-            for (let i = 0; i < totalPosters; i++) {
-                const poster = document.createElement('div');
-                poster.className = 'poster';
-                
-                // Use poster from array (cyclically)
-                const posterUrl = posters[i % posters.length];
-                
-                // Preload image
-                const img = new Image();
-                img.onload = function() {
-                    poster.style.backgroundImage = `url('${posterUrl}')`;
-                };
-                img.onerror = function() {
-                    // If image failed to load, use fallback
-                    console.log('Failed to load:', posterUrl);
-                    poster.style.backgroundColor = '#444';
-                };
-                img.src = posterUrl;
-                
-                // Add fallback in case image doesn't load
-                poster.style.backgroundColor = '#2a2a2a';
-                
-                mosaic.appendChild(poster);
-            }
-        }
-
-        // Create mosaic on page load
-        window.addEventListener('load', createMosaic);
-        
-        // Recreate mosaic on window resize
-        window.addEventListener('resize', createMosaic);
-    </script>
     
 </head>
 <body>
-    <div class="background-mosaic">
-        <!-- Posters will be created by JavaScript -->
-    </div>
+    <div class="background-mosaic"></div>
     <div class="overlay"></div>
     <div class="container">
         <div class="app-icon"></div>
