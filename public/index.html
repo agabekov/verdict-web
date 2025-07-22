@@ -53,32 +53,65 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 120%;
-            height: 120%;
-            top: -10%;
-            left: -10%;
-            background-image: 
-                url('https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'),
-                url('https://image.tmdb.org/t/p/w500/6CoRTJTmijhBLJTUNoVSUNxZMEI.jpg'),
-                url('https://image.tmdb.org/t/p/w500/cxevDYdeFkiixRShbObdwAHBZry.jpg'),
-                url('https://image.tmdb.org/t/p/w500/1BIoJGKbXjdFDAqUEiA2VHqkK1Z.jpg'),
-                url('https://image.tmdb.org/t/p/w500/aQvJ5WPzZgYVDrxLX4R6cLJCEaQ.jpg'),
-                url('https://image.tmdb.org/t/p/w500/iQFcwSGbZXMkeyKrxbPnwnRo5fl.jpg'),
-                url('https://image.tmdb.org/t/p/w500/pThyQovXQrw2m0s9x82twj48Jq4.jpg'),
-                url('https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg');
-            background-size: 122px 182px;
-            background-repeat: repeat;
-            background-position: 0 0, 122px 0, 244px 0, 366px 0, 0 182px, 122px 182px, 244px 182px, 366px 182px;
-            filter: blur(6px) saturate(1.2);
-            opacity: 0.4;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, white 1px, transparent 3px),
+                radial-gradient(circle at 80% 10%, white 1px, transparent 3px),
+                radial-gradient(circle at 40% 40%, white 1px, transparent 3px),
+                radial-gradient(circle at 90% 80%, white 1px, transparent 3px),
+                radial-gradient(circle at 15% 70%, white 1px, transparent 3px),
+                radial-gradient(circle at 70% 30%, white 1px, transparent 3px),
+                radial-gradient(circle at 30% 90%, white 1px, transparent 3px),
+                radial-gradient(circle at 85% 50%, white 1px, transparent 3px),
+                radial-gradient(circle at 5% 50%, white 1px, transparent 3px),
+                radial-gradient(circle at 60% 70%, white 1px, transparent 3px),
+                radial-gradient(circle at 25% 15%, white 1px, transparent 3px),
+                radial-gradient(circle at 95% 25%, white 1px, transparent 3px),
+                radial-gradient(circle at 50% 5%, white 1px, transparent 3px),
+                radial-gradient(circle at 75% 90%, white 1px, transparent 3px),
+                radial-gradient(circle at 35% 60%, white 1px, transparent 3px),
+                radial-gradient(circle at 65% 15%, white 1px, transparent 3px),
+                radial-gradient(circle at 20% 80%, white 1px, transparent 3px),
+                radial-gradient(circle at 90% 35%, white 1px, transparent 3px),
+                radial-gradient(circle at 45% 75%, white 1px, transparent 3px),
+                radial-gradient(circle at 75% 60%, white 1px, transparent 3px),
+                radial-gradient(circle at 12% 45%, white 1px, transparent 3px),
+                radial-gradient(circle at 88% 65%, white 1px, transparent 3px),
+                radial-gradient(circle at 32% 25%, white 1px, transparent 3px),
+                radial-gradient(circle at 68% 85%, white 1px, transparent 3px),
+                radial-gradient(circle at 22% 55%, white 1px, transparent 3px),
+                radial-gradient(circle at 78% 15%, white 1px, transparent 3px),
+                radial-gradient(circle at 42% 95%, white 1px, transparent 3px),
+                radial-gradient(circle at 58% 35%, white 1px, transparent 3px),
+                radial-gradient(circle at 18% 25%, white 1px, transparent 3px),
+                radial-gradient(circle at 82% 75%, white 1px, transparent 3px),
+                radial-gradient(circle at 38% 15%, white 1px, transparent 3px),
+                radial-gradient(circle at 62% 95%, white 1px, transparent 3px),
+                radial-gradient(circle at 28% 65%, white 1px, transparent 3px),
+                radial-gradient(circle at 72% 25%, white 1px, transparent 3px),
+                radial-gradient(circle at 48% 85%, white 1px, transparent 3px),
+                radial-gradient(circle at 52% 45%, white 1px, transparent 3px),
+                radial-gradient(circle at 8% 75%, white 1px, transparent 3px),
+                radial-gradient(circle at 92% 15%, white 1px, transparent 3px),
+                radial-gradient(circle at 14% 95%, white 1px, transparent 3px),
+                radial-gradient(circle at 86% 45%, white 1px, transparent 3px),
+                radial-gradient(circle at 34% 5%, white 1px, transparent 3px),
+                radial-gradient(circle at 66% 75%, white 1px, transparent 3px),
+                radial-gradient(circle at 24% 35%, white 1px, transparent 3px),
+                radial-gradient(circle at 76% 55%, white 1px, transparent 3px),
+                radial-gradient(circle at 44% 25%, white 1px, transparent 3px),
+                radial-gradient(circle at 56% 85%, white 1px, transparent 3px),
+                #1a1a1a;
+            background-size: 100% 100%;
+            filter: blur(0.3px);
             z-index: -1;
-            transform: rotate(-2deg);
-            animation: float 20s ease-in-out infinite;
+            animation: starfieldMove 40s linear infinite;
         }
         
-        @keyframes float {
-            0%, 100% { transform: rotate(-2deg) translateY(0px); }
-            50% { transform: rotate(-2deg) translateY(-10px); }
+        @keyframes starfieldMove {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(-200px) translateY(-200px); }
         }
         
         
@@ -89,7 +122,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%);
+            background: radial-gradient(circle at center, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
             z-index: 0;
         }
         
