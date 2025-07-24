@@ -236,21 +236,21 @@ function generateMovieHTML(movie, credits, keywords, reviews) {
         }
         
         .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
+            max-width: 800px;
+            margin: 0 auto;
             padding: 0 24px;
-            margin-bottom: 24px;
+            text-align: center;
         }
         
         .poster-section {
             display: flex;
             justify-content: center;
+            margin-bottom: 32px;
         }
         
         .poster-container {
-            width: 70%;
-            max-width: 280px;
+            width: 60%;
+            max-width: 300px;
             position: relative;
         }
         
@@ -276,6 +276,7 @@ function generateMovieHTML(movie, credits, keywords, reviews) {
         }
         
         .movie-info {
+            text-align: left;
             margin-bottom: 24px;
         }
         
@@ -479,31 +480,6 @@ function generateMovieHTML(movie, credits, keywords, reviews) {
             margin-top: 12px;
         }
         
-        @media (min-width: 768px) {
-            .main-content {
-                flex-direction: row;
-                align-items: flex-start;
-                gap: 40px;
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 0 40px;
-            }
-            
-            .poster-section {
-                flex: 0 0 300px;
-                justify-content: flex-start;
-            }
-            
-            .poster-container {
-                width: 100%;
-                max-width: 300px;
-            }
-            
-            .movie-info {
-                flex: 1;
-                margin-bottom: 0;
-            }
-        }
         
         .movie-title {
             font-size: 28px;

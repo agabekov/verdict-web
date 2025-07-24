@@ -239,21 +239,21 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews) {
         }
         
         .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
+            max-width: 800px;
+            margin: 0 auto;
             padding: 0 24px;
-            margin-bottom: 24px;
+            text-align: center;
         }
         
         .poster-section {
             display: flex;
             justify-content: center;
+            margin-bottom: 32px;
         }
         
         .poster-container {
-            width: 70%;
-            max-width: 280px;
+            width: 60%;
+            max-width: 300px;
             position: relative;
         }
         
@@ -279,6 +279,7 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews) {
         }
         
         .tv-info {
+            text-align: left;
             margin-bottom: 24px;
         }
         
@@ -467,31 +468,6 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews) {
             margin-top: 12px;
         }
         
-        @media (min-width: 768px) {
-            .main-content {
-                flex-direction: row;
-                align-items: flex-start;
-                gap: 40px;
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 0 40px;
-            }
-            
-            .poster-section {
-                flex: 0 0 300px;
-                justify-content: flex-start;
-            }
-            
-            .poster-container {
-                width: 100%;
-                max-width: 300px;
-            }
-            
-            .tv-info {
-                flex: 1;
-                margin-bottom: 0;
-            }
-        }
         
         .tv-title {
             font-size: 28px;
