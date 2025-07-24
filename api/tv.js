@@ -155,11 +155,17 @@ function generateTvSeriesHTML(tvSeries) {
             min-height: 100vh;
         }
         
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding: 0 24px;
+            margin-bottom: 24px;
+        }
+        
         .poster-section {
             display: flex;
             justify-content: center;
-            padding: 0 24px;
-            margin-bottom: 24px;
         }
         
         .poster-container {
@@ -190,8 +196,33 @@ function generateTvSeriesHTML(tvSeries) {
         }
         
         .tv-info {
-            padding: 0 24px;
             margin-bottom: 24px;
+        }
+        
+        @media (min-width: 768px) {
+            .main-content {
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 40px;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 40px;
+            }
+            
+            .poster-section {
+                flex: 0 0 300px;
+                justify-content: flex-start;
+            }
+            
+            .poster-container {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .tv-info {
+                flex: 1;
+                margin-bottom: 0;
+            }
         }
         
         .tv-title {
@@ -274,24 +305,26 @@ function generateTvSeriesHTML(tvSeries) {
     </div>
     
     <div class="content-container">
-        <div class="poster-section">
-            <div class="poster-container">
-                <img src="${posterUrl}" alt="${tvSeries.name}" class="poster">
-                <div class="poster-gradient"></div>
-            </div>
-        </div>
-        
-        <div class="tv-info">
-            <h1 class="tv-title">${tvSeries.name}</h1>
-            
-            ${year !== 'Unknown' ? `<div class="release-year">${year}</div>` : ''}
-            
-            <div class="tv-details">
-                ${tvSeries.number_of_seasons ? `<div class="detail-item">📺 ${tvSeries.number_of_seasons} Season${tvSeries.number_of_seasons > 1 ? 's' : ''}</div>` : ''}
-                ${tvSeries.number_of_episodes ? `<div class="detail-item">🎬 ${tvSeries.number_of_episodes} Episodes</div>` : ''}
+        <div class="main-content">
+            <div class="poster-section">
+                <div class="poster-container">
+                    <img src="${posterUrl}" alt="${tvSeries.name}" class="poster">
+                    <div class="poster-gradient"></div>
+                </div>
             </div>
             
-            ${tvSeries.overview ? `<div class="overview">${tvSeries.overview}</div>` : ''}
+            <div class="tv-info">
+                <h1 class="tv-title">${tvSeries.name}</h1>
+                
+                ${year !== 'Unknown' ? `<div class="release-year">${year}</div>` : ''}
+                
+                <div class="tv-details">
+                    ${tvSeries.number_of_seasons ? `<div class="detail-item">📺 ${tvSeries.number_of_seasons} Season${tvSeries.number_of_seasons > 1 ? 's' : ''}</div>` : ''}
+                    ${tvSeries.number_of_episodes ? `<div class="detail-item">🎬 ${tvSeries.number_of_episodes} Episodes</div>` : ''}
+                </div>
+                
+                ${tvSeries.overview ? `<div class="overview">${tvSeries.overview}</div>` : ''}
+            </div>
         </div>
         
         <div class="footer">

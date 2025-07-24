@@ -154,11 +154,17 @@ function generateMovieHTML(movie) {
             min-height: 100vh;
         }
         
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding: 0 24px;
+            margin-bottom: 24px;
+        }
+        
         .poster-section {
             display: flex;
             justify-content: center;
-            padding: 0 24px;
-            margin-bottom: 24px;
         }
         
         .poster-container {
@@ -189,8 +195,33 @@ function generateMovieHTML(movie) {
         }
         
         .movie-info {
-            padding: 0 24px;
             margin-bottom: 24px;
+        }
+        
+        @media (min-width: 768px) {
+            .main-content {
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 40px;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 40px;
+            }
+            
+            .poster-section {
+                flex: 0 0 300px;
+                justify-content: flex-start;
+            }
+            
+            .poster-container {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .movie-info {
+                flex: 1;
+                margin-bottom: 0;
+            }
         }
         
         .movie-title {
@@ -255,19 +286,21 @@ function generateMovieHTML(movie) {
     </div>
     
     <div class="content-container">
-        <div class="poster-section">
-            <div class="poster-container">
-                <img src="${posterUrl}" alt="${movie.title}" class="poster">
-                <div class="poster-gradient"></div>
+        <div class="main-content">
+            <div class="poster-section">
+                <div class="poster-container">
+                    <img src="${posterUrl}" alt="${movie.title}" class="poster">
+                    <div class="poster-gradient"></div>
+                </div>
             </div>
-        </div>
-        
-        <div class="movie-info">
-            <h1 class="movie-title">${movie.title}</h1>
             
-            ${year !== 'Unknown' ? `<div class="release-year">${year}</div>` : ''}
-            
-            ${movie.overview ? `<div class="overview">${movie.overview}</div>` : ''}
+            <div class="movie-info">
+                <h1 class="movie-title">${movie.title}</h1>
+                
+                ${year !== 'Unknown' ? `<div class="release-year">${year}</div>` : ''}
+                
+                ${movie.overview ? `<div class="overview">${movie.overview}</div>` : ''}
+            </div>
         </div>
         
         <div class="footer">
