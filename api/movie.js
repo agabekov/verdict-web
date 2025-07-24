@@ -573,37 +573,6 @@ function generateMovieHTML(movie, credits, keywords, reviews) {
                 
                 ${movie.overview ? `<div class="overview">${movie.overview}</div>` : ''}
                 
-                ${credits.crew && credits.crew.length > 0 ? (() => {
-                  const directors = credits.crew.filter(person => person.job === 'Director');
-                  const writers = credits.crew.filter(person => ['Writer', 'Screenplay', 'Story'].includes(person.job));
-                  const producers = credits.crew.filter(person => person.job === 'Producer');
-                  
-                  return `<div class="crew-section">
-                    <h3 style="font-size: 18px; margin: 20px 0 10px 0; color: rgba(255,255,255,0.9);">Crew</h3>
-                    <div class="crew-grid">
-                        ${directors.length > 0 ? `<div class="crew-role">
-                            <div class="crew-role-title">Director</div>
-                            <div class="crew-names">${directors.map(d => d.name).join(', ')}</div>
-                        </div>` : ''}
-                        ${writers.length > 0 ? `<div class="crew-role">
-                            <div class="crew-role-title">Writer</div>
-                            <div class="crew-names">${writers.slice(0, 3).map(w => w.name).join(', ')}</div>
-                        </div>` : ''}
-                        ${producers.length > 0 ? `<div class="crew-role">
-                            <div class="crew-role-title">Producer</div>
-                            <div class="crew-names">${producers.slice(0, 3).map(p => p.name).join(', ')}</div>
-                        </div>` : ''}
-                    </div>
-                </div>`;
-                })() : ''}
-                
-                ${movie.production_companies && movie.production_companies.length > 0 ? `<div class="production-info">
-                    <h3 style="font-size: 18px; margin: 20px 0 10px 0; color: rgba(255,255,255,0.9);">Production</h3>
-                    <div style="font-size: 15px; color: rgba(255,255,255,0.7);">
-                        ${movie.production_companies.map(pc => pc.name).join(', ')}
-                    </div>
-                </div>` : ''}
-                
                 ${credits.cast && credits.cast.length > 0 ? `<div class="cast-section">
                     <h3 style="font-size: 18px; margin: 20px 0 10px 0; color: rgba(255,255,255,0.9);">Cast</h3>
                     <div class="cast-grid">
@@ -638,6 +607,37 @@ function generateMovieHTML(movie, credits, keywords, reviews) {
                     `).join('')}
                 </div>`;
                 })() : ''}
+                
+                ${credits.crew && credits.crew.length > 0 ? (() => {
+                  const directors = credits.crew.filter(person => person.job === 'Director');
+                  const writers = credits.crew.filter(person => ['Writer', 'Screenplay', 'Story'].includes(person.job));
+                  const producers = credits.crew.filter(person => person.job === 'Producer');
+                  
+                  return `<div class="crew-section">
+                    <h3 style="font-size: 18px; margin: 20px 0 10px 0; color: rgba(255,255,255,0.9);">Crew</h3>
+                    <div class="crew-grid">
+                        ${directors.length > 0 ? `<div class="crew-role">
+                            <div class="crew-role-title">Director</div>
+                            <div class="crew-names">${directors.map(d => d.name).join(', ')}</div>
+                        </div>` : ''}
+                        ${writers.length > 0 ? `<div class="crew-role">
+                            <div class="crew-role-title">Writer</div>
+                            <div class="crew-names">${writers.slice(0, 3).map(w => w.name).join(', ')}</div>
+                        </div>` : ''}
+                        ${producers.length > 0 ? `<div class="crew-role">
+                            <div class="crew-role-title">Producer</div>
+                            <div class="crew-names">${producers.slice(0, 3).map(p => p.name).join(', ')}</div>
+                        </div>` : ''}
+                    </div>
+                </div>`;
+                })() : ''}
+                
+                ${movie.production_companies && movie.production_companies.length > 0 ? `<div class="production-info">
+                    <h3 style="font-size: 18px; margin: 20px 0 10px 0; color: rgba(255,255,255,0.9);">Production</h3>
+                    <div style="font-size: 15px; color: rgba(255,255,255,0.7);">
+                        ${movie.production_companies.map(pc => pc.name).join(', ')}
+                    </div>
+                </div>` : ''}
                 
                 ${keywords.keywords && keywords.keywords.length > 0 ? `<div class="keywords-section">
                     <h4 style="font-size: 16px; margin: 0 0 8px 0; color: rgba(255,255,255,0.8);">Keywords</h4>
