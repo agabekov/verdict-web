@@ -597,6 +597,13 @@ function generateMovieHTML(movie, credits, keywords, reviews) {
                 </div>`;
                 })() : ''}
                 
+                ${movie.production_companies && movie.production_companies.length > 0 ? `<div class="production-info">
+                    <h3 style="font-size: 18px; margin: 20px 0 10px 0; color: rgba(255,255,255,0.9);">Production</h3>
+                    <div style="font-size: 15px; color: rgba(255,255,255,0.7);">
+                        ${movie.production_companies.map(pc => pc.name).join(', ')}
+                    </div>
+                </div>` : ''}
+                
                 ${credits.cast && credits.cast.length > 0 ? `<div class="cast-section">
                     <h3 style="font-size: 18px; margin: 20px 0 10px 0; color: rgba(255,255,255,0.9);">Cast</h3>
                     <div class="cast-grid">
@@ -611,26 +618,26 @@ function generateMovieHTML(movie, credits, keywords, reviews) {
                     </div>
                 </div>` : ''}
                 
-                ${reviews.results && reviews.results.length > 0 ? `<div class="reviews-section">
+                ${reviews.results && reviews.results.length > 0 ? (() => {
+                  const sortedReviews = reviews.results
+                    .filter(review => review.created_at)
+                    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                    .slice(0, 3);
+                  
+                  return `<div class="reviews-section">
                     <h3 style="font-size: 18px; margin: 20px 0 16px 0; color: rgba(255,255,255,0.9);">User Reviews</h3>
-                    ${reviews.results.slice(0, 3).map(review => `
+                    ${sortedReviews.map(review => `
                         <div class="review-item">
                             <div class="review-header">
                                 <div class="review-author">${review.author}</div>
                                 ${review.author_details && review.author_details.rating ? `<div class="review-rating">★ ${review.author_details.rating}/10</div>` : ''}
                             </div>
-                            <div class="review-content truncated">${review.content}</div>
+                            <div class="review-content">${review.content}</div>
                             ${review.created_at ? `<div class="review-date">${new Date(review.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>` : ''}
                         </div>
                     `).join('')}
-                </div>` : ''}
-                
-                ${movie.production_companies && movie.production_companies.length > 0 ? `<div class="production-info">
-                    <h3 style="font-size: 18px; margin: 20px 0 10px 0; color: rgba(255,255,255,0.9);">Production</h3>
-                    <div style="font-size: 15px; color: rgba(255,255,255,0.7);">
-                        ${movie.production_companies.map(pc => pc.name).join(', ')}
-                    </div>
-                </div>` : ''}
+                </div>`;
+                })() : ''}
                 
                 ${keywords.keywords && keywords.keywords.length > 0 ? `<div class="keywords-section">
                     <h4 style="font-size: 16px; margin: 0 0 8px 0; color: rgba(255,255,255,0.8);">Keywords</h4>
