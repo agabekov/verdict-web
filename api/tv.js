@@ -746,7 +746,7 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData)
         </div>
         
         <div class="footer">
-            made with <a href="https://go.daniyar.link/verdict-web" style="color: rgba(255,255,255,0.8); text-decoration: none;">Verdict</a>
+            <a href="https://go.daniyar.link/verdict-web" style="color: rgba(255,255,255,0.8); text-decoration: none;">made with Verdict</a>
         </div>
     </div>
     
