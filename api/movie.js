@@ -536,7 +536,7 @@ function generateMovieHTML(movie, credits, keywords, reviews) {
     <div class="background-overlay"></div>
     
     <div class="app-banner">
-        <div class="banner-text">🎬 Open this in Verdict app for the best experience!</div>
+        <div class="banner-text">🎬 Open in Verdict, rate it and share with friends</div>
         <a href="https://go.daniyar.link/verdict-web" class="download-btn">
             Download from App Store
         </a>
@@ -649,7 +649,7 @@ function generateMovieHTML(movie, credits, keywords, reviews) {
         </div>
         
         <div class="footer">
-            made in Verdict
+            made with <a href="https://go.daniyar.link/verdict-web" style="color: rgba(255,255,255,0.8); text-decoration: none;">Verdict</a>
         </div>
     </div>
     
