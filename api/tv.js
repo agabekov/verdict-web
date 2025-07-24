@@ -60,6 +60,8 @@ function generateTvSeriesHTML(tvSeries) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${tvSeries.name} - Verdict</title>
+    <meta name="description" content="${tvSeries.overview || `${tvSeries.name} - Watch and discover TV series on Verdict app`}">
+    <link rel="canonical" href="https://verdict.daniyar.link/tv/${tvSeries.id}">
     
     <!-- Open Graph for rich previews -->
     <meta property="og:title" content="${tvSeries.name}">
@@ -67,6 +69,40 @@ function generateTvSeriesHTML(tvSeries) {
     <meta property="og:image" content="${posterUrl}">
     <meta property="og:url" content="https://verdict.daniyar.link/tv/${tvSeries.id}">
     <meta property="og:type" content="video.tv_show">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TVSeries",
+      "name": "${tvSeries.name}",
+      "url": "https://verdict.daniyar.link/tv/${tvSeries.id}",
+      "image": {
+        "@type": "ImageObject",
+        "url": "${posterUrl}",
+        "width": 500,
+        "height": 750
+      },
+      ${tvSeries.overview ? `"description": "${tvSeries.overview.replace(/"/g, '\\"')}",` : ''}
+      ${tvSeries.first_air_date ? `"startDate": "${tvSeries.first_air_date}",` : ''}
+      ${tvSeries.last_air_date ? `"endDate": "${tvSeries.last_air_date}",` : ''}
+      ${tvSeries.number_of_seasons ? `"numberOfSeasons": ${tvSeries.number_of_seasons},` : ''}
+      ${tvSeries.number_of_episodes ? `"numberOfEpisodes": ${tvSeries.number_of_episodes},` : ''}
+      ${tvSeries.vote_average ? `"aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "${tvSeries.vote_average}",
+        "ratingCount": "${tvSeries.vote_count || 1}",
+        "bestRating": "10",
+        "worstRating": "1"
+      },` : ''}
+      ${tvSeries.genres && tvSeries.genres.length > 0 ? `"genre": [${tvSeries.genres.map(g => `"${g.name}"`).join(', ')}],` : ''}
+      ${tvSeries.production_companies && tvSeries.production_companies.length > 0 ? `"productionCompany": [${tvSeries.production_companies.map(pc => `{
+        "@type": "Organization",
+        "name": "${pc.name}"
+      }`).join(', ')}],` : ''}
+      ${tvSeries.spoken_languages && tvSeries.spoken_languages.length > 0 ? `"inLanguage": "${tvSeries.spoken_languages[0].iso_639_1}"` : '"inLanguage": "en"'}
+    }
+    </script>
     
     <style>
         * {
@@ -199,6 +235,32 @@ function generateTvSeriesHTML(tvSeries) {
             margin-bottom: 24px;
         }
         
+        .genres {
+            margin: 16px 0;
+        }
+        
+        .genre-tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            margin: 0 6px 6px 0;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 12px 0;
+            font-size: 16px;
+        }
+        
+        .rating-stars {
+            color: #ffd700;
+        }
+        
         @media (min-width: 768px) {
             .main-content {
                 flex-direction: row;
@@ -318,12 +380,39 @@ function generateTvSeriesHTML(tvSeries) {
                 
                 ${year !== 'Unknown' ? `<div class="release-year">${year}</div>` : ''}
                 
+                ${tvSeries.vote_average ? `<div class="rating">
+                    <span class="rating-stars">★★★★★</span>
+                    <span>${tvSeries.vote_average}/10</span>
+                    ${tvSeries.vote_count ? `<span>(${tvSeries.vote_count.toLocaleString()} votes)</span>` : ''}
+                </div>` : ''}
+                
                 <div class="tv-details">
                     ${tvSeries.number_of_seasons ? `<div class="detail-item">📺 ${tvSeries.number_of_seasons} Season${tvSeries.number_of_seasons > 1 ? 's' : ''}</div>` : ''}
                     ${tvSeries.number_of_episodes ? `<div class="detail-item">🎬 ${tvSeries.number_of_episodes} Episodes</div>` : ''}
+                    ${tvSeries.status ? `<div class="detail-item">📅 ${tvSeries.status}</div>` : ''}
+                    ${tvSeries.original_language ? `<div class="detail-item">🌐 ${tvSeries.original_language.toUpperCase()}</div>` : ''}
+                    ${tvSeries.episode_run_time && tvSeries.episode_run_time.length > 0 ? `<div class="detail-item">⏱️ ${tvSeries.episode_run_time[0]} min/episode</div>` : ''}
                 </div>
                 
+                ${tvSeries.genres && tvSeries.genres.length > 0 ? `<div class="genres">
+                    ${tvSeries.genres.map(genre => `<span class="genre-tag">${genre.name}</span>`).join('')}
+                </div>` : ''}
+                
                 ${tvSeries.overview ? `<div class="overview">${tvSeries.overview}</div>` : ''}
+                
+                ${tvSeries.networks && tvSeries.networks.length > 0 ? `<div class="network-info">
+                    <h3 style="font-size: 18px; margin: 20px 0 10px 0; color: rgba(255,255,255,0.9);">Network</h3>
+                    <div style="font-size: 15px; color: rgba(255,255,255,0.7);">
+                        ${tvSeries.networks.map(n => n.name).join(', ')}
+                    </div>
+                </div>` : ''}
+                
+                ${tvSeries.production_companies && tvSeries.production_companies.length > 0 ? `<div class="production-info">
+                    <h3 style="font-size: 18px; margin: 20px 0 10px 0; color: rgba(255,255,255,0.9);">Production</h3>
+                    <div style="font-size: 15px; color: rgba(255,255,255,0.7);">
+                        ${tvSeries.production_companies.map(pc => pc.name).join(', ')}
+                    </div>
+                </div>` : ''}
             </div>
         </div>
         

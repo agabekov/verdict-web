@@ -60,6 +60,8 @@ function generateMovieHTML(movie) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${movie.title} - Verdict</title>
+    <meta name="description" content="${movie.overview || `${movie.title} - Watch and discover movies on Verdict app`}">
+    <link rel="canonical" href="https://verdict.daniyar.link/movie/${movie.id}">
     
     <!-- Open Graph for rich previews -->
     <meta property="og:title" content="${movie.title}">
@@ -67,6 +69,38 @@ function generateMovieHTML(movie) {
     <meta property="og:image" content="${posterUrl}">
     <meta property="og:url" content="https://verdict.daniyar.link/movie/${movie.id}">
     <meta property="og:type" content="video.movie">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Movie",
+      "name": "${movie.title}",
+      "url": "https://verdict.daniyar.link/movie/${movie.id}",
+      "image": {
+        "@type": "ImageObject",
+        "url": "${posterUrl}",
+        "width": 500,
+        "height": 750
+      },
+      ${movie.overview ? `"description": "${movie.overview.replace(/"/g, '\\"')}",` : ''}
+      ${movie.release_date ? `"datePublished": "${movie.release_date}",` : ''}
+      ${movie.runtime ? `"duration": "PT${movie.runtime}M",` : ''}
+      ${movie.vote_average ? `"aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "${movie.vote_average}",
+        "ratingCount": "${movie.vote_count || 1}",
+        "bestRating": "10",
+        "worstRating": "1"
+      },` : ''}
+      ${movie.genres && movie.genres.length > 0 ? `"genre": [${movie.genres.map(g => `"${g.name}"`).join(', ')}],` : ''}
+      ${movie.production_companies && movie.production_companies.length > 0 ? `"productionCompany": [${movie.production_companies.map(pc => `{
+        "@type": "Organization",
+        "name": "${pc.name}"
+      }`).join(', ')}],` : ''}
+      ${movie.spoken_languages && movie.spoken_languages.length > 0 ? `"inLanguage": "${movie.spoken_languages[0].iso_639_1}"` : '"inLanguage": "en"'}
+    }
+    </script>
     
     <style>
         * {
@@ -198,6 +232,47 @@ function generateMovieHTML(movie) {
             margin-bottom: 24px;
         }
         
+        .movie-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 16px 0;
+        }
+        
+        .detail-item {
+            background: rgba(255,255,255,0.1);
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .genres {
+            margin: 16px 0;
+        }
+        
+        .genre-tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            margin: 0 6px 6px 0;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 12px 0;
+            font-size: 16px;
+        }
+        
+        .rating-stars {
+            color: #ffd700;
+        }
+        
         @media (min-width: 768px) {
             .main-content {
                 flex-direction: row;
@@ -299,7 +374,30 @@ function generateMovieHTML(movie) {
                 
                 ${year !== 'Unknown' ? `<div class="release-year">${year}</div>` : ''}
                 
+                ${movie.vote_average ? `<div class="rating">
+                    <span class="rating-stars">★★★★★</span>
+                    <span>${movie.vote_average}/10</span>
+                    ${movie.vote_count ? `<span>(${movie.vote_count.toLocaleString()} votes)</span>` : ''}
+                </div>` : ''}
+                
+                <div class="movie-details">
+                    ${movie.runtime ? `<div class="detail-item">⏱️ ${movie.runtime} minutes</div>` : ''}
+                    ${movie.status ? `<div class="detail-item">📅 ${movie.status}</div>` : ''}
+                    ${movie.original_language ? `<div class="detail-item">🌐 ${movie.original_language.toUpperCase()}</div>` : ''}
+                </div>
+                
+                ${movie.genres && movie.genres.length > 0 ? `<div class="genres">
+                    ${movie.genres.map(genre => `<span class="genre-tag">${genre.name}</span>`).join('')}
+                </div>` : ''}
+                
                 ${movie.overview ? `<div class="overview">${movie.overview}</div>` : ''}
+                
+                ${movie.production_companies && movie.production_companies.length > 0 ? `<div class="production-info">
+                    <h3 style="font-size: 18px; margin: 20px 0 10px 0; color: rgba(255,255,255,0.9);">Production</h3>
+                    <div style="font-size: 15px; color: rgba(255,255,255,0.7);">
+                        ${movie.production_companies.map(pc => pc.name).join(', ')}
+                    </div>
+                </div>` : ''}
             </div>
         </div>
         

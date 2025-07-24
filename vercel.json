@@ -9,6 +9,10 @@
   },
   "rewrites": [
     {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
       "source": "/movie/(.*)",
       "destination": "/api/movie?id=$1"
     },
