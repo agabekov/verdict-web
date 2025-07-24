@@ -10,8 +10,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Fetch TV series data from TMDB
-    const tvResponse = await fetch(`${TMDB_BASE_URL}/tv/${id}?api_key=${TMDB_API_KEY}&language=en-US`);
+    // Fetch TV series data and credits from TMDB
+    const [tvResponse, creditsResponse] = await Promise.all([
+      fetch(`${TMDB_BASE_URL}/tv/${id}?api_key=${TMDB_API_KEY}&language=en-US`),
+      fetch(`${TMDB_BASE_URL}/tv/${id}/credits?api_key=${TMDB_API_KEY}`)
+    ]);
     
     if (!tvResponse.ok) {
       if (tvResponse.status === 404) {
@@ -29,9 +32,10 @@ export default async function handler(req, res) {
     }
     
     const tvSeries = await tvResponse.json();
+    const credits = creditsResponse.ok ? await creditsResponse.json() : { cast: [] };
     
     // Generate HTML page matching iOS design
-    const html = generateTvSeriesHTML(tvSeries);
+    const html = generateTvSeriesHTML(tvSeries, credits);
     
     res.setHeader('Content-Type', 'text/html');
     res.status(200).send(html);
@@ -42,7 +46,7 @@ export default async function handler(req, res) {
   }
 }
 
-function generateTvSeriesHTML(tvSeries) {
+function generateTvSeriesHTML(tvSeries, credits) {
   const posterUrl = tvSeries.poster_path 
     ? `https://image.tmdb.org/t/p/w500${tvSeries.poster_path}`
     : 'https://via.placeholder.com/300x450/cccccc/666666?text=No+Image';
@@ -99,6 +103,11 @@ function generateTvSeriesHTML(tvSeries) {
       ${tvSeries.production_companies && tvSeries.production_companies.length > 0 ? `"productionCompany": [${tvSeries.production_companies.map(pc => `{
         "@type": "Organization",
         "name": "${pc.name}"
+      }`).join(', ')}],` : ''}
+      ${credits.cast && credits.cast.length > 0 ? `"actor": [${credits.cast.slice(0, 6).map(actor => `{
+        "@type": "Person",
+        "name": "${actor.name}"${actor.character ? `,
+        "character": "${actor.character}"` : ''}
       }`).join(', ')}],` : ''}
       ${tvSeries.spoken_languages && tvSeries.spoken_languages.length > 0 ? `"inLanguage": "${tvSeries.spoken_languages[0].iso_639_1}"` : '"inLanguage": "en"'}
     }
@@ -261,6 +270,52 @@ function generateTvSeriesHTML(tvSeries) {
             color: #ffd700;
         }
         
+        .cast-section {
+            margin: 24px 0;
+        }
+        
+        .cast-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        
+        .cast-member {
+            text-align: center;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .cast-member:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .cast-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 8px;
+            display: block;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .cast-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 4px;
+        }
+        
+        .cast-character {
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+        }
+        
         @media (min-width: 768px) {
             .main-content {
                 flex-direction: row;
@@ -399,6 +454,20 @@ function generateTvSeriesHTML(tvSeries) {
                 </div>` : ''}
                 
                 ${tvSeries.overview ? `<div class="overview">${tvSeries.overview}</div>` : ''}
+                
+                ${credits.cast && credits.cast.length > 0 ? `<div class="cast-section">
+                    <h3 style="font-size: 18px; margin: 20px 0 10px 0; color: rgba(255,255,255,0.9);">Cast</h3>
+                    <div class="cast-grid">
+                        ${credits.cast.slice(0, 6).map(actor => `
+                            <div class="cast-member">
+                                <img src="${actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : 'https://via.placeholder.com/80x80/666/fff?text=?'}" 
+                                     alt="${actor.name}" class="cast-photo">
+                                <div class="cast-name">${actor.name}</div>
+                                <div class="cast-character">${actor.character}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>` : ''}
                 
                 ${tvSeries.networks && tvSeries.networks.length > 0 ? `<div class="network-info">
                     <h3 style="font-size: 18px; margin: 20px 0 10px 0; color: rgba(255,255,255,0.9);">Network</h3>
