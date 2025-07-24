@@ -109,6 +109,25 @@ function generateTvSeriesHTML(tvSeries, credits) {
         "name": "${actor.name}"${actor.character ? `,
         "character": "${actor.character}"` : ''}
       }`).join(', ')}],` : ''}
+      ${credits.crew && credits.crew.length > 0 ? (() => {
+        const directors = credits.crew.filter(person => person.job === 'Director');
+        const writers = credits.crew.filter(person => ['Writer', 'Screenplay', 'Story', 'Creator'].includes(person.job));
+        
+        let crewSchema = '';
+        if (directors.length > 0) {
+          crewSchema += `"director": [${directors.slice(0, 3).map(d => `{
+            "@type": "Person",
+            "name": "${d.name}"
+          }`).join(', ')}],`;
+        }
+        if (writers.length > 0) {
+          crewSchema += `"writer": [${writers.slice(0, 3).map(w => `{
+            "@type": "Person",
+            "name": "${w.name}"
+          }`).join(', ')}],`;
+        }
+        return crewSchema;
+      })() : ''}
       ${tvSeries.spoken_languages && tvSeries.spoken_languages.length > 0 ? `"inLanguage": "${tvSeries.spoken_languages[0].iso_639_1}"` : '"inLanguage": "en"'}
     }
     </script>
@@ -316,6 +335,38 @@ function generateTvSeriesHTML(tvSeries, credits) {
             color: rgba(255,255,255,0.6);
         }
         
+        .crew-section {
+            margin: 24px 0;
+        }
+        
+        .crew-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        
+        .crew-role {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 16px;
+        }
+        
+        .crew-role-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .crew-names {
+            font-size: 15px;
+            color: rgba(255,255,255,0.9);
+            line-height: 1.4;
+        }
+        
         @media (min-width: 768px) {
             .main-content {
                 flex-direction: row;
@@ -454,6 +505,30 @@ function generateTvSeriesHTML(tvSeries, credits) {
                 </div>` : ''}
                 
                 ${tvSeries.overview ? `<div class="overview">${tvSeries.overview}</div>` : ''}
+                
+                ${credits.crew && credits.crew.length > 0 ? (() => {
+                  const directors = credits.crew.filter(person => person.job === 'Director');
+                  const writers = credits.crew.filter(person => ['Writer', 'Screenplay', 'Story', 'Creator'].includes(person.job));
+                  const producers = credits.crew.filter(person => ['Producer', 'Executive Producer'].includes(person.job));
+                  
+                  return `<div class="crew-section">
+                    <h3 style="font-size: 18px; margin: 20px 0 10px 0; color: rgba(255,255,255,0.9);">Crew</h3>
+                    <div class="crew-grid">
+                        ${directors.length > 0 ? `<div class="crew-role">
+                            <div class="crew-role-title">Director</div>
+                            <div class="crew-names">${directors.slice(0, 3).map(d => d.name).join(', ')}</div>
+                        </div>` : ''}
+                        ${writers.length > 0 ? `<div class="crew-role">
+                            <div class="crew-role-title">Writer/Creator</div>
+                            <div class="crew-names">${writers.slice(0, 3).map(w => w.name).join(', ')}</div>
+                        </div>` : ''}
+                        ${producers.length > 0 ? `<div class="crew-role">
+                            <div class="crew-role-title">Producer</div>
+                            <div class="crew-names">${producers.slice(0, 3).map(p => p.name).join(', ')}</div>
+                        </div>` : ''}
+                    </div>
+                </div>`;
+                })() : ''}
                 
                 ${credits.cast && credits.cast.length > 0 ? `<div class="cast-section">
                     <h3 style="font-size: 18px; margin: 20px 0 10px 0; color: rgba(255,255,255,0.9);">Cast</h3>
