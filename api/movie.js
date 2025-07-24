@@ -10,11 +10,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Fetch movie data, credits, and keywords from TMDB
-    const [movieResponse, creditsResponse, keywordsResponse] = await Promise.all([
+    // Fetch movie data, credits, keywords, and reviews from TMDB
+    const [movieResponse, creditsResponse, keywordsResponse, reviewsResponse] = await Promise.all([
       fetch(`${TMDB_BASE_URL}/movie/${id}?api_key=${TMDB_API_KEY}&language=en-US`),
       fetch(`${TMDB_BASE_URL}/movie/${id}/credits?api_key=${TMDB_API_KEY}`),
-      fetch(`${TMDB_BASE_URL}/movie/${id}/keywords?api_key=${TMDB_API_KEY}`)
+      fetch(`${TMDB_BASE_URL}/movie/${id}/keywords?api_key=${TMDB_API_KEY}`),
+      fetch(`${TMDB_BASE_URL}/movie/${id}/reviews?api_key=${TMDB_API_KEY}&language=en-US`)
     ]);
     
     if (!movieResponse.ok) {
@@ -35,9 +36,10 @@ export default async function handler(req, res) {
     const movie = await movieResponse.json();
     const credits = creditsResponse.ok ? await creditsResponse.json() : { cast: [] };
     const keywords = keywordsResponse.ok ? await keywordsResponse.json() : { keywords: [] };
+    const reviews = reviewsResponse.ok ? await reviewsResponse.json() : { results: [] };
     
     // Generate HTML page matching iOS design
-    const html = generateMovieHTML(movie, credits, keywords);
+    const html = generateMovieHTML(movie, credits, keywords, reviews);
     
     res.setHeader('Content-Type', 'text/html');
     res.status(200).send(html);
@@ -48,7 +50,7 @@ export default async function handler(req, res) {
   }
 }
 
-function generateMovieHTML(movie, credits, keywords) {
+function generateMovieHTML(movie, credits, keywords, reviews) {
   const posterUrl = movie.poster_path 
     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
     : 'https://via.placeholder.com/300x450/cccccc/666666?text=No+Image';
@@ -129,6 +131,20 @@ function generateMovieHTML(movie, credits, keywords) {
         return crewSchema;
       })() : ''}
       ${keywords.keywords && keywords.keywords.length > 0 ? `"keywords": "${keywords.keywords.slice(0, 10).map(k => k.name).join(', ')}",` : ''}
+      ${reviews.results && reviews.results.length > 0 ? `"review": [${reviews.results.slice(0, 3).map(review => `{
+        "@type": "Review",
+        "author": {
+          "@type": "Person",
+          "name": "${review.author}"
+        },
+        "reviewBody": "${review.content.replace(/"/g, '\\"').substring(0, 500)}${review.content.length > 500 ? '...' : ''}",
+        "datePublished": "${review.created_at}"${review.author_details && review.author_details.rating ? `,
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "${review.author_details.rating}",
+          "bestRating": "10"
+        }` : ''}
+      }`).join(', ')}],` : ''}
       ${movie.spoken_languages && movie.spoken_languages.length > 0 ? `"inLanguage": "${movie.spoken_languages[0].iso_639_1}"` : '"inLanguage": "en"'}
     }
     </script>
@@ -410,6 +426,59 @@ function generateMovieHTML(movie, credits, keywords) {
             color: rgba(255,255,255,0.9);
         }
         
+        .reviews-section {
+            margin: 32px 0;
+        }
+        
+        .review-item {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        
+        .review-author {
+            font-size: 16px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .review-rating {
+            background: rgba(255,215,0,0.2);
+            color: #ffd700;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .review-content {
+            font-size: 15px;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .review-content.truncated {
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .review-date {
+            font-size: 13px;
+            color: rgba(255,255,255,0.5);
+            margin-top: 12px;
+        }
+        
         @media (min-width: 768px) {
             .main-content {
                 flex-direction: row;
@@ -514,7 +583,6 @@ function generateMovieHTML(movie, credits, keywords) {
                 ${movie.vote_average ? `<div class="rating">
                     <span class="rating-stars">★★★★★</span>
                     <span>${movie.vote_average}/10</span>
-                    ${movie.vote_count ? `<span>(${movie.vote_count.toLocaleString()} votes)</span>` : ''}
                 </div>` : ''}
                 
                 <div class="movie-details">
@@ -525,13 +593,6 @@ function generateMovieHTML(movie, credits, keywords) {
                 
                 ${movie.genres && movie.genres.length > 0 ? `<div class="genres">
                     ${movie.genres.map(genre => `<span class="genre-tag">${genre.name}</span>`).join('')}
-                </div>` : ''}
-                
-                ${keywords.keywords && keywords.keywords.length > 0 ? `<div class="keywords-section">
-                    <h4 style="font-size: 16px; margin: 0 0 8px 0; color: rgba(255,255,255,0.8);">Keywords</h4>
-                    <div class="keywords-container">
-                        ${keywords.keywords.slice(0, 10).map(keyword => `<span class="keyword-tag">${keyword.name}</span>`).join('')}
-                    </div>
                 </div>` : ''}
                 
                 ${movie.overview ? `<div class="overview">${movie.overview}</div>` : ''}
@@ -574,10 +635,31 @@ function generateMovieHTML(movie, credits, keywords) {
                     </div>
                 </div>` : ''}
                 
+                ${reviews.results && reviews.results.length > 0 ? `<div class="reviews-section">
+                    <h3 style="font-size: 18px; margin: 20px 0 16px 0; color: rgba(255,255,255,0.9);">User Reviews</h3>
+                    ${reviews.results.slice(0, 3).map(review => `
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="review-author">${review.author}</div>
+                                ${review.author_details && review.author_details.rating ? `<div class="review-rating">★ ${review.author_details.rating}/10</div>` : ''}
+                            </div>
+                            <div class="review-content truncated">${review.content}</div>
+                            ${review.created_at ? `<div class="review-date">${new Date(review.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>` : ''}
+                        </div>
+                    `).join('')}
+                </div>` : ''}
+                
                 ${movie.production_companies && movie.production_companies.length > 0 ? `<div class="production-info">
                     <h3 style="font-size: 18px; margin: 20px 0 10px 0; color: rgba(255,255,255,0.9);">Production</h3>
                     <div style="font-size: 15px; color: rgba(255,255,255,0.7);">
                         ${movie.production_companies.map(pc => pc.name).join(', ')}
+                    </div>
+                </div>` : ''}
+                
+                ${keywords.keywords && keywords.keywords.length > 0 ? `<div class="keywords-section">
+                    <h4 style="font-size: 16px; margin: 0 0 8px 0; color: rgba(255,255,255,0.8);">Keywords</h4>
+                    <div class="keywords-container">
+                        ${keywords.keywords.slice(0, 10).map(keyword => `<span class="keyword-tag">${keyword.name}</span>`).join('')}
                     </div>
                 </div>` : ''}
             </div>
