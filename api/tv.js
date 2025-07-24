@@ -10,13 +10,28 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Fetch TV series data, credits, keywords, and reviews from TMDB
+    // Fetch TV series data, credits, keywords, reviews, and seasons from TMDB
     const [tvResponse, creditsResponse, keywordsResponse, reviewsResponse] = await Promise.all([
       fetch(`${TMDB_BASE_URL}/tv/${id}?api_key=${TMDB_API_KEY}&language=en-US`),
       fetch(`${TMDB_BASE_URL}/tv/${id}/credits?api_key=${TMDB_API_KEY}`),
       fetch(`${TMDB_BASE_URL}/tv/${id}/keywords?api_key=${TMDB_API_KEY}`),
       fetch(`${TMDB_BASE_URL}/tv/${id}/reviews?api_key=${TMDB_API_KEY}&language=en-US`)
     ]);
+    
+    const tvSeries = await tvResponse.json();
+    
+    // Fetch season details for each season
+    const seasonsData = tvSeries.seasons ? await Promise.all(
+      tvSeries.seasons.map(async (season) => {
+        try {
+          const seasonResponse = await fetch(`${TMDB_BASE_URL}/tv/${id}/season/${season.season_number}?api_key=${TMDB_API_KEY}&language=en-US`);
+          return seasonResponse.ok ? await seasonResponse.json() : null;
+        } catch (error) {
+          console.error(`Error fetching season ${season.season_number}:`, error);
+          return null;
+        }
+      })
+    ).then(seasons => seasons.filter(Boolean)) : [];
     
     if (!tvResponse.ok) {
       if (tvResponse.status === 404) {
@@ -33,13 +48,12 @@ export default async function handler(req, res) {
       throw new Error(`HTTP error! status: ${tvResponse.status}`);
     }
     
-    const tvSeries = await tvResponse.json();
     const credits = creditsResponse.ok ? await creditsResponse.json() : { cast: [] };
     const keywords = keywordsResponse.ok ? await keywordsResponse.json() : { results: [] };
     const reviews = reviewsResponse.ok ? await reviewsResponse.json() : { results: [] };
     
     // Generate HTML page matching iOS design
-    const html = generateTvSeriesHTML(tvSeries, credits, keywords, reviews);
+    const html = generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData);
     
     res.setHeader('Content-Type', 'text/html');
     res.status(200).send(html);
@@ -50,7 +64,7 @@ export default async function handler(req, res) {
   }
 }
 
-function generateTvSeriesHTML(tvSeries, credits, keywords, reviews) {
+function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData) {
   const posterUrl = tvSeries.poster_path 
     ? `https://image.tmdb.org/t/p/w500${tvSeries.poster_path}`
     : 'https://via.placeholder.com/300x450/cccccc/666666?text=No+Image';
@@ -468,6 +482,45 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews) {
             margin-top: 12px;
         }
         
+        .seasons-section {
+            margin: 24px 0;
+        }
+        
+        .season-item {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        
+        .season-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .season-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .season-meta {
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.08);
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+        
+        .season-overview {
+            font-size: 15px;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.8);
+        }
+        
         
         .tv-title {
             font-size: 28px;
@@ -580,6 +633,25 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews) {
                 </div>` : ''}
                 
                 ${tvSeries.overview ? `<div class="overview">${tvSeries.overview}</div>` : ''}
+                
+                ${seasonsData && seasonsData.length > 0 ? `<div class="seasons-section">
+                    <h3 style="font-size: 18px; margin: 20px 0 16px 0; color: rgba(255,255,255,0.9);">Seasons</h3>
+                    ${seasonsData
+                      .filter(season => season.season_number > 0)
+                      .sort((a, b) => a.season_number - b.season_number)
+                      .map(season => {
+                        const airYear = season.air_date ? new Date(season.air_date).getFullYear() : 'TBA';
+                        const episodeCount = season.episode_count || 0;
+                        return `
+                        <div class="season-item">
+                            <div class="season-header">
+                                <div class="season-title">Season ${season.season_number}</div>
+                                <div class="season-meta">${airYear} • ${episodeCount} Episode${episodeCount !== 1 ? 's' : ''}</div>
+                            </div>
+                            ${season.overview ? `<div class="season-overview">${season.overview}</div>` : ''}
+                        </div>`;
+                      }).join('')}
+                </div>` : ''}
                 
                 ${credits.cast && credits.cast.length > 0 ? `<div class="cast-section">
                     <h3 style="font-size: 18px; margin: 20px 0 10px 0; color: rgba(255,255,255,0.9);">Cast</h3>
