@@ -20,18 +20,29 @@ export default async function handler(req, res) {
     
     const tvSeries = await tvResponse.json();
     
-    // Fetch season details for each season
-    const seasonsData = tvSeries.seasons ? await Promise.all(
-      tvSeries.seasons.map(async (season) => {
-        try {
-          const seasonResponse = await fetch(`${TMDB_BASE_URL}/tv/${id}/season/${season.season_number}?api_key=${TMDB_API_KEY}&language=en-US`);
-          return seasonResponse.ok ? await seasonResponse.json() : null;
-        } catch (error) {
-          console.error(`Error fetching season ${season.season_number}:`, error);
-          return null;
-        }
-      })
-    ).then(seasons => seasons.filter(Boolean)) : [];
+    // Fetch detailed season data for seasons that have aired
+    const seasonsData = tvSeries.seasons && tvSeries.seasons.length > 0 ? await Promise.all(
+      tvSeries.seasons
+        .filter(season => season.season_number > 0) // Skip specials (season 0)
+        .slice(0, 10) // Limit to first 10 seasons to avoid too many API calls
+        .map(async (season) => {
+          try {
+            const seasonResponse = await fetch(`${TMDB_BASE_URL}/tv/${id}/season/${season.season_number}?api_key=${TMDB_API_KEY}&language=en-US`);
+            if (seasonResponse.ok) {
+              const seasonData = await seasonResponse.json();
+              return {
+                ...season, // Keep original data as fallback
+                ...seasonData, // Override with detailed data
+                episode_count: seasonData.episodes ? seasonData.episodes.length : season.episode_count
+              };
+            }
+            return season; // Return original season data if detailed fetch fails
+          } catch (error) {
+            console.error(`Error fetching season ${season.season_number}:`, error);
+            return season; // Return original season data on error
+          }
+        })
+    ) : [];
     
     if (!tvResponse.ok) {
       if (tvResponse.status === 404) {
@@ -637,7 +648,6 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData)
                 ${seasonsData && seasonsData.length > 0 ? `<div class="seasons-section">
                     <h3 style="font-size: 18px; margin: 20px 0 16px 0; color: rgba(255,255,255,0.9);">Seasons</h3>
                     ${seasonsData
-                      .filter(season => season.season_number > 0)
                       .sort((a, b) => a.season_number - b.season_number)
                       .map(season => {
                         const airYear = season.air_date ? new Date(season.air_date).getFullYear() : 'TBA';
