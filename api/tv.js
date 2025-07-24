@@ -10,10 +10,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Fetch TV series data and credits from TMDB
-    const [tvResponse, creditsResponse] = await Promise.all([
+    // Fetch TV series data, credits, and keywords from TMDB
+    const [tvResponse, creditsResponse, keywordsResponse] = await Promise.all([
       fetch(`${TMDB_BASE_URL}/tv/${id}?api_key=${TMDB_API_KEY}&language=en-US`),
-      fetch(`${TMDB_BASE_URL}/tv/${id}/credits?api_key=${TMDB_API_KEY}`)
+      fetch(`${TMDB_BASE_URL}/tv/${id}/credits?api_key=${TMDB_API_KEY}`),
+      fetch(`${TMDB_BASE_URL}/tv/${id}/keywords?api_key=${TMDB_API_KEY}`)
     ]);
     
     if (!tvResponse.ok) {
@@ -33,9 +34,10 @@ export default async function handler(req, res) {
     
     const tvSeries = await tvResponse.json();
     const credits = creditsResponse.ok ? await creditsResponse.json() : { cast: [] };
+    const keywords = keywordsResponse.ok ? await keywordsResponse.json() : { results: [] };
     
     // Generate HTML page matching iOS design
-    const html = generateTvSeriesHTML(tvSeries, credits);
+    const html = generateTvSeriesHTML(tvSeries, credits, keywords);
     
     res.setHeader('Content-Type', 'text/html');
     res.status(200).send(html);
@@ -46,7 +48,7 @@ export default async function handler(req, res) {
   }
 }
 
-function generateTvSeriesHTML(tvSeries, credits) {
+function generateTvSeriesHTML(tvSeries, credits, keywords) {
   const posterUrl = tvSeries.poster_path 
     ? `https://image.tmdb.org/t/p/w500${tvSeries.poster_path}`
     : 'https://via.placeholder.com/300x450/cccccc/666666?text=No+Image';
@@ -128,6 +130,7 @@ function generateTvSeriesHTML(tvSeries, credits) {
         }
         return crewSchema;
       })() : ''}
+      ${keywords.results && keywords.results.length > 0 ? `"keywords": "${keywords.results.slice(0, 10).map(k => k.name).join(', ')}",` : ''}
       ${tvSeries.spoken_languages && tvSeries.spoken_languages.length > 0 ? `"inLanguage": "${tvSeries.spoken_languages[0].iso_639_1}"` : '"inLanguage": "en"'}
     }
     </script>
@@ -367,6 +370,34 @@ function generateTvSeriesHTML(tvSeries, credits) {
             line-height: 1.4;
         }
         
+        .keywords-section {
+            margin: 24px 0;
+        }
+        
+        .keywords-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .keyword-tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.8);
+            transition: all 0.2s ease;
+        }
+        
+        .keyword-tag:hover {
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.25);
+            color: rgba(255,255,255,0.9);
+        }
+        
         @media (min-width: 768px) {
             .main-content {
                 flex-direction: row;
@@ -502,6 +533,13 @@ function generateTvSeriesHTML(tvSeries, credits) {
                 
                 ${tvSeries.genres && tvSeries.genres.length > 0 ? `<div class="genres">
                     ${tvSeries.genres.map(genre => `<span class="genre-tag">${genre.name}</span>`).join('')}
+                </div>` : ''}
+                
+                ${keywords.results && keywords.results.length > 0 ? `<div class="keywords-section">
+                    <h4 style="font-size: 16px; margin: 0 0 8px 0; color: rgba(255,255,255,0.8);">Keywords</h4>
+                    <div class="keywords-container">
+                        ${keywords.results.slice(0, 10).map(keyword => `<span class="keyword-tag">${keyword.name}</span>`).join('')}
+                    </div>
                 </div>` : ''}
                 
                 ${tvSeries.overview ? `<div class="overview">${tvSeries.overview}</div>` : ''}

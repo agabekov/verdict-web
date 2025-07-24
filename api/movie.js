@@ -10,10 +10,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Fetch movie data and credits from TMDB
-    const [movieResponse, creditsResponse] = await Promise.all([
+    // Fetch movie data, credits, and keywords from TMDB
+    const [movieResponse, creditsResponse, keywordsResponse] = await Promise.all([
       fetch(`${TMDB_BASE_URL}/movie/${id}?api_key=${TMDB_API_KEY}&language=en-US`),
-      fetch(`${TMDB_BASE_URL}/movie/${id}/credits?api_key=${TMDB_API_KEY}`)
+      fetch(`${TMDB_BASE_URL}/movie/${id}/credits?api_key=${TMDB_API_KEY}`),
+      fetch(`${TMDB_BASE_URL}/movie/${id}/keywords?api_key=${TMDB_API_KEY}`)
     ]);
     
     if (!movieResponse.ok) {
@@ -33,9 +34,10 @@ export default async function handler(req, res) {
     
     const movie = await movieResponse.json();
     const credits = creditsResponse.ok ? await creditsResponse.json() : { cast: [] };
+    const keywords = keywordsResponse.ok ? await keywordsResponse.json() : { keywords: [] };
     
     // Generate HTML page matching iOS design
-    const html = generateMovieHTML(movie, credits);
+    const html = generateMovieHTML(movie, credits, keywords);
     
     res.setHeader('Content-Type', 'text/html');
     res.status(200).send(html);
@@ -46,7 +48,7 @@ export default async function handler(req, res) {
   }
 }
 
-function generateMovieHTML(movie, credits) {
+function generateMovieHTML(movie, credits, keywords) {
   const posterUrl = movie.poster_path 
     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
     : 'https://via.placeholder.com/300x450/cccccc/666666?text=No+Image';
@@ -126,6 +128,7 @@ function generateMovieHTML(movie, credits) {
         }
         return crewSchema;
       })() : ''}
+      ${keywords.keywords && keywords.keywords.length > 0 ? `"keywords": "${keywords.keywords.slice(0, 10).map(k => k.name).join(', ')}",` : ''}
       ${movie.spoken_languages && movie.spoken_languages.length > 0 ? `"inLanguage": "${movie.spoken_languages[0].iso_639_1}"` : '"inLanguage": "en"'}
     }
     </script>
@@ -379,6 +382,34 @@ function generateMovieHTML(movie, credits) {
             line-height: 1.4;
         }
         
+        .keywords-section {
+            margin: 24px 0;
+        }
+        
+        .keywords-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .keyword-tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.8);
+            transition: all 0.2s ease;
+        }
+        
+        .keyword-tag:hover {
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.25);
+            color: rgba(255,255,255,0.9);
+        }
+        
         @media (min-width: 768px) {
             .main-content {
                 flex-direction: row;
@@ -494,6 +525,13 @@ function generateMovieHTML(movie, credits) {
                 
                 ${movie.genres && movie.genres.length > 0 ? `<div class="genres">
                     ${movie.genres.map(genre => `<span class="genre-tag">${genre.name}</span>`).join('')}
+                </div>` : ''}
+                
+                ${keywords.keywords && keywords.keywords.length > 0 ? `<div class="keywords-section">
+                    <h4 style="font-size: 16px; margin: 0 0 8px 0; color: rgba(255,255,255,0.8);">Keywords</h4>
+                    <div class="keywords-container">
+                        ${keywords.keywords.slice(0, 10).map(keyword => `<span class="keyword-tag">${keyword.name}</span>`).join('')}
+                    </div>
                 </div>` : ''}
                 
                 ${movie.overview ? `<div class="overview">${movie.overview}</div>` : ''}
