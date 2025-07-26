@@ -353,10 +353,6 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData)
             transition: all 0.3s ease;
         }
         
-        .cast-member:hover {
-            background: rgba(255,255,255,0.1);
-            transform: translateY(-2px);
-        }
         
         .cast-photo {
             width: 80px;
