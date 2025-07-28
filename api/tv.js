@@ -78,6 +78,13 @@ export default async function handler(req, res) {
 }
 
 function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData, watchProviders) {
+  // Function to remove HTML links and other tags, keeping only text content
+  function stripHtmlLinks(text) {
+    if (!text) return '';
+    // Remove HTML tags while preserving the text content
+    return text.replace(/<[^>]*>/g, '').trim();
+  }
+
   const posterUrl = tvSeries.poster_path 
     ? `https://image.tmdb.org/t/p/w500${tvSeries.poster_path}`
     : 'https://via.placeholder.com/300x450/cccccc/666666?text=No+Image';
@@ -166,7 +173,7 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData,
           "@type": "Person",
           "name": "${review.author}"
         },
-        "reviewBody": "${review.content.replace(/"/g, '\\"').substring(0, 500)}${review.content.length > 500 ? '...' : ''}",
+        "reviewBody": "${stripHtmlLinks(review.content).replace(/"/g, '\\"').substring(0, 500)}${stripHtmlLinks(review.content).length > 500 ? '...' : ''}",
         "datePublished": "${review.created_at}"${review.author_details && review.author_details.rating ? `,
         "reviewRating": {
           "@type": "Rating",
@@ -783,7 +790,7 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData,
                                 <div class="review-author">${review.author}</div>
                                 ${review.author_details && review.author_details.rating ? `<div class="review-rating">★ ${review.author_details.rating}/10</div>` : ''}
                             </div>
-                            <div class="review-content">${review.content}</div>
+                            <div class="review-content">${stripHtmlLinks(review.content)}</div>
                             ${review.created_at ? `<div class="review-date">${new Date(review.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>` : ''}
                         </div>
                     `).join('')}
