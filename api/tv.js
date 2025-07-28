@@ -10,12 +10,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Fetch TV series data, credits, keywords, reviews, and seasons from TMDB
-    const [tvResponse, creditsResponse, keywordsResponse, reviewsResponse] = await Promise.all([
+    // Fetch TV series data, credits, keywords, reviews, seasons, and watch providers from TMDB
+    const [tvResponse, creditsResponse, keywordsResponse, reviewsResponse, watchProvidersResponse] = await Promise.all([
       fetch(`${TMDB_BASE_URL}/tv/${id}?api_key=${TMDB_API_KEY}&language=en-US`),
       fetch(`${TMDB_BASE_URL}/tv/${id}/credits?api_key=${TMDB_API_KEY}`),
       fetch(`${TMDB_BASE_URL}/tv/${id}/keywords?api_key=${TMDB_API_KEY}`),
-      fetch(`${TMDB_BASE_URL}/tv/${id}/reviews?api_key=${TMDB_API_KEY}&language=en-US`)
+      fetch(`${TMDB_BASE_URL}/tv/${id}/reviews?api_key=${TMDB_API_KEY}&language=en-US`),
+      fetch(`${TMDB_BASE_URL}/tv/${id}/watch/providers?api_key=${TMDB_API_KEY}`)
     ]);
     
     const tvSeries = await tvResponse.json();
@@ -62,9 +63,10 @@ export default async function handler(req, res) {
     const credits = creditsResponse.ok ? await creditsResponse.json() : { cast: [] };
     const keywords = keywordsResponse.ok ? await keywordsResponse.json() : { results: [] };
     const reviews = reviewsResponse.ok ? await reviewsResponse.json() : { results: [] };
+    const watchProviders = watchProvidersResponse.ok ? await watchProvidersResponse.json() : { results: {} };
     
     // Generate HTML page matching iOS design
-    const html = generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData);
+    const html = generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData, watchProviders);
     
     res.setHeader('Content-Type', 'text/html');
     res.status(200).send(html);
@@ -75,7 +77,7 @@ export default async function handler(req, res) {
   }
 }
 
-function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData) {
+function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData, watchProviders) {
   const posterUrl = tvSeries.poster_path 
     ? `https://image.tmdb.org/t/p/w500${tvSeries.poster_path}`
     : 'https://via.placeholder.com/300x450/cccccc/666666?text=No+Image';
@@ -551,6 +553,52 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData)
         
         
         
+        .streaming-section {
+            margin: 24px 0;
+        }
+        
+        .streaming-category {
+            margin-bottom: 20px;
+        }
+        
+        .streaming-category-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .streaming-providers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .provider-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 8px 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .provider-logo {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+        
+        .provider-name {
+            font-size: 13px;
+            color: rgba(255,255,255,0.9);
+            font-weight: 500;
+        }
+        
         .footer {
             text-align: center;
             padding: 40px 24px;
@@ -640,6 +688,54 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData)
                 </div>` : ''}
                 
                 ${tvSeries.overview ? `<div class="overview">${tvSeries.overview}</div>` : ''}
+                
+                ${watchProviders.results && watchProviders.results.US ? (() => {
+                  const usProviders = watchProviders.results.US;
+                  const streaming = usProviders.flatrate || [];
+                  const rent = usProviders.rent || [];
+                  const buy = usProviders.buy || [];
+                  
+                  if (streaming.length === 0 && rent.length === 0 && buy.length === 0) {
+                    return '';
+                  }
+                  
+                  return `<div class="streaming-section">
+                    <h3 style="font-size: 18px; margin: 20px 0 12px 0; color: rgba(255,255,255,0.9);">Where to Watch (US)</h3>
+                    ${streaming.length > 0 ? `<div class="streaming-category">
+                      <h4 class="streaming-category-title">Stream</h4>
+                      <div class="streaming-providers">
+                        ${streaming.map(provider => `
+                          <div class="provider-item">
+                            <img src="https://image.tmdb.org/t/p/w92${provider.logo_path}" alt="${provider.provider_name}" class="provider-logo">
+                            <span class="provider-name">${provider.provider_name}</span>
+                          </div>
+                        `).join('')}
+                      </div>
+                    </div>` : ''}
+                    ${rent.length > 0 ? `<div class="streaming-category">
+                      <h4 class="streaming-category-title">Rent</h4>
+                      <div class="streaming-providers">
+                        ${rent.map(provider => `
+                          <div class="provider-item">
+                            <img src="https://image.tmdb.org/t/p/w92${provider.logo_path}" alt="${provider.provider_name}" class="provider-logo">
+                            <span class="provider-name">${provider.provider_name}</span>
+                          </div>
+                        `).join('')}
+                      </div>
+                    </div>` : ''}
+                    ${buy.length > 0 ? `<div class="streaming-category">
+                      <h4 class="streaming-category-title">Buy</h4>
+                      <div class="streaming-providers">
+                        ${buy.map(provider => `
+                          <div class="provider-item">
+                            <img src="https://image.tmdb.org/t/p/w92${provider.logo_path}" alt="${provider.provider_name}" class="provider-logo">
+                            <span class="provider-name">${provider.provider_name}</span>
+                          </div>
+                        `).join('')}
+                      </div>
+                    </div>` : ''}
+                  </div>`;
+                })() : ''}
                 
                 ${seasonsData && seasonsData.length > 0 ? `<div class="seasons-section">
                     <h3 style="font-size: 18px; margin: 20px 0 16px 0; color: rgba(255,255,255,0.9);">Seasons</h3>
