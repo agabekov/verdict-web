@@ -847,19 +847,32 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData,
         <div class="footer">
             <a href="https://go.daniyar.link/x-verdictweb" target="_blank" style="color: rgba(255,255,255,0.8); text-decoration: underline;">made by Daniyar Agabekov</a>
             <div style="margin-top: 16px; font-size: 13px; color: rgba(255,255,255,0.5);">
-                <div style="margin-bottom: 8px; font-weight: 600;">Donation</div>
-                <div style="line-height: 1.4;">
-                    <div>Bitcoin: bc1quzza9c30exsj7jj02kj2nukcxg7x8mf2259w2m</div>
-                    <div>Ethereum: 0x655e13867c27292E04f5579918eb6A2B15eEdaCd</div>
-                    <div>Tether USD: 0x655e13867c27292E04f5579918eb6A2B15eEdaCd</div>
-                    <div>Solana: 5nroFAaVoz3iJhMY8xQiHMkDvkNt13douMsggjDiMALL</div>
-                    <div>Dogecoin: DHgcLztxTA4GXFBV5FLP7qXCLJC4o1Rqoz</div>
+                <div style="margin-bottom: 12px; font-weight: 600;">Donation</div>
+                <div style="line-height: 1.6;">
+                    <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('bc1quzza9c30exsj7jj02kj2nukcxg7x8mf2259w2m', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Bitcoin: bc1quzza9c30exsj7jj02kj2nukcxg7x8mf2259w2m</div>
+                    <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('0x655e13867c27292E04f5579918eb6A2B15eEdaCd', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Ethereum: 0x655e13867c27292E04f5579918eb6A2B15eEdaCd</div>
+                    <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('0x655e13867c27292E04f5579918eb6A2B15eEdaCd', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Tether USD: 0x655e13867c27292E04f5579918eb6A2B15eEdaCd</div>
+                    <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('5nroFAaVoz3iJhMY8xQiHMkDvkNt13douMsggjDiMALL', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Solana: 5nroFAaVoz3iJhMY8xQiHMkDvkNt13douMsggjDiMALL</div>
+                    <div style="cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('DHgcLztxTA4GXFBV5FLP7qXCLJC4o1Rqoz', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Dogecoin: DHgcLztxTA4GXFBV5FLP7qXCLJC4o1Rqoz</div>
                 </div>
             </div>
         </div>
     </div>
     
     <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+    <script>
+        function copyToClipboard(text, element) {
+            navigator.clipboard.writeText(text).then(function() {
+                const originalText = element.innerHTML;
+                element.innerHTML = originalText + ' <span style="color: #4CAF50;">✓ Copied!</span>';
+                setTimeout(function() {
+                    element.innerHTML = originalText;
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Could not copy text: ', err);
+            });
+        }
+    </script>
 </body>
 </html>
   `;
