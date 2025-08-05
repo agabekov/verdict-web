@@ -845,7 +845,7 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData,
         </div>
         
         <div class="footer">
-            <a href="https://go.daniyar.link/verdict-web" style="color: rgba(255,255,255,0.8); text-decoration: none;">made with Verdict</a>
+            <a href="https://go.daniyar.link/x-verdictweb" style="color: rgba(255,255,255,0.8); text-decoration: underline;">made by Daniyar Agabekov</a>
         </div>
     </div>
     
