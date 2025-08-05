@@ -847,7 +847,6 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData,
         <div class="footer">
             <a href="https://go.daniyar.link/x-verdictweb" target="_blank" style="color: rgba(255,255,255,0.8); text-decoration: underline;">made by Daniyar Agabekov</a>
             <div style="margin-top: 16px; font-size: 13px; color: rgba(255,255,255,0.5);">
-                <div style="margin-bottom: 12px; font-weight: 600;">Donation</div>
                 <div style="line-height: 1.6;">
                     <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('bc1quzza9c30exsj7jj02kj2nukcxg7x8mf2259w2m', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Bitcoin: bc1quzza9c30exsj7jj02kj2nukcxg7x8mf2259w2m</div>
                     <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('0x655e13867c27292E04f5579918eb6A2B15eEdaCd', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Ethereum: 0x655e13867c27292E04f5579918eb6A2B15eEdaCd</div>
