@@ -528,15 +528,117 @@ export default async function handler(req, res) {
     return res.status(200).send(html);
   } catch (error) {
     if (error && error.status === 404) {
+      // Fetch popular movies for 404 page
+      const popularMovies = await fetchTmdbOrNull('/movie/popular');
+      const movies = popularMovies?.results?.slice(0, 12) || [];
+      
       res.setHeader('Content-Type', 'text/html; charset=UTF-8');
       return res.status(404).send(`
-        <html>
-          <head><title>Movie Not Found</title></head>
-          <body style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; text-align: center; padding: 50px;">
-            <h1>Movie Not Found</h1>
-            <p>Movie with ID ${escapeHtml(String(id))} does not exist.</p>
-          </body>
-        </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Not Found - Verdict</title>
+  <meta name="description" content="The movie you're looking for was not found. Discover and rate movies on the Verdict app.">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #000; color: #fff; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
+    .background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); z-index: -1; }
+    .app-banner { background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.1); color: white; padding: 20px; text-align: center; font-size: 16px; }
+    .banner-text { font-weight: 500; margin-bottom: 12px; color: rgba(255,255,255,0.9); }
+    .download-btn { background: rgba(255,255,255,0.15); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; display: inline-block; transition: all 0.3s ease; font-size: 15px; }
+    .download-btn:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.3); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    .content-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 24px; }
+    .main-content { text-align: center; max-width: 500px; }
+    .movie-icon { font-size: 80px; margin-bottom: 20px; opacity: 0.6; }
+    .error-title { font-size: 32px; font-weight: 700; margin-bottom: 16px; color: rgba(255,255,255,0.9); }
+    .error-message { font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.7); margin-bottom: 24px; }
+    .suggestion { font-size: 16px; color: rgba(255,255,255,0.8); margin-bottom: 32px; }
+    .cta-button { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 16px 32px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 16px; display: inline-block; transition: all 0.3s ease; }
+    .cta-button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4); }
+    .popular-section { margin-top: 48px; padding: 0 24px; max-width: 1200px; margin-left: auto; margin-right: auto; }
+    .popular-title { font-size: 24px; font-weight: 700; margin-bottom: 24px; color: rgba(255,255,255,0.9); text-align: center; }
+    .movies-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-bottom: 32px; }
+    .movie-card { background: rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden; transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.1); }
+    .movie-card:hover { transform: translateY(-4px); background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+    .movie-poster { width: 100%; aspect-ratio: 2/3; object-fit: cover; }
+    .movie-title { padding: 8px 12px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.9); text-align: center; line-height: 1.3; }
+    .movie-link { text-decoration: none; color: inherit; display: block; }
+    .footer { text-align: center; padding: 40px 24px; color: rgba(255,255,255,0.6); font-size: 14px; border-top: 1px solid rgba(255,255,255,0.1); }
+    @media (max-width: 768px) { .error-title { font-size: 28px; } .movie-icon { font-size: 60px; } .movies-grid { grid-template-columns: repeat(3, 1fr); } .popular-section { padding: 0 16px; } }
+    @media (max-width: 480px) { .movies-grid { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+  
+  <div class="app-banner">
+    <div class="banner-text">🎬 Open in Verdict, rate it and share with friends</div>
+    <a href="https://go.daniyar.link/verdict-web" class="download-btn" target="_blank" rel="noopener noreferrer">Download from App Store</a>
+  </div>
+
+  <div class="content-container">
+    <div class="main-content">
+      <div class="movie-icon">🎭</div>
+      <h1 class="error-title">Movie Not Found</h1>
+      <p class="error-message">
+        Sorry, we couldn't find the movie you're looking for. It might have been removed or the link might be incorrect.
+      </p>
+      <p class="suggestion">
+        Discover thousands of movies, rate them, and share your thoughts with friends on the Verdict app!
+      </p>
+      <a href="https://go.daniyar.link/verdict-web" class="cta-button" target="_blank" rel="noopener noreferrer">
+        Browse Movies on Verdict
+      </a>
+    </div>
+  </div>
+
+  <div class="popular-section">
+    <h2 class="popular-title">Popular now</h2>
+    <div class="movies-grid">
+      ${movies.map(movie => `
+        <a href="/movie/${movie.id}" class="movie-link">
+          <div class="movie-card">
+            <img src="${movie.poster_path 
+              ? `https://image.tmdb.org/t/p/w300${movie.poster_path}` 
+              : 'https://via.placeholder.com/150x225/666/fff?text=?'}" 
+              alt="${escapeHtml(movie.title || 'Movie')}" 
+              class="movie-poster" 
+              loading="lazy" 
+              decoding="async">
+            <div class="movie-title">${escapeHtml(movie.title || 'Untitled')}</div>
+          </div>
+        </a>
+      `).join('')}
+    </div>
+  </div>
+
+  <div class="footer">
+    <a href="https://go.daniyar.link/x-verdictweb" target="_blank" rel="noopener noreferrer" style="color: rgba(255,255,255,0.8); text-decoration: underline;">made by Daniyar Agabekov</a>
+    <div style="margin-top: 16px; font-size: 13px; color: rgba(255,255,255,0.5);">
+      <div style="line-height: 1.6;">
+        <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('bc1quzza9c30exsj7jj02kj2nukcxg7x8mf2259w2m', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Bitcoin: bc1quzza9c30exsj7jj02kj2nukcxg7x8mf2259w2m</div>
+        <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('0x655e13867c27292E04f5579918eb6A2B15eEdaCd', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Ethereum: 0x655e13867c27292E04f5579918eb6A2B15eEdaCd</div>
+        <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('0x655e13867c27292E04f5579918eb6A2B15eEdaCd', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Tether USD: 0x655e13867c27292E04f5579918eb6A2B15eEdaCd</div>
+        <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('5nroFAaVoz3iJhMY8xQiHMkDvkNt13douMsggjDiMALL', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Solana: 5nroFAaVoz3iJhMY8xQiHMkDvkNt13douMsggjDiMALL</div>
+        <div style="cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('DHgcLztxTA4GXFBV5FLP7qXCLJC4o1Rqoz', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Dogecoin: DHgcLztxTA4GXFBV5FLP7qXCLJC4o1Rqoz</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function copyToClipboard(text, element) {
+      navigator.clipboard.writeText(text).then(function() {
+        const originalText = element.innerHTML;
+        element.innerHTML = originalText + ' <span style="color: #4CAF50;">✓ Copied!</span>';
+        setTimeout(function() { element.innerHTML = originalText; }, 2000);
+      }).catch(function(err) { console.error('Could not copy text: ', err); });
+    }
+  </script>
+</body>
+</html>
       `);
     }
     console.error('Error fetching movie:', error);
