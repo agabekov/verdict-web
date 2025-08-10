@@ -338,7 +338,7 @@ function generateMovieHTML(movie, credits, keywords, reviews, watchProviders, re
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #000; color: #fff; overflow-x: hidden; }
     .background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('${backdropUrl}'); background-size: cover; background-position: center; filter: blur(30px); z-index: -2; }
     .background-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 70%, rgba(0,0,0,0.9) 100%); z-index: -1; pointer-events: none; }
-    .app-banner { background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); color: white; padding: 20px; text-align: center; font-size: 16px; position: relative; z-index: 10; }
+    .app-banner { background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); color: white; padding: 20px; text-align: center; font-size: 16px; position: relative; z-index: 10; }
     .banner-text { font-weight: 500; margin-bottom: 12px; color: rgba(255,255,255,0.9); }
     .download-btn { background: rgba(255,255,255,0.15); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; display: inline-block; transition: all 0.3s ease; font-size: 15px; }
     .download-btn:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.3); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
@@ -388,7 +388,7 @@ function generateMovieHTML(movie, credits, keywords, reviews, watchProviders, re
     .provider-item { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); border-radius: 8px; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.1); }
     .provider-logo { width: 24px; height: 24px; border-radius: 4px; object-fit: cover; }
     .provider-name { font-size: 13px; color: rgba(255,255,255,0.9); font-weight: 500; }
-    .footer { text-align: center; padding: 40px 24px; color: rgba(255,255,255,0.6); font-size: 14px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); position: relative; z-index: 10; }
+    .footer { text-align: center; padding: 40px 24px; color: rgba(255,255,255,0.6); font-size: 14px; background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); position: relative; z-index: 10; }
     @media (max-width: 768px) { .content-container { padding-top: 40px; } .movie-title { font-size: 24px; } }
     @media (max-width: 480px) { .movie-info { padding-left: 16px; padding-right: 16px; } .poster-section { padding: 0 16px; } }
   </style>
@@ -554,7 +554,7 @@ export default async function handler(req, res) {
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #000; color: #fff; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
     .background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; ${backdropUrl ? `background-image: url('${backdropUrl}'); background-size: cover; background-position: center; filter: blur(30px);` : 'background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);'} z-index: -2; }
     .background-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 70%, rgba(0,0,0,0.9) 100%); z-index: -1; pointer-events: none; }
-    .app-banner { background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); color: white; padding: 20px; text-align: center; font-size: 16px; position: relative; z-index: 10; }
+    .app-banner { background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); color: white; padding: 20px; text-align: center; font-size: 16px; position: relative; z-index: 10; }
     .banner-text { font-weight: 500; margin-bottom: 12px; color: rgba(255,255,255,0.9); }
     .download-btn { background: rgba(255,255,255,0.15); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; display: inline-block; transition: all 0.3s ease; font-size: 15px; }
     .download-btn:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.3); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
@@ -587,7 +587,7 @@ export default async function handler(req, res) {
     .suggestion-info { flex: 1; }
     .suggestion-title { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.9); margin-bottom: 2px; }
     .suggestion-year { font-size: 12px; color: rgba(255,255,255,0.6); }
-    .footer { text-align: center; padding: 40px 24px; color: rgba(255,255,255,0.6); font-size: 14px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); position: relative; z-index: 10; }
+    .footer { text-align: center; padding: 40px 24px; color: rgba(255,255,255,0.6); font-size: 14px; background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); position: relative; z-index: 10; }
     @media (max-width: 768px) { .error-title { font-size: 28px; } .movie-icon { font-size: 60px; } .movies-grid { grid-template-columns: repeat(3, 1fr); } .popular-section { padding: 0 16px; } }
     @media (max-width: 480px) { .movies-grid { grid-template-columns: repeat(2, 1fr); } }
   </style>
