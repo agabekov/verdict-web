@@ -591,7 +591,6 @@ export default async function handler(req, res) {
 
   <div class="content-container">
     <div class="main-content">
-      <div class="movie-icon">🎭</div>
       <h1 class="error-title">Hmm, we don't have that</h1>
     </div>
   </div>
@@ -609,8 +608,6 @@ export default async function handler(req, res) {
               class="movie-poster" 
               loading="lazy" 
               decoding="async">
-            <div class="poster-gradient"></div>
-            <div class="movie-title">${escapeHtml(movie.title || 'Untitled')}</div>
           </div>
         </a>
       `).join('')}
