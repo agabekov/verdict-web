@@ -699,7 +699,7 @@ export default async function handler(req, res) {
 
       searchTimeout = setTimeout(async () => {
         try {
-          const response = await fetch(\`/api/search-tv?query=\${encodeURIComponent(query)}\`);
+          const response = await fetch(\`/api/search?query=\${encodeURIComponent(query)}\`);
           const data = await response.json();
           
           if (data.results && data.results.length > 0) {
@@ -714,18 +714,19 @@ export default async function handler(req, res) {
       }, 300);
     });
 
-    function displaySuggestions(tvShows) {
-      suggestionsContainer.innerHTML = tvShows.map(tvShow => {
-        const year = tvShow.first_air_date ? new Date(tvShow.first_air_date).getFullYear() : '';
-        const posterUrl = tvShow.poster_path 
-          ? \`https://image.tmdb.org/t/p/w154\${tvShow.poster_path}\` 
+    function displaySuggestions(results) {
+      suggestionsContainer.innerHTML = results.map(item => {
+        const year = item.date ? new Date(item.date).getFullYear() : '';
+        const posterUrl = item.poster_path 
+          ? \`https://image.tmdb.org/t/p/w154\${item.poster_path}\` 
           : 'https://via.placeholder.com/45x68/333/999?text=?';
+        const mediaIcon = item.media_type === 'tv' ? '📺' : '🎬';
         
         return \`
-          <div class="search-suggestion" onclick="openTvShow(\${tvShow.id})">
-            <img src="\${posterUrl}" alt="\${tvShow.name}" class="suggestion-poster" loading="lazy">
+          <div class="search-suggestion" onclick="selectResult(\${item.id}, '\${item.media_type}')">
+            <img src="\${posterUrl}" alt="\${item.title}" class="suggestion-poster" loading="lazy">
             <div class="suggestion-info">
-              <div class="suggestion-title">\${tvShow.name || 'Unknown Title'}</div>
+              <div class="suggestion-title">\${mediaIcon} \${item.title}</div>
               <div class="suggestion-year">\${year || 'Unknown Year'}</div>
             </div>
           </div>
@@ -734,8 +735,8 @@ export default async function handler(req, res) {
       suggestionsContainer.style.display = 'block';
     }
 
-    function openTvShow(tvId) {
-      window.location.href = \`/tv/\${tvId}\`;
+    function selectResult(id, mediaType) {
+      window.location.href = \`/\${mediaType}/\${id}\`;
     }
 
     // Hide suggestions when clicking outside

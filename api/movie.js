@@ -669,7 +669,7 @@ export default async function handler(req, res) {
 
       searchTimeout = setTimeout(async () => {
         try {
-          const response = await fetch(\`/api/search-movies?query=\${encodeURIComponent(query)}\`);
+          const response = await fetch(\`/api/search?query=\${encodeURIComponent(query)}\`);
           const data = await response.json();
           
           if (data.results && data.results.length > 0) {
@@ -684,18 +684,19 @@ export default async function handler(req, res) {
       }, 300);
     });
 
-    function displaySuggestions(movies) {
-      suggestionsContainer.innerHTML = movies.map(movie => {
-        const year = movie.release_date ? new Date(movie.release_date).getFullYear() : '';
-        const posterUrl = movie.poster_path 
-          ? \`https://image.tmdb.org/t/p/w154\${movie.poster_path}\` 
+    function displaySuggestions(results) {
+      suggestionsContainer.innerHTML = results.map(item => {
+        const year = item.date ? new Date(item.date).getFullYear() : '';
+        const posterUrl = item.poster_path 
+          ? \`https://image.tmdb.org/t/p/w154\${item.poster_path}\` 
           : 'https://via.placeholder.com/45x68/333/999?text=?';
+        const mediaIcon = item.media_type === 'tv' ? '📺' : '🎬';
         
         return \`
-          <div class="search-suggestion" onclick="selectMovie(\${movie.id})">
-            <img src="\${posterUrl}" alt="\${movie.title}" class="suggestion-poster" loading="lazy">
+          <div class="search-suggestion" onclick="selectResult(\${item.id}, '\${item.media_type}')">
+            <img src="\${posterUrl}" alt="\${item.title}" class="suggestion-poster" loading="lazy">
             <div class="suggestion-info">
-              <div class="suggestion-title">\${movie.title}</div>
+              <div class="suggestion-title">\${mediaIcon} \${item.title}</div>
               <div class="suggestion-year">\${year}</div>
             </div>
           </div>
@@ -705,8 +706,8 @@ export default async function handler(req, res) {
       suggestionsContainer.style.display = 'block';
     }
 
-    function selectMovie(movieId) {
-      window.location.href = \`/movie/\${movieId}\`;
+    function selectResult(id, mediaType) {
+      window.location.href = \`/\${mediaType}/\${id}\`;
     }
 
     document.addEventListener('click', function(e) {
