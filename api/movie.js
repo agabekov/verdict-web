@@ -532,6 +532,13 @@ export default async function handler(req, res) {
       const popularMovies = await fetchTmdbOrNull('/movie/popular');
       const movies = popularMovies?.results?.slice(0, 12) || [];
       
+      // Use first movie's backdrop for background
+      const backdropUrl = movies.length > 0 && movies[0].backdrop_path
+        ? `https://image.tmdb.org/t/p/w1280${movies[0].backdrop_path}`
+        : movies.length > 0 && movies[0].poster_path
+        ? `https://image.tmdb.org/t/p/w500${movies[0].poster_path}`
+        : '';
+      
       res.setHeader('Content-Type', 'text/html; charset=UTF-8');
       return res.status(404).send(`
 <!DOCTYPE html>
@@ -545,7 +552,8 @@ export default async function handler(req, res) {
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #000; color: #fff; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
-    .background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); z-index: -1; }
+    .background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; ${backdropUrl ? `background-image: url('${backdropUrl}'); background-size: cover; background-position: center; filter: blur(30px);` : 'background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);'} z-index: -2; }
+    .background-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 70%, rgba(0,0,0,0.9) 100%); z-index: -1; }
     .app-banner { background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.1); color: white; padding: 20px; text-align: center; font-size: 16px; }
     .banner-text { font-weight: 500; margin-bottom: 12px; color: rgba(255,255,255,0.9); }
     .download-btn { background: rgba(255,255,255,0.15); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; display: inline-block; transition: all 0.3s ease; font-size: 15px; }
@@ -558,7 +566,7 @@ export default async function handler(req, res) {
     .suggestion { font-size: 16px; color: rgba(255,255,255,0.8); margin-bottom: 32px; }
     .cta-button { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 16px 32px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 16px; display: inline-block; transition: all 0.3s ease; }
     .cta-button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4); }
-    .popular-section { margin-top: 48px; padding: 0 24px; max-width: 1200px; margin-left: auto; margin-right: auto; }
+    .popular-section { margin-top: 24px; padding: 0 24px; max-width: 1200px; margin-left: auto; margin-right: auto; }
     .popular-title { font-size: 24px; font-weight: 700; margin-bottom: 24px; color: rgba(255,255,255,0.9); text-align: center; }
     .movies-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-bottom: 32px; }
     .movie-card { position: relative; transition: all 0.3s ease; }
@@ -574,6 +582,7 @@ export default async function handler(req, res) {
 </head>
 <body>
   <div class="background"></div>
+  <div class="background-overlay"></div>
   
   <div class="app-banner">
     <div class="banner-text">🎬 Open in Verdict, rate it and share with friends</div>
