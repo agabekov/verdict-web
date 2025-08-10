@@ -254,6 +254,47 @@ function renderKeywords(keywords) {
   `;
 }
 
+function renderReviews(reviews) {
+  const results = reviews?.results || [];
+  if (results.length === 0) return '';
+  const sorted = results
+    .filter((r) => r.created_at)
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    .slice(0, 3);
+  if (sorted.length === 0) return '';
+  return `
+    <div class="reviews-section">
+      <h3 style="font-size: 18px; margin: 20px 0 16px 0; color: rgba(255,255,255,0.9);">User Reviews</h3>
+      ${sorted
+        .map((review) => {
+          const body = escapeHtml(stripHtmlTags(review.content || ''));
+          return `
+            <div class="review-item">
+              <div class="review-header">
+                <div class="review-author">${escapeHtml(review.author || 'Anonymous')}</div>
+                ${
+                  review.author_details && review.author_details.rating
+                    ? `<div class=\"review-rating\">★ ${escapeHtml(String(review.author_details.rating))}/10</div>`
+                    : ''
+                }
+              </div>
+              <div class="review-content">${body}</div>
+              ${
+                review.created_at
+                  ? `<div class=\"review-date\">${new Date(review.created_at).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}</div>`
+                  : ''
+              }
+            </div>`;
+        })
+        .join('')}
+    </div>
+  `;
+}
+
 function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData, watchProviders, region) {
   const safeTitle = escapeHtml(tvSeries.name || 'TV Series');
   const safeOverview = escapeHtml(tvSeries.overview || `${safeTitle} - Watch and discover TV series on Verdict app`);
