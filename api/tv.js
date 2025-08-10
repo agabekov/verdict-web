@@ -338,8 +338,8 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData,
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #000; color: #fff; overflow-x: hidden; }
     .background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('${backdropUrl}'); background-size: cover; background-position: center; filter: blur(30px); z-index: -2; }
-    .background-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 70%, rgba(0,0,0,0.9) 100%); z-index: -1; }
-    .app-banner { background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); color: white; padding: 20px; text-align: center; font-size: 16px; position: relative; z-index: 100; }
+    .background-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 70%, rgba(0,0,0,0.9) 100%); z-index: -1; pointer-events: none; }
+    .app-banner { background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); color: white; padding: 20px; text-align: center; font-size: 16px; position: relative; z-index: 10; }
     .banner-text { font-weight: 500; margin-bottom: 12px; color: rgba(255,255,255,0.9); }
     .download-btn { background: rgba(255,255,255,0.15); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; display: inline-block; transition: all 0.3s ease; font-size: 15px; }
     .download-btn:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.3); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
@@ -393,7 +393,7 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData,
     .provider-item { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); border-radius: 8px; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.1); }
     .provider-logo { width: 24px; height: 24px; border-radius: 4px; object-fit: cover; }
     .provider-name { font-size: 13px; color: rgba(255,255,255,0.9); font-weight: 500; }
-    .footer { text-align: center; padding: 40px 24px; color: rgba(255,255,255,0.6); font-size: 14px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); }
+    .footer { text-align: center; padding: 40px 24px; color: rgba(255,255,255,0.6); font-size: 14px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); position: relative; z-index: 10; }
     .tv-details { display: flex; flex-wrap: wrap; gap: 16px; margin: 16px 0; }
     .detail-item { background: rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 20px; font-size: 14px; color: rgba(255,255,255,0.9); }
     @media (max-width: 768px) { .content-container { padding-top: 40px; } .tv-title { font-size: 24px; } }
@@ -591,7 +591,7 @@ export default async function handler(req, res) {
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #000; color: #fff; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
     .background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; ${backdropUrl ? `background-image: url('${backdropUrl}'); background-size: cover; background-position: center; filter: blur(30px);` : 'background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);'} z-index: -2; }
-    .background-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 70%, rgba(0,0,0,0.9) 100%); z-index: -1; }
+    .background-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 70%, rgba(0,0,0,0.9) 100%); z-index: -1; pointer-events: none; }
     .app-banner { background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); color: white; padding: 20px; text-align: center; font-size: 16px; }
     .banner-text { font-weight: 500; margin-bottom: 12px; color: rgba(255,255,255,0.9); }
     .download-btn { background: rgba(255,255,255,0.15); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; display: inline-block; transition: all 0.3s ease; font-size: 15px; }
@@ -616,7 +616,7 @@ export default async function handler(req, res) {
     .search-suggestion:last-child { border-bottom: none; }
     .suggestion-title { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 4px; }
     .suggestion-meta { font-size: 12px; color: rgba(255,255,255,0.6); }
-    .footer { text-align: center; padding: 40px 24px; color: rgba(255,255,255,0.6); font-size: 14px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); }
+    .footer { text-align: center; padding: 40px 24px; color: rgba(255,255,255,0.6); font-size: 14px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); position: relative; z-index: 10; }
     @media (max-width: 768px) { .error-title { font-size: 28px; } .tv-grid { grid-template-columns: repeat(3, 1fr); } .popular-section { padding: 0 16px; } }
     @media (max-width: 480px) { .tv-grid { grid-template-columns: repeat(2, 1fr); } }
   </style>
