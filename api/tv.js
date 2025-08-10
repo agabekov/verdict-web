@@ -697,7 +697,7 @@ export default async function handler(req, res) {
 
       searchTimeout = setTimeout(async () => {
         try {
-          const response = await fetch(\`https://api.themoviedb.org/3/search/tv?api_key=${process.env.TMDB_API_KEY || ''}&query=\${encodeURIComponent(query)}&language=en-US&page=1\`);
+          const response = await fetch(\`/api/search-tv?query=\${encodeURIComponent(query)}\`);
           const data = await response.json();
           
           if (data.results && data.results.length > 0) {
