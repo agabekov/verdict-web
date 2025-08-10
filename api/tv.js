@@ -164,6 +164,9 @@ function renderSeasons(seasonsData) {
       }</div>
           </div>
           ${season.overview ? `<div class="season-overview">${escapeHtml(season.overview)}</div>` : ''}
+          ${!season.overview && season.episodes && season.episodes.length > 0 ? `<div class="season-overview">${escapeHtml(
+            season.episodes[0].overview || ''
+          )}</div>` : ''}
         </div>
       `;
     })
@@ -374,6 +377,7 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData,
     .review-content { font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.8); }
     .review-content.truncated { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
     .review-date { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 12px; }
+    .season-overview { font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.8); white-space: pre-line; }
     .tv-title { font-size: 28px; font-weight: 700; line-height: 1.2; margin-bottom: 8px; }
     .release-year { font-size: 17px; color: rgba(255,255,255,0.7); margin-bottom: 8px; }
     .overview { font-size: 17px; line-height: 1.6; color: rgba(255,255,255,0.9); margin-top: 8px; }
