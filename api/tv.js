@@ -377,6 +377,11 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData,
     .review-content { font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.8); }
     .review-content.truncated { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
     .review-date { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 12px; }
+    .seasons-section { margin: 24px 0; }
+    .season-item { background: rgba(255,255,255,0.03); border-radius: 12px; padding: 20px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.08); }
+    .season-header { margin-bottom: 12px; }
+    .season-title { font-size: 16px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 4px; }
+    .season-meta { font-size: 14px; color: rgba(255,255,255,0.6); }
     .season-overview { font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.8); white-space: pre-line; }
     .tv-title { font-size: 28px; font-weight: 700; line-height: 1.2; margin-bottom: 8px; }
     .release-year { font-size: 17px; color: rgba(255,255,255,0.7); margin-bottom: 8px; }
@@ -561,15 +566,109 @@ export default async function handler(req, res) {
     return res.status(200).send(html);
   } catch (error) {
     if (error && error.status === 404) {
+      // Fetch popular TV shows for 404 page
+      const popularTvShows = await fetchTmdbOrNull('/tv/popular');
+      const tvShows = popularTvShows?.results?.slice(0, 12) || [];
+      
+      // Use first TV show's backdrop for background
+      const backdropUrl = tvShows.length > 0 && tvShows[0].backdrop_path
+        ? `https://image.tmdb.org/t/p/w1280${tvShows[0].backdrop_path}`
+        : tvShows.length > 0 && tvShows[0].poster_path
+        ? `https://image.tmdb.org/t/p/w500${tvShows[0].poster_path}`
+        : '';
+      
       res.setHeader('Content-Type', 'text/html; charset=UTF-8');
       return res.status(404).send(`
-        <html>
-          <head><title>TV Series Not Found</title></head>
-          <body style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; text-align: center; padding: 50px;">
-            <h1>TV Series Not Found</h1>
-            <p>TV series with ID ${escapeHtml(String(id))} does not exist.</p>
-          </body>
-        </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TV Series Not Found - Verdict</title>
+  <meta name="description" content="The TV series you're looking for was not found. Discover and rate TV shows on the Verdict app.">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #000; color: #fff; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
+    .background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; ${backdropUrl ? `background-image: url('${backdropUrl}'); background-size: cover; background-position: center; filter: blur(30px);` : 'background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);'} z-index: -2; }
+    .background-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 70%, rgba(0,0,0,0.9) 100%); z-index: -1; }
+    .app-banner { background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.1); color: white; padding: 20px; text-align: center; font-size: 16px; }
+    .banner-text { font-weight: 500; margin-bottom: 12px; color: rgba(255,255,255,0.9); }
+    .download-btn { background: rgba(255,255,255,0.15); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; display: inline-block; transition: all 0.3s ease; font-size: 15px; }
+    .download-btn:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.3); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    .content-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 24px; }
+    .main-content { text-align: center; max-width: 500px; }
+    .error-title { font-size: 32px; font-weight: 700; margin-bottom: 16px; color: rgba(255,255,255,0.9); }
+    .popular-section { margin-top: 24px; padding: 0 24px; max-width: 1200px; margin-left: auto; margin-right: auto; }
+    .popular-title { font-size: 24px; font-weight: 700; margin-bottom: 24px; color: rgba(255,255,255,0.9); text-align: center; }
+    .tv-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-bottom: 32px; }
+    .tv-card { position: relative; transition: all 0.3s ease; }
+    .tv-card:hover { transform: translateY(-4px); }
+    .tv-poster { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+    .tv-link { text-decoration: none; color: inherit; display: block; }
+    .footer { text-align: center; padding: 40px 24px; color: rgba(255,255,255,0.6); font-size: 14px; border-top: 1px solid rgba(255,255,255,0.1); }
+    @media (max-width: 768px) { .error-title { font-size: 28px; } .tv-grid { grid-template-columns: repeat(3, 1fr); } .popular-section { padding: 0 16px; } }
+    @media (max-width: 480px) { .tv-grid { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+  <div class="background-overlay"></div>
+  
+  <div class="app-banner">
+    <div class="banner-text">📺 Open in Verdict, rate it and share with friends</div>
+    <a href="https://go.daniyar.link/verdict-web" class="download-btn" target="_blank" rel="noopener noreferrer">Download from App Store</a>
+  </div>
+
+  <div class="content-container">
+    <div class="main-content">
+      <h1 class="error-title">Hmm, we don't have that</h1>
+    </div>
+  </div>
+
+  <div class="popular-section">
+    <h2 class="popular-title">Popular now</h2>
+    <div class="tv-grid">
+      ${tvShows.map(tvShow => `
+        <a href="/tv/${tvShow.id}" class="tv-link">
+          <div class="tv-card">
+            <img src="${tvShow.poster_path 
+              ? `https://image.tmdb.org/t/p/w500${tvShow.poster_path}` 
+              : 'https://via.placeholder.com/300x450/cccccc/666666?text=No+Image'}" 
+              alt="${escapeHtml(tvShow.name || 'TV Series')}" 
+              class="tv-poster" 
+              loading="lazy" 
+              decoding="async">
+          </div>
+        </a>
+      `).join('')}
+    </div>
+  </div>
+
+  <div class="footer">
+    <a href="https://go.daniyar.link/x-verdictweb" target="_blank" rel="noopener noreferrer" style="color: rgba(255,255,255,0.8); text-decoration: underline;">made by Daniyar Agabekov</a>
+    <div style="margin-top: 16px; font-size: 13px; color: rgba(255,255,255,0.5);">
+      <div style="line-height: 1.6;">
+        <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('bc1quzza9c30exsj7jj02kj2nukcxg7x8mf2259w2m', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Bitcoin: bc1quzza9c30exsj7jj02kj2nukcxg7x8mf2259w2m</div>
+        <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('0x655e13867c27292E04f5579918eb6A2B15eEdaCd', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Ethereum: 0x655e13867c27292E04f5579918eb6A2B15eEdaCd</div>
+        <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('0x655e13867c27292E04f5579918eb6A2B15eEdaCd', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Tether USD: 0x655e13867c27292E04f5579918eb6A2B15eEdaCd</div>
+        <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('5nroFAaVoz3iJhMY8xQiHMkDvkNt13douMsggjDiMALL', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Solana: 5nroFAaVoz3iJhMY8xQiHMkDvkNt13douMsggjDiMALL</div>
+        <div style="cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('DHgcLztxTA4GXFBV5FLP7qXCLJC4o1Rqoz', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Dogecoin: DHgcLztxTA4GXFBV5FLP7qXCLJC4o1Rqoz</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function copyToClipboard(text, element) {
+      navigator.clipboard.writeText(text).then(function() {
+        const originalText = element.innerHTML;
+        element.innerHTML = originalText + ' <span style="color: #4CAF50;">✓ Copied!</span>';
+        setTimeout(function() { element.innerHTML = originalText; }, 2000);
+      }).catch(function(err) { console.error('Could not copy text: ', err); });
+    }
+  </script>
+</body>
+</html>
       `);
     }
     console.error('Error fetching TV series:', error);
