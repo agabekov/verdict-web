@@ -606,6 +606,16 @@ export default async function handler(req, res) {
     .tv-card:hover { transform: translateY(-4px); }
     .tv-poster { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
     .tv-link { text-decoration: none; color: inherit; display: block; }
+    .search-container { margin: 24px 0; max-width: 400px; margin-left: auto; margin-right: auto; position: relative; }
+    .search-input { width: 100%; padding: 16px 20px; font-size: 16px; background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; outline: none; transition: all 0.3s ease; }
+    .search-input::placeholder { color: rgba(255,255,255,0.6); }
+    .search-input:focus { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.4); box-shadow: 0 0 0 4px rgba(255,255,255,0.1); }
+    .search-suggestions { position: absolute; top: 100%; left: 0; right: 0; background: rgba(20,20,20,0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; margin-top: 8px; max-height: 300px; overflow-y: auto; z-index: 1000; display: none; }
+    .search-suggestion { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.1); transition: background 0.2s ease; }
+    .search-suggestion:hover { background: rgba(255,255,255,0.1); }
+    .search-suggestion:last-child { border-bottom: none; }
+    .suggestion-title { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 4px; }
+    .suggestion-meta { font-size: 12px; color: rgba(255,255,255,0.6); }
     .footer { text-align: center; padding: 40px 24px; color: rgba(255,255,255,0.6); font-size: 14px; border-top: 1px solid rgba(255,255,255,0.1); }
     @media (max-width: 768px) { .error-title { font-size: 28px; } .tv-grid { grid-template-columns: repeat(3, 1fr); } .popular-section { padding: 0 16px; } }
     @media (max-width: 480px) { .tv-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -623,6 +633,10 @@ export default async function handler(req, res) {
   <div class="content-container">
     <div class="main-content">
       <h1 class="error-title">Hmm, we don't have that</h1>
+      <div class="search-container">
+        <input type="text" class="search-input" placeholder="Search TV series..." id="searchInput">
+        <div class="search-suggestions" id="searchSuggestions"></div>
+      </div>
     </div>
   </div>
 
@@ -666,6 +680,58 @@ export default async function handler(req, res) {
         setTimeout(function() { element.innerHTML = originalText; }, 2000);
       }).catch(function(err) { console.error('Could not copy text: ', err); });
     }
+
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    const suggestionsContainer = document.getElementById('searchSuggestions');
+    let searchTimeout;
+
+    searchInput.addEventListener('input', function() {
+      const query = this.value.trim();
+      clearTimeout(searchTimeout);
+      
+      if (query.length < 2) {
+        suggestionsContainer.style.display = 'none';
+        return;
+      }
+
+      searchTimeout = setTimeout(async () => {
+        try {
+          const response = await fetch(\`https://api.themoviedb.org/3/search/tv?api_key=${process.env.TMDB_API_KEY || ''}&query=\${encodeURIComponent(query)}&language=en-US&page=1\`);
+          const data = await response.json();
+          
+          if (data.results && data.results.length > 0) {
+            displaySuggestions(data.results.slice(0, 5));
+          } else {
+            suggestionsContainer.style.display = 'none';
+          }
+        } catch (error) {
+          console.error('Search error:', error);
+          suggestionsContainer.style.display = 'none';
+        }
+      }, 300);
+    });
+
+    function displaySuggestions(tvShows) {
+      suggestionsContainer.innerHTML = tvShows.map(tvShow => \`
+        <div class="search-suggestion" onclick="openTvShow(\${tvShow.id})">
+          <div class="suggestion-title">\${tvShow.name || 'Unknown Title'}</div>
+          <div class="suggestion-meta">\${tvShow.first_air_date ? new Date(tvShow.first_air_date).getFullYear() : 'Unknown Year'}</div>
+        </div>
+      \`).join('');
+      suggestionsContainer.style.display = 'block';
+    }
+
+    function openTvShow(tvId) {
+      window.location.href = \`/tv/\${tvId}\`;
+    }
+
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', function(event) {
+      if (!searchInput.contains(event.target) && !suggestionsContainer.contains(event.target)) {
+        suggestionsContainer.style.display = 'none';
+      }
+    });
   </script>
 </body>
 </html>

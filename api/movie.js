@@ -575,6 +575,18 @@ export default async function handler(req, res) {
     .poster-gradient { position: absolute; bottom: 0; left: 0; right: 0; height: 40%; background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.3) 100%); border-radius: 0 0 12px 12px; pointer-events: none; }
     .movie-title { position: absolute; bottom: 8px; left: 12px; right: 12px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.9); text-align: center; line-height: 1.3; z-index: 1; }
     .movie-link { text-decoration: none; color: inherit; display: block; }
+    .search-section { margin: 32px auto; max-width: 500px; padding: 0 24px; }
+    .search-container { position: relative; }
+    .search-input { width: 100%; padding: 16px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; font-size: 16px; outline: none; transition: all 0.3s ease; }
+    .search-input::placeholder { color: rgba(255,255,255,0.6); }
+    .search-input:focus { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.4); box-shadow: 0 0 0 3px rgba(255,255,255,0.1); }
+    .search-suggestions { position: absolute; top: 100%; left: 0; right: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; margin-top: 8px; max-height: 300px; overflow-y: auto; z-index: 1000; display: none; }
+    .search-suggestion { padding: 12px 20px; cursor: pointer; transition: background 0.2s ease; display: flex; align-items: center; gap: 12px; }
+    .search-suggestion:hover { background: rgba(255,255,255,0.1); }
+    .suggestion-poster { width: 40px; height: 60px; border-radius: 6px; object-fit: cover; background: rgba(255,255,255,0.1); }
+    .suggestion-info { flex: 1; }
+    .suggestion-title { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.9); margin-bottom: 2px; }
+    .suggestion-year { font-size: 12px; color: rgba(255,255,255,0.6); }
     .footer { text-align: center; padding: 40px 24px; color: rgba(255,255,255,0.6); font-size: 14px; border-top: 1px solid rgba(255,255,255,0.1); }
     @media (max-width: 768px) { .error-title { font-size: 28px; } .movie-icon { font-size: 60px; } .movies-grid { grid-template-columns: repeat(3, 1fr); } .popular-section { padding: 0 16px; } }
     @media (max-width: 480px) { .movies-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -592,6 +604,13 @@ export default async function handler(req, res) {
   <div class="content-container">
     <div class="main-content">
       <h1 class="error-title">Hmm, we don't have that</h1>
+    </div>
+  </div>
+
+  <div class="search-section">
+    <div class="search-container">
+      <input type="text" class="search-input" placeholder="Search for a movie..." id="movieSearch" autocomplete="off">
+      <div class="search-suggestions" id="movieSuggestions"></div>
     </div>
   </div>
 
@@ -635,6 +654,68 @@ export default async function handler(req, res) {
         setTimeout(function() { element.innerHTML = originalText; }, 2000);
       }).catch(function(err) { console.error('Could not copy text: ', err); });
     }
+
+    let searchTimeout;
+    const searchInput = document.getElementById('movieSearch');
+    const suggestionsContainer = document.getElementById('movieSuggestions');
+
+    searchInput.addEventListener('input', function() {
+      const query = this.value.trim();
+      
+      clearTimeout(searchTimeout);
+      
+      if (query.length < 2) {
+        suggestionsContainer.style.display = 'none';
+        return;
+      }
+
+      searchTimeout = setTimeout(async () => {
+        try {
+          const response = await fetch(\`/api/search-movies?query=\${encodeURIComponent(query)}\`);
+          const data = await response.json();
+          
+          if (data.results && data.results.length > 0) {
+            displaySuggestions(data.results.slice(0, 5));
+          } else {
+            suggestionsContainer.style.display = 'none';
+          }
+        } catch (error) {
+          console.error('Search error:', error);
+          suggestionsContainer.style.display = 'none';
+        }
+      }, 300);
+    });
+
+    function displaySuggestions(movies) {
+      suggestionsContainer.innerHTML = movies.map(movie => {
+        const year = movie.release_date ? new Date(movie.release_date).getFullYear() : '';
+        const posterUrl = movie.poster_path 
+          ? \`https://image.tmdb.org/t/p/w92\${movie.poster_path}\` 
+          : 'https://via.placeholder.com/40x60/666/fff?text=?';
+        
+        return \`
+          <div class="search-suggestion" onclick="selectMovie(\${movie.id})">
+            <img src="\${posterUrl}" alt="\${movie.title}" class="suggestion-poster" loading="lazy">
+            <div class="suggestion-info">
+              <div class="suggestion-title">\${movie.title}</div>
+              <div class="suggestion-year">\${year}</div>
+            </div>
+          </div>
+        \`;
+      }).join('');
+      
+      suggestionsContainer.style.display = 'block';
+    }
+
+    function selectMovie(movieId) {
+      window.location.href = \`/movie/\${movieId}\`;
+    }
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.search-container')) {
+        suggestionsContainer.style.display = 'none';
+      }
+    });
   </script>
 </body>
 </html>
