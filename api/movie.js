@@ -561,10 +561,11 @@ export default async function handler(req, res) {
     .popular-section { margin-top: 48px; padding: 0 24px; max-width: 1200px; margin-left: auto; margin-right: auto; }
     .popular-title { font-size: 24px; font-weight: 700; margin-bottom: 24px; color: rgba(255,255,255,0.9); text-align: center; }
     .movies-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-bottom: 32px; }
-    .movie-card { background: rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden; transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.1); }
-    .movie-card:hover { transform: translateY(-4px); background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
-    .movie-poster { width: 100%; aspect-ratio: 2/3; object-fit: cover; }
-    .movie-title { padding: 8px 12px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.9); text-align: center; line-height: 1.3; }
+    .movie-card { position: relative; transition: all 0.3s ease; }
+    .movie-card:hover { transform: translateY(-4px); }
+    .movie-poster { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+    .poster-gradient { position: absolute; bottom: 0; left: 0; right: 0; height: 40%; background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.3) 100%); border-radius: 0 0 12px 12px; pointer-events: none; }
+    .movie-title { position: absolute; bottom: 8px; left: 12px; right: 12px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.9); text-align: center; line-height: 1.3; z-index: 1; }
     .movie-link { text-decoration: none; color: inherit; display: block; }
     .footer { text-align: center; padding: 40px 24px; color: rgba(255,255,255,0.6); font-size: 14px; border-top: 1px solid rgba(255,255,255,0.1); }
     @media (max-width: 768px) { .error-title { font-size: 28px; } .movie-icon { font-size: 60px; } .movies-grid { grid-template-columns: repeat(3, 1fr); } .popular-section { padding: 0 16px; } }
@@ -582,16 +583,7 @@ export default async function handler(req, res) {
   <div class="content-container">
     <div class="main-content">
       <div class="movie-icon">🎭</div>
-      <h1 class="error-title">Movie Not Found</h1>
-      <p class="error-message">
-        Sorry, we couldn't find the movie you're looking for. It might have been removed or the link might be incorrect.
-      </p>
-      <p class="suggestion">
-        Discover thousands of movies, rate them, and share your thoughts with friends on the Verdict app!
-      </p>
-      <a href="https://go.daniyar.link/verdict-web" class="cta-button" target="_blank" rel="noopener noreferrer">
-        Browse Movies on Verdict
-      </a>
+      <h1 class="error-title">Hmm, we don't have that</h1>
     </div>
   </div>
 
@@ -602,12 +594,13 @@ export default async function handler(req, res) {
         <a href="/movie/${movie.id}" class="movie-link">
           <div class="movie-card">
             <img src="${movie.poster_path 
-              ? `https://image.tmdb.org/t/p/w300${movie.poster_path}` 
-              : 'https://via.placeholder.com/150x225/666/fff?text=?'}" 
+              ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` 
+              : 'https://via.placeholder.com/300x450/cccccc/666666?text=No+Image'}" 
               alt="${escapeHtml(movie.title || 'Movie')}" 
               class="movie-poster" 
               loading="lazy" 
               decoding="async">
+            <div class="poster-gradient"></div>
             <div class="movie-title">${escapeHtml(movie.title || 'Untitled')}</div>
           </div>
         </a>
