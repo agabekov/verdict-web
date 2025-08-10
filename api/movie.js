@@ -580,13 +580,14 @@ export default async function handler(req, res) {
     .search-input { width: 100%; padding: 16px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; font-size: 16px; outline: none; transition: all 0.3s ease; }
     .search-input::placeholder { color: rgba(255,255,255,0.6); }
     .search-input:focus { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.4); box-shadow: 0 0 0 3px rgba(255,255,255,0.1); }
-    .search-suggestions { position: absolute; top: 100%; left: 0; right: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; margin-top: 8px; max-height: 300px; overflow-y: auto; z-index: 1000; display: none; }
-    .search-suggestion { padding: 12px 20px; cursor: pointer; transition: background 0.2s ease; display: flex; align-items: center; gap: 12px; }
-    .search-suggestion:hover { background: rgba(255,255,255,0.1); }
-    .suggestion-poster { width: 40px; height: 60px; border-radius: 6px; object-fit: cover; background: rgba(255,255,255,0.1); }
-    .suggestion-info { flex: 1; }
-    .suggestion-title { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.9); margin-bottom: 2px; }
-    .suggestion-year { font-size: 12px; color: rgba(255,255,255,0.6); }
+    .search-suggestions { position: absolute; top: 100%; left: 0; right: 0; background: rgba(20,20,20,0.95); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; margin-top: 8px; max-height: 350px; overflow-y: auto; z-index: 1000; display: none; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+    .search-suggestion { padding: 14px 18px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .search-suggestion:hover { background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.12) 100%); transform: translateX(2px); }
+    .search-suggestion:last-child { border-bottom: none; }
+    .suggestion-poster { width: 45px; height: 68px; border-radius: 8px; object-fit: cover; background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    .suggestion-info { flex: 1; text-align: left; }
+    .suggestion-title { font-size: 15px; font-weight: 600; color: rgba(255,255,255,0.95); margin-bottom: 3px; line-height: 1.3; text-align: left; }
+    .suggestion-year { font-size: 13px; color: rgba(255,255,255,0.65); font-weight: 500; text-align: left; }
     .footer { text-align: center; padding: 40px 24px; color: rgba(255,255,255,0.6); font-size: 14px; position: relative; z-index: 10; }
     @media (max-width: 768px) { .error-title { font-size: 28px; } .movie-icon { font-size: 60px; } .movies-grid { grid-template-columns: repeat(3, 1fr); } .popular-section { padding: 0 16px; } }
     @media (max-width: 480px) { .movies-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -687,8 +688,8 @@ export default async function handler(req, res) {
       suggestionsContainer.innerHTML = movies.map(movie => {
         const year = movie.release_date ? new Date(movie.release_date).getFullYear() : '';
         const posterUrl = movie.poster_path 
-          ? \`https://image.tmdb.org/t/p/w92\${movie.poster_path}\` 
-          : 'https://via.placeholder.com/40x60/666/fff?text=?';
+          ? \`https://image.tmdb.org/t/p/w154\${movie.poster_path}\` 
+          : 'https://via.placeholder.com/45x68/333/999?text=?';
         
         return \`
           <div class="search-suggestion" onclick="selectMovie(\${movie.id})">
