@@ -606,7 +606,7 @@ export default async function handler(req, res) {
     .tv-card:hover { transform: translateY(-4px); }
     .tv-poster { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
     .tv-link { text-decoration: none; color: inherit; display: block; }
-    .search-container { margin: 24px 0; max-width: 400px; margin-left: auto; margin-right: auto; position: relative; }
+    .search-container { margin: 8px 0 24px 0; max-width: 400px; margin-left: auto; margin-right: auto; position: relative; }
     .search-input { width: 100%; padding: 16px 20px; font-size: 16px; background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; outline: none; transition: all 0.3s ease; }
     .search-input::placeholder { color: rgba(255,255,255,0.6); }
     .search-input:focus { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.4); box-shadow: 0 0 0 4px rgba(255,255,255,0.1); }
@@ -634,7 +634,7 @@ export default async function handler(req, res) {
     <div class="main-content">
       <h1 class="error-title">Hmm, we don't have that</h1>
       <div class="search-container">
-        <input type="text" class="search-input" placeholder="Search TV series..." id="searchInput">
+        <input type="text" class="search-input" placeholder="Find movies and TV shows" id="searchInput">
         <div class="search-suggestions" id="searchSuggestions"></div>
       </div>
     </div>

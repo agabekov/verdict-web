@@ -576,7 +576,7 @@ export default async function handler(req, res) {
     .movie-title { position: absolute; bottom: 8px; left: 12px; right: 12px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.9); text-align: center; line-height: 1.3; z-index: 1; }
     .movie-link { text-decoration: none; color: inherit; display: block; }
     .search-section { margin: 32px auto; max-width: 500px; padding: 0 24px; }
-    .search-container { position: relative; }
+    .search-container { position: relative; margin: 8px auto 0 auto; max-width: 400px; }
     .search-input { width: 100%; padding: 16px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; font-size: 16px; outline: none; transition: all 0.3s ease; }
     .search-input::placeholder { color: rgba(255,255,255,0.6); }
     .search-input:focus { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.4); box-shadow: 0 0 0 3px rgba(255,255,255,0.1); }
@@ -604,13 +604,10 @@ export default async function handler(req, res) {
   <div class="content-container">
     <div class="main-content">
       <h1 class="error-title">Hmm, we don't have that</h1>
-    </div>
-  </div>
-
-  <div class="search-section">
-    <div class="search-container">
-      <input type="text" class="search-input" placeholder="Search for a movie..." id="movieSearch" autocomplete="off">
-      <div class="search-suggestions" id="movieSuggestions"></div>
+      <div class="search-container">
+        <input type="text" class="search-input" placeholder="Find movies and TV shows" id="movieSearch" autocomplete="off">
+        <div class="search-suggestions" id="movieSuggestions"></div>
+      </div>
     </div>
   </div>
 
