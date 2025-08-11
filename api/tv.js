@@ -513,7 +513,6 @@ export default async function handler(req, res) {
         ? Promise.all(
             tvSeries.seasons
               .filter((s) => s.season_number > 0)
-              .slice(0, 10)
               .map(async (season) => {
                 const detail = await fetchTmdbOrNull(`/tv/${id}/season/${season.season_number}`);
                 if (detail) {
