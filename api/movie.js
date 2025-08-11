@@ -532,12 +532,25 @@ export default async function handler(req, res) {
       const popularMovies = await fetchTmdbOrNull('/movie/popular');
       const movies = popularMovies?.results?.slice(0, 12) || [];
       
-      // Use first movie's backdrop for background
-      const backdropUrl = movies.length > 0 && movies[0].backdrop_path
-        ? `https://image.tmdb.org/t/p/w1280${movies[0].backdrop_path}`
-        : movies.length > 0 && movies[0].poster_path
-        ? `https://image.tmdb.org/t/p/w500${movies[0].poster_path}`
-        : '';
+      // Find first movie with a good backdrop for background
+      let backdropUrl = '';
+      if (movies.length > 0) {
+        for (const movie of movies) {
+          if (movie.backdrop_path) {
+            backdropUrl = `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`;
+            break;
+          }
+        }
+        // Fallback to poster if no backdrop found
+        if (!backdropUrl) {
+          for (const movie of movies) {
+            if (movie.poster_path) {
+              backdropUrl = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+              break;
+            }
+          }
+        }
+      }
       
       res.setHeader('Content-Type', 'text/html; charset=UTF-8');
       return res.status(404).send(`

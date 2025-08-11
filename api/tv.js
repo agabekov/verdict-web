@@ -569,12 +569,25 @@ export default async function handler(req, res) {
       const popularTvShows = await fetchTmdbOrNull('/tv/popular');
       const tvShows = popularTvShows?.results?.slice(0, 12) || [];
       
-      // Use first TV show's backdrop for background
-      const backdropUrl = tvShows.length > 0 && tvShows[0].backdrop_path
-        ? `https://image.tmdb.org/t/p/w1280${tvShows[0].backdrop_path}`
-        : tvShows.length > 0 && tvShows[0].poster_path
-        ? `https://image.tmdb.org/t/p/w500${tvShows[0].poster_path}`
-        : '';
+      // Find first TV show with a good backdrop for background
+      let backdropUrl = '';
+      if (tvShows.length > 0) {
+        for (const show of tvShows) {
+          if (show.backdrop_path) {
+            backdropUrl = `https://image.tmdb.org/t/p/w1280${show.backdrop_path}`;
+            break;
+          }
+        }
+        // Fallback to poster if no backdrop found
+        if (!backdropUrl) {
+          for (const show of tvShows) {
+            if (show.poster_path) {
+              backdropUrl = `https://image.tmdb.org/t/p/w500${show.poster_path}`;
+              break;
+            }
+          }
+        }
+      }
       
       res.setHeader('Content-Type', 'text/html; charset=UTF-8');
       return res.status(404).send(`
