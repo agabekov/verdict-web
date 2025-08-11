@@ -602,7 +602,7 @@ export default async function handler(req, res) {
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #000; color: #fff; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
-    .background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; ${backdropUrl ? `background-image: url('${backdropUrl}'); background-size: cover; background-position: center; filter: blur(30px);` : 'background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);'} z-index: -2; }
+    .background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('${backdropUrl}'); background-size: cover; background-position: center; filter: blur(30px); z-index: -2; }
     .background-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 70%, rgba(0,0,0,1) 100%); z-index: -1; pointer-events: none; }
     .app-banner { color: white; padding: 20px; text-align: center; font-size: 16px; position: relative; z-index: 10; }
     .banner-text { font-weight: 500; margin-bottom: 12px; color: rgba(255,255,255,0.9); }
