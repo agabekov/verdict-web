@@ -70,12 +70,12 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #1a1a1a;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             color: white;
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
+            margin: 0;
+            padding: 0;
         }
         
         .background-mosaic {
@@ -106,6 +106,28 @@
             100% { transform: translateX(-200px) translateY(-200px); }
         }
         
+        .dynamic-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            filter: blur(30px);
+            z-index: -2;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        
+        .dynamic-background.show {
+            opacity: 1;
+        }
+        
+        .background-mosaic.fade-out {
+            opacity: 0.3;
+        }
+        
         
         
         .overlay {
@@ -121,15 +143,20 @@
         .container {
             text-align: center;
             max-width: 1200px;
-            padding: 40px 20px;
+            margin: 0 auto;
+            padding: 60px 20px 40px;
             position: relative;
             z-index: 1;
             width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
         
         .main-content {
             max-width: 400px;
-            margin: 0 auto;
+            margin: 0 auto 40px;
+            flex-shrink: 0;
         }
         
         .app-icon {
@@ -208,14 +235,16 @@
         }
         
         .crypto-addresses {
-            margin-top: 24px;
+            margin-top: 48px;
+            margin-bottom: 40px;
             font-size: 0.8rem;
             color: rgba(255,255,255,0.6);
             line-height: 1.8;
             text-align: left;
-            max-width: 380px;
+            max-width: 500px;
             margin-left: auto;
             margin-right: auto;
+            padding: 0 20px;
         }
         
         .crypto-address {
@@ -262,9 +291,11 @@
         
         .popular-section {
             margin-top: 48px;
+            margin-bottom: 24px;
             width: 100%;
             max-width: 1200px;
             padding: 0 20px;
+            flex-grow: 1;
         }
         
         .popular-title {
@@ -355,6 +386,7 @@
 </head>
 <body>
     <div class="background-mosaic"></div>
+    <div class="dynamic-background" id="dynamicBackground"></div>
     <div class="overlay"></div>
     <main class="container">
         <div class="main-content">
@@ -375,7 +407,6 @@
             <h2 class="popular-title">Popular now</h2>
             
             <div class="content-row">
-                <h3 class="row-title">Movies</h3>
                 <div class="content-grid" id="moviesGrid">
                     <!-- Loading placeholders -->
                     <div class="content-card">
@@ -400,7 +431,6 @@
             </div>
             
             <div class="content-row">
-                <h3 class="row-title">TV Shows</h3>
                 <div class="content-grid" id="tvGrid">
                     <!-- Loading placeholders -->
                     <div class="content-card">
@@ -518,6 +548,9 @@
                 
                 renderMovies(movies);
                 renderTvShows(tvShows);
+                
+                // Set background from first movie with good backdrop/poster
+                setDynamicBackground([...movies, ...tvShows]);
             } catch (error) {
                 console.error('Error loading popular content:', error);
                 // Hide the popular section if there's an error
@@ -570,6 +603,45 @@
                     </div>
                 </a>
             `).join('');
+        }
+        
+        function setDynamicBackground(allContent) {
+            if (!allContent || allContent.length === 0) return;
+            
+            // Find first item with a good backdrop
+            let backdropUrl = '';
+            for (const item of allContent) {
+                if (item.backdrop_path) {
+                    backdropUrl = `https://image.tmdb.org/t/p/w1280${item.backdrop_path}`;
+                    break;
+                }
+            }
+            
+            // Fallback to poster if no backdrop found
+            if (!backdropUrl) {
+                for (const item of allContent) {
+                    if (item.poster_path) {
+                        backdropUrl = `https://image.tmdb.org/t/p/w500${item.poster_path}`;
+                        break;
+                    }
+                }
+            }
+            
+            if (backdropUrl) {
+                console.log('Setting dynamic background:', backdropUrl);
+                const dynamicBg = document.getElementById('dynamicBackground');
+                const mosaicBg = document.querySelector('.background-mosaic');
+                
+                if (dynamicBg) {
+                    dynamicBg.style.backgroundImage = `url('${backdropUrl}')`;
+                    dynamicBg.classList.add('show');
+                    
+                    // Fade out the mosaic background slightly
+                    if (mosaicBg) {
+                        mosaicBg.classList.add('fade-out');
+                    }
+                }
+            }
         }
         
         // Load popular content when the page loads
