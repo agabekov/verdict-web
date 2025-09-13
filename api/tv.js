@@ -344,12 +344,13 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData,
     .download-btn { background: rgba(255,255,255,0.15); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; display: inline-block; transition: all 0.3s ease; font-size: 15px; }
     .download-btn:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.3); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
     .content-container { position: relative; z-index: 10; padding-top: 60px; min-height: 100vh; }
-    .main-content { max-width: 800px; margin: 0 auto; padding: 0 24px; text-align: center; }
-    .poster-section { display: flex; justify-content: center; margin-bottom: 32px; }
-    .poster-container { width: 60%; max-width: 300px; position: relative; }
+    .main-content { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .desktop-layout { display: flex; gap: 48px; align-items: flex-start; margin-bottom: 48px; }
+    .poster-section { flex: 0 0 300px; }
+    .poster-container { width: 100%; position: relative; }
     .poster { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
     .poster-gradient { position: absolute; bottom: 0; left: 0; right: 0; height: 40%; background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.3) 100%); border-radius: 0 0 12px 12px; }
-    .tv-info { text-align: left; margin-bottom: 24px; }
+    .tv-info { flex: 1; text-align: left; }
     .genres { margin: 16px 0; }
     .genre-tag { display: inline-block; background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 12px; font-size: 13px; margin: 0 6px 6px 0; color: rgba(255,255,255,0.9); }
     .rating { display: flex; align-items: center; gap: 8px; margin: 12px 0; font-size: 16px; }
@@ -396,8 +397,16 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData,
     .footer { text-align: center; padding: 40px 24px; color: rgba(255,255,255,0.6); font-size: 14px; position: relative; z-index: 10; }
     .tv-details { display: flex; flex-wrap: wrap; gap: 16px; margin: 16px 0; }
     .detail-item { background: rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 20px; font-size: 14px; color: rgba(255,255,255,0.9); }
-    @media (max-width: 768px) { .content-container { padding-top: 40px; } .tv-title { font-size: 24px; } }
-    @media (max-width: 480px) { .tv-info { padding-left: 16px; padding-right: 16px; } .poster-section { padding: 0 16px; } }
+    @media (max-width: 768px) { 
+      .content-container { padding-top: 40px; } 
+      .tv-title { font-size: 24px; } 
+      .desktop-layout { flex-direction: column; gap: 32px; text-align: center; }
+      .poster-section { flex: none; align-self: center; max-width: 300px; }
+    }
+    @media (max-width: 480px) { 
+      .tv-info { padding-left: 16px; padding-right: 16px; } 
+      .poster-section { padding: 0 16px; max-width: 250px; } 
+    }
   </style>
 </head>
 <body>
@@ -411,33 +420,38 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData,
 
   <div class="content-container">
     <div class="main-content">
-      <div class="poster-section">
-        <div class="poster-container">
-          <img src="${posterUrl}" alt="${safeTitle}" class="poster" decoding="async">
-          <div class="poster-gradient"></div>
+      <div class="desktop-layout">
+        <div class="poster-section">
+          <div class="poster-container">
+            <img src="${posterUrl}" alt="${safeTitle}" class="poster" decoding="async">
+            <div class="poster-gradient"></div>
+          </div>
+        </div>
+
+        <div class="tv-info">
+          <h1 class="tv-title">${safeTitle}</h1>
+          ${year !== 'Unknown' ? `<div class="release-year">${escapeHtml(String(year))}</div>` : ''}
+          ${tvSeries.vote_average ? `<div class="rating">${renderStarRating(tvSeries.vote_average)}</div>` : ''}
+          <div class="tv-details">
+            ${tvSeries.number_of_seasons ? `<div class="detail-item">📺 ${escapeHtml(String(tvSeries.number_of_seasons))} Season${
+              tvSeries.number_of_seasons > 1 ? 's' : ''
+            }</div>` : ''}
+            ${tvSeries.number_of_episodes ? `<div class="detail-item">🎬 ${escapeHtml(String(tvSeries.number_of_episodes))} Episodes</div>` : ''}
+            ${tvSeries.status ? `<div class="detail-item">📅 ${escapeHtml(tvSeries.status)}</div>` : ''}
+            ${tvSeries.original_language ? `<div class="detail-item">🌐 ${escapeHtml(tvSeries.original_language.toUpperCase())}</div>` : ''}
+            ${tvSeries.episode_run_time && tvSeries.episode_run_time.length > 0 ? `<div class="detail-item">⏱️ ${escapeHtml(
+              String(tvSeries.episode_run_time[0]),
+            )} min/episode</div>` : ''}
+          </div>
+          ${tvSeries.genres && tvSeries.genres.length > 0 ? `<div class="genres">${tvSeries.genres
+            .map((genre) => `<span class="genre-tag">${escapeHtml(genre.name)}</span>`)
+            .join('')}</div>` : ''}
+          ${tvSeries.overview ? `<div class="overview">${escapeHtml(tvSeries.overview)}</div>` : ''}
+          ${renderWatchProviders(watchProviders, region)}
         </div>
       </div>
 
-      <div class="tv-info">
-        <h1 class="tv-title">${safeTitle}</h1>
-        ${year !== 'Unknown' ? `<div class="release-year">${escapeHtml(String(year))}</div>` : ''}
-        ${tvSeries.vote_average ? `<div class="rating">${renderStarRating(tvSeries.vote_average)}</div>` : ''}
-        <div class="tv-details">
-          ${tvSeries.number_of_seasons ? `<div class="detail-item">📺 ${escapeHtml(String(tvSeries.number_of_seasons))} Season${
-            tvSeries.number_of_seasons > 1 ? 's' : ''
-          }</div>` : ''}
-          ${tvSeries.number_of_episodes ? `<div class="detail-item">🎬 ${escapeHtml(String(tvSeries.number_of_episodes))} Episodes</div>` : ''}
-          ${tvSeries.status ? `<div class="detail-item">📅 ${escapeHtml(tvSeries.status)}</div>` : ''}
-          ${tvSeries.original_language ? `<div class="detail-item">🌐 ${escapeHtml(tvSeries.original_language.toUpperCase())}</div>` : ''}
-          ${tvSeries.episode_run_time && tvSeries.episode_run_time.length > 0 ? `<div class="detail-item">⏱️ ${escapeHtml(
-            String(tvSeries.episode_run_time[0]),
-          )} min/episode</div>` : ''}
-        </div>
-        ${tvSeries.genres && tvSeries.genres.length > 0 ? `<div class="genres">${tvSeries.genres
-          .map((genre) => `<span class="genre-tag">${escapeHtml(genre.name)}</span>`)
-          .join('')}</div>` : ''}
-        ${tvSeries.overview ? `<div class="overview">${escapeHtml(tvSeries.overview)}</div>` : ''}
-        ${renderWatchProviders(watchProviders, region)}
+      <div style="max-width: 1200px; margin: 0 auto;">
         ${renderSeasons(seasonsData)}
         ${renderCast(credits)}
         ${renderReviews(reviews)}
@@ -464,11 +478,10 @@ function generateTvSeriesHTML(tvSeries, credits, keywords, reviews, seasonsData,
       <a href="https://go.daniyar.link/x-verdictweb" target="_blank" rel="noopener noreferrer" style="color: rgba(255,255,255,0.8); text-decoration: underline;">made by Daniyar Agabekov</a>
       <div style="margin-top: 16px; font-size: 13px; color: white;">
         <div style="line-height: 1.6;">
-          <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('bc1quzza9c30exsj7jj02kj2nukcxg7x8mf2259w2m', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Bitcoin: bc1quzza9c30exsj7jj02kj2nukcxg7x8mf2259w2m</div>
-          <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('0x655e13867c27292E04f5579918eb6A2B15eEdaCd', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Ethereum: 0x655e13867c27292E04f5579918eb6A2B15eEdaCd</div>
-          <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('0x655e13867c27292E04f5579918eb6A2B15eEdaCd', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Tether USD: 0x655e13867c27292E04f5579918eb6A2B15eEdaCd</div>
-          <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('5nroFAaVoz3iJhMY8xQiHMkDvkNt13douMsggjDiMALL', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Solana: 5nroFAaVoz3iJhMY8xQiHMkDvkNt13douMsggjDiMALL</div>
-          <div style="cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('DHgcLztxTA4GXFBV5FLP7qXCLJC4o1Rqoz', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Dogecoin: DHgcLztxTA4GXFBV5FLP7qXCLJC4o1Rqoz</div>
+          <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('1MvQWAR59BhG7FMax1C6fwjQicVGPFG3sU', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Bitcoin: 1MvQWAR59BhG7FMax1C6fwjQicVGPFG3sU</div>
+          <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('0x8dfaf5324850cc8098d772c64ea515a97c610043', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Ethereum (ERC20): 0x8dfaf5324850cc8098d772c64ea515a97c610043</div>
+          <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('CED4M3F1eCKUPj33AknaSjSHprdTRnaQt5FnsgMALYZB', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Solana: CED4M3F1eCKUPj33AknaSjSHprdTRnaQt5FnsgMALYZB</div>
+          <div style="cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('TKyKGBqKDHdb1X9znkmfGeL4sRiNxvMJ2h', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">TRX (TRC20): TKyKGBqKDHdb1X9znkmfGeL4sRiNxvMJ2h</div>
         </div>
       </div>
     </div>
@@ -677,11 +690,10 @@ export default async function handler(req, res) {
     <a href="https://go.daniyar.link/x-verdictweb" target="_blank" rel="noopener noreferrer" style="color: rgba(255,255,255,0.8); text-decoration: underline;">made by Daniyar Agabekov</a>
     <div style="margin-top: 16px; font-size: 13px; color: white;">
       <div style="line-height: 1.6;">
-        <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('bc1quzza9c30exsj7jj02kj2nukcxg7x8mf2259w2m', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Bitcoin: bc1quzza9c30exsj7jj02kj2nukcxg7x8mf2259w2m</div>
-        <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('0x655e13867c27292E04f5579918eb6A2B15eEdaCd', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Ethereum: 0x655e13867c27292E04f5579918eb6A2B15eEdaCd</div>
-        <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('0x655e13867c27292E04f5579918eb6A2B15eEdaCd', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Tether USD: 0x655e13867c27292E04f5579918eb6A2B15eEdaCd</div>
-        <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('5nroFAaVoz3iJhMY8xQiHMkDvkNt13douMsggjDiMALL', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Solana: 5nroFAaVoz3iJhMY8xQiHMkDvkNt13douMsggjDiMALL</div>
-        <div style="cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('DHgcLztxTA4GXFBV5FLP7qXCLJC4o1Rqoz', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Dogecoin: DHgcLztxTA4GXFBV5FLP7qXCLJC4o1Rqoz</div>
+        <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('1MvQWAR59BhG7FMax1C6fwjQicVGPFG3sU', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Bitcoin: 1MvQWAR59BhG7FMax1C6fwjQicVGPFG3sU</div>
+        <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('0x8dfaf5324850cc8098d772c64ea515a97c610043', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Ethereum (ERC20): 0x8dfaf5324850cc8098d772c64ea515a97c610043</div>
+        <div style="margin-bottom: 6px; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('CED4M3F1eCKUPj33AknaSjSHprdTRnaQt5FnsgMALYZB', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Solana: CED4M3F1eCKUPj33AknaSjSHprdTRnaQt5FnsgMALYZB</div>
+        <div style="cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onclick="copyToClipboard('TKyKGBqKDHdb1X9znkmfGeL4sRiNxvMJ2h', this)" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">TRX (TRC20): TKyKGBqKDHdb1X9znkmfGeL4sRiNxvMJ2h</div>
       </div>
     </div>
   </div>

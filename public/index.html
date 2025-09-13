@@ -253,6 +253,98 @@
                 height: 66px;
             }
         }
+        
+        .popular-section {
+            margin-top: 48px;
+            width: 100%;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+        
+        .popular-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 32px;
+            color: rgba(255,255,255,0.95);
+        }
+        
+        .content-row {
+            margin-bottom: 32px;
+        }
+        
+        .row-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: rgba(255,255,255,0.9);
+            text-align: left;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+        
+        .content-card {
+            position: relative;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+        
+        .content-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .content-poster {
+            width: 100%;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .content-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .loading-placeholder {
+            width: 100%;
+            aspect-ratio: 2/3;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .popular-title {
+                font-size: 1.7rem;
+            }
+            .row-title {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .content-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .popular-section {
+                padding: 0 16px;
+            }
+        }
     </style>
     
 </head>
@@ -271,12 +363,66 @@
         <p class="credit">
             <a href="https://go.daniyar.link/x-verdictweb" target="_blank" rel="noopener">made by Daniyar Agabekov</a>
         </p>
+        
+        <section class="popular-section">
+            <h2 class="popular-title">Popular now</h2>
+            
+            <div class="content-row">
+                <h3 class="row-title">Movies</h3>
+                <div class="content-grid" id="moviesGrid">
+                    <!-- Loading placeholders -->
+                    <div class="content-card">
+                        <div class="loading-placeholder">Loading...</div>
+                    </div>
+                    <div class="content-card">
+                        <div class="loading-placeholder">Loading...</div>
+                    </div>
+                    <div class="content-card">
+                        <div class="loading-placeholder">Loading...</div>
+                    </div>
+                    <div class="content-card">
+                        <div class="loading-placeholder">Loading...</div>
+                    </div>
+                    <div class="content-card">
+                        <div class="loading-placeholder">Loading...</div>
+                    </div>
+                    <div class="content-card">
+                        <div class="loading-placeholder">Loading...</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-row">
+                <h3 class="row-title">TV Shows</h3>
+                <div class="content-grid" id="tvGrid">
+                    <!-- Loading placeholders -->
+                    <div class="content-card">
+                        <div class="loading-placeholder">Loading...</div>
+                    </div>
+                    <div class="content-card">
+                        <div class="loading-placeholder">Loading...</div>
+                    </div>
+                    <div class="content-card">
+                        <div class="loading-placeholder">Loading...</div>
+                    </div>
+                    <div class="content-card">
+                        <div class="loading-placeholder">Loading...</div>
+                    </div>
+                    <div class="content-card">
+                        <div class="loading-placeholder">Loading...</div>
+                    </div>
+                    <div class="content-card">
+                        <div class="loading-placeholder">Loading...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
         <section class="crypto-addresses">
-            <div class="crypto-address" tabindex="0" onclick="copyToClipboard('bc1quzza9c30exsj7jj02kj2nukcxg7x8mf2259w2m', this)" onkeydown="handleKeyDown(event, 'bc1quzza9c30exsj7jj02kj2nukcxg7x8mf2259w2m', this)" aria-label="Click to copy Bitcoin address">Bitcoin: bc1quzza9c30exsj7jj02kj2nukcxg7x8mf2259w2m</div>
-            <div class="crypto-address" tabindex="0" onclick="copyToClipboard('0x655e13867c27292E04f5579918eb6A2B15eEdaCd', this)" onkeydown="handleKeyDown(event, '0x655e13867c27292E04f5579918eb6A2B15eEdaCd', this)" aria-label="Click to copy Ethereum address">Ethereum: 0x655e13867c27292E04f5579918eb6A2B15eEdaCd</div>
-            <div class="crypto-address" tabindex="0" onclick="copyToClipboard('0x655e13867c27292E04f5579918eb6A2B15eEdaCd', this)" onkeydown="handleKeyDown(event, '0x655e13867c27292E04f5579918eb6A2B15eEdaCd', this)" aria-label="Click to copy Tether USD address">Tether USD: 0x655e13867c27292E04f5579918eb6A2B15eEdaCd</div>
-            <div class="crypto-address" tabindex="0" onclick="copyToClipboard('5nroFAaVoz3iJhMY8xQiHMkDvkNt13douMsggjDiMALL', this)" onkeydown="handleKeyDown(event, '5nroFAaVoz3iJhMY8xQiHMkDvkNt13douMsggjDiMALL', this)" aria-label="Click to copy Solana address">Solana: 5nroFAaVoz3iJhMY8xQiHMkDvkNt13douMsggjDiMALL</div>
-            <div class="crypto-address" tabindex="0" onclick="copyToClipboard('DHgcLztxTA4GXFBV5FLP7qXCLJC4o1Rqoz', this)" onkeydown="handleKeyDown(event, 'DHgcLztxTA4GXFBV5FLP7qXCLJC4o1Rqoz', this)" aria-label="Click to copy Dogecoin address">Dogecoin: DHgcLztxTA4GXFBV5FLP7qXCLJC4o1Rqoz</div>
+            <div class="crypto-address" tabindex="0" onclick="copyToClipboard('1MvQWAR59BhG7FMax1C6fwjQicVGPFG3sU', this)" onkeydown="handleKeyDown(event, '1MvQWAR59BhG7FMax1C6fwjQicVGPFG3sU', this)" aria-label="Click to copy Bitcoin address">Bitcoin: 1MvQWAR59BhG7FMax1C6fwjQicVGPFG3sU</div>
+            <div class="crypto-address" tabindex="0" onclick="copyToClipboard('0x8dfaf5324850cc8098d772c64ea515a97c610043', this)" onkeydown="handleKeyDown(event, '0x8dfaf5324850cc8098d772c64ea515a97c610043', this)" aria-label="Click to copy Ethereum address">Ethereum (ERC20): 0x8dfaf5324850cc8098d772c64ea515a97c610043</div>
+            <div class="crypto-address" tabindex="0" onclick="copyToClipboard('CED4M3F1eCKUPj33AknaSjSHprdTRnaQt5FnsgMALYZB', this)" onkeydown="handleKeyDown(event, 'CED4M3F1eCKUPj33AknaSjSHprdTRnaQt5FnsgMALYZB', this)" aria-label="Click to copy Solana address">Solana: CED4M3F1eCKUPj33AknaSjSHprdTRnaQt5FnsgMALYZB</div>
+            <div class="crypto-address" tabindex="0" onclick="copyToClipboard('TKyKGBqKDHdb1X9znkmfGeL4sRiNxvMJ2h', this)" onkeydown="handleKeyDown(event, 'TKyKGBqKDHdb1X9znkmfGeL4sRiNxvMJ2h', this)" aria-label="Click to copy TRX address">TRX (TRC20): TKyKGBqKDHdb1X9znkmfGeL4sRiNxvMJ2h</div>
         </section>
     </main>
     
@@ -334,6 +480,77 @@
                 copyToClipboard(text, element);
             }
         }
+        
+        // Load popular content
+        async function loadPopularContent() {
+            try {
+                // Use the existing API endpoints that already handle TMDB API calls
+                const [moviesResponse, tvResponse] = await Promise.all([
+                    fetch('/api/popular-movies'),
+                    fetch('/api/popular-tv')
+                ]);
+                
+                if (!moviesResponse.ok || !tvResponse.ok) {
+                    throw new Error('API request failed');
+                }
+                
+                const moviesData = await moviesResponse.json();
+                const tvData = await tvResponse.json();
+                
+                renderMovies(moviesData.results?.slice(0, 6) || []);
+                renderTvShows(tvData.results?.slice(0, 6) || []);
+            } catch (error) {
+                console.error('Error loading popular content:', error);
+                // Hide the popular section if there's an error
+                const popularSection = document.querySelector('.popular-section');
+                if (popularSection) {
+                    popularSection.style.display = 'none';
+                }
+            }
+        }
+        
+        function renderMovies(movies) {
+            const moviesGrid = document.getElementById('moviesGrid');
+            if (!moviesGrid) return;
+            
+            moviesGrid.innerHTML = movies.map(movie => `
+                <a href="/movie/${movie.id}" class="content-link">
+                    <div class="content-card">
+                        <img src="${movie.poster_path 
+                            ? `https://image.tmdb.org/t/p/w300${movie.poster_path}` 
+                            : 'https://via.placeholder.com/300x450/cccccc/666666?text=No+Image'}" 
+                            alt="${movie.title || 'Movie'}" 
+                            class="content-poster" 
+                            loading="lazy" 
+                            decoding="async">
+                    </div>
+                </a>
+            `).join('');
+        }
+        
+        function renderTvShows(tvShows) {
+            const tvGrid = document.getElementById('tvGrid');
+            if (!tvGrid) return;
+            
+            tvGrid.innerHTML = tvShows.map(show => `
+                <a href="/tv/${show.id}" class="content-link">
+                    <div class="content-card">
+                        <img src="${show.poster_path 
+                            ? `https://image.tmdb.org/t/p/w300${show.poster_path}` 
+                            : 'https://via.placeholder.com/300x450/cccccc/666666?text=No+Image'}" 
+                            alt="${show.name || 'TV Show'}" 
+                            class="content-poster" 
+                            loading="lazy" 
+                            decoding="async">
+                    </div>
+                </a>
+            `).join('');
+        }
+        
+        // Load popular content when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPopularContent();
+        });
     </script>
 </body>
 </html>
