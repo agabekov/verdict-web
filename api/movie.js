@@ -343,12 +343,13 @@ function generateMovieHTML(movie, credits, keywords, reviews, watchProviders, re
     .download-btn { background: rgba(255,255,255,0.15); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; display: inline-block; transition: all 0.3s ease; font-size: 15px; }
     .download-btn:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.3); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
     .content-container { position: relative; z-index: 10; padding-top: 60px; min-height: 100vh; }
-    .main-content { max-width: 800px; margin: 0 auto; padding: 0 24px; text-align: center; }
-    .poster-section { display: flex; justify-content: center; margin-bottom: 32px; }
-    .poster-container { width: 60%; max-width: 300px; position: relative; }
+    .main-content { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .desktop-layout { display: flex; gap: 48px; align-items: flex-start; margin-bottom: 48px; }
+    .poster-section { flex: 0 0 300px; }
+    .poster-container { width: 100%; position: relative; }
     .poster { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
     .poster-gradient { position: absolute; bottom: 0; left: 0; right: 0; height: 40%; background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.3) 100%); border-radius: 0 0 12px 12px; }
-    .movie-info { text-align: left; margin-bottom: 24px; }
+    .movie-info { flex: 1; text-align: left; }
     .movie-details { display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0; }
     .detail-item { background: rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 16px; font-size: 14px; color: rgba(255,255,255,0.9); }
     .genres { margin: 16px 0; }
@@ -389,8 +390,16 @@ function generateMovieHTML(movie, credits, keywords, reviews, watchProviders, re
     .provider-logo { width: 24px; height: 24px; border-radius: 4px; object-fit: cover; }
     .provider-name { font-size: 13px; color: rgba(255,255,255,0.9); font-weight: 500; }
     .footer { text-align: center; padding: 40px 24px; color: rgba(255,255,255,0.6); font-size: 14px; position: relative; z-index: 10; }
-    @media (max-width: 768px) { .content-container { padding-top: 40px; } .movie-title { font-size: 24px; } }
-    @media (max-width: 480px) { .movie-info { padding-left: 16px; padding-right: 16px; } .poster-section { padding: 0 16px; } }
+    @media (max-width: 768px) { 
+      .content-container { padding-top: 40px; } 
+      .movie-title { font-size: 24px; } 
+      .desktop-layout { flex-direction: column; gap: 32px; text-align: center; }
+      .poster-section { flex: none; align-self: center; max-width: 300px; }
+    }
+    @media (max-width: 480px) { 
+      .movie-info { padding-left: 16px; padding-right: 16px; } 
+      .poster-section { padding: 0 16px; max-width: 250px; } 
+    }
   </style>
 </head>
 <body>
@@ -404,27 +413,32 @@ function generateMovieHTML(movie, credits, keywords, reviews, watchProviders, re
 
   <div class="content-container">
     <div class="main-content">
-      <div class="poster-section">
-        <div class="poster-container">
-          <img src="${posterUrl}" alt="${safeTitle}" class="poster" decoding="async">
-          <div class="poster-gradient"></div>
+      <div class="desktop-layout">
+        <div class="poster-section">
+          <div class="poster-container">
+            <img src="${posterUrl}" alt="${safeTitle}" class="poster" decoding="async">
+            <div class="poster-gradient"></div>
+          </div>
+        </div>
+
+        <div class="movie-info">
+          <h1 class="movie-title">${safeTitle}</h1>
+          ${year !== 'Unknown' ? `<div class="release-year">${escapeHtml(String(year))}</div>` : ''}
+          ${movie.vote_average ? `<div class="rating">${renderStarRating(movie.vote_average)}</div>` : ''}
+          <div class="movie-details">
+            ${movie.runtime ? `<div class="detail-item">⏱️ ${escapeHtml(String(movie.runtime))} minutes</div>` : ''}
+            ${movie.status ? `<div class="detail-item">📅 ${escapeHtml(movie.status)}</div>` : ''}
+            ${movie.original_language ? `<div class="detail-item">🌐 ${escapeHtml(movie.original_language.toUpperCase())}</div>` : ''}
+          </div>
+          ${movie.genres && movie.genres.length > 0 ? `<div class="genres">${movie.genres
+            .map((genre) => `<span class="genre-tag">${escapeHtml(genre.name)}</span>`)
+            .join('')}</div>` : ''}
+          ${movie.overview ? `<div class="overview">${escapeHtml(movie.overview)}</div>` : ''}
+          ${renderWatchProviders(watchProviders, region)}
         </div>
       </div>
 
-      <div class="movie-info">
-        <h1 class="movie-title">${safeTitle}</h1>
-        ${year !== 'Unknown' ? `<div class="release-year">${escapeHtml(String(year))}</div>` : ''}
-        ${movie.vote_average ? `<div class="rating">${renderStarRating(movie.vote_average)}</div>` : ''}
-        <div class="movie-details">
-          ${movie.runtime ? `<div class="detail-item">⏱️ ${escapeHtml(String(movie.runtime))} minutes</div>` : ''}
-          ${movie.status ? `<div class="detail-item">📅 ${escapeHtml(movie.status)}</div>` : ''}
-          ${movie.original_language ? `<div class="detail-item">🌐 ${escapeHtml(movie.original_language.toUpperCase())}</div>` : ''}
-        </div>
-        ${movie.genres && movie.genres.length > 0 ? `<div class="genres">${movie.genres
-          .map((genre) => `<span class="genre-tag">${escapeHtml(genre.name)}</span>`)
-          .join('')}</div>` : ''}
-        ${movie.overview ? `<div class="overview">${escapeHtml(movie.overview)}</div>` : ''}
-        ${renderWatchProviders(watchProviders, region)}
+      <div style="max-width: 1200px; margin: 0 auto;">
         ${renderCast(credits)}
         ${renderReviews(reviews)}
         ${renderCrew(credits)}
