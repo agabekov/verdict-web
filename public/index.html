@@ -120,10 +120,16 @@
         
         .container {
             text-align: center;
-            max-width: 400px;
+            max-width: 1200px;
             padding: 40px 20px;
             position: relative;
             z-index: 1;
+            width: 100%;
+        }
+        
+        .main-content {
+            max-width: 400px;
+            margin: 0 auto;
         }
         
         .app-icon {
@@ -284,8 +290,7 @@
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 16px;
-            overflow-x: auto;
-            padding-bottom: 8px;
+            width: 100%;
         }
         
         .content-card {
@@ -352,17 +357,19 @@
     <div class="background-mosaic"></div>
     <div class="overlay"></div>
     <main class="container">
-        <header>
-            <div class="app-icon" role="img" aria-label="Verdict app icon"></div>
-            <h1>Verdict</h1>
-            <p class="subtitle">Watch. Rate. Share with friends</p>
-        </header>
-        <a href="https://go.daniyar.link/verdict-web" class="app-store-badge">
-            <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&releaseDate=1559347200" alt="Download on the App Store">
-        </a>
-        <p class="credit">
-            <a href="https://go.daniyar.link/x-verdictweb" target="_blank" rel="noopener">made by Daniyar Agabekov</a>
-        </p>
+        <div class="main-content">
+            <header>
+                <div class="app-icon" role="img" aria-label="Verdict app icon"></div>
+                <h1>Verdict</h1>
+                <p class="subtitle">Watch. Rate. Share with friends</p>
+            </header>
+            <a href="https://go.daniyar.link/verdict-web" class="app-store-badge">
+                <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&releaseDate=1559347200" alt="Download on the App Store">
+            </a>
+            <p class="credit">
+                <a href="https://go.daniyar.link/x-verdictweb" target="_blank" rel="noopener">made by Daniyar Agabekov</a>
+            </p>
+        </div>
         
         <section class="popular-section">
             <h2 class="popular-title">Popular now</h2>
@@ -484,21 +491,33 @@
         // Load popular content
         async function loadPopularContent() {
             try {
+                console.log('Loading popular content...');
                 // Use the existing API endpoints that already handle TMDB API calls
                 const [moviesResponse, tvResponse] = await Promise.all([
                     fetch('/api/popular-movies'),
                     fetch('/api/popular-tv')
                 ]);
                 
+                console.log('API responses:', moviesResponse.status, tvResponse.status);
+                
                 if (!moviesResponse.ok || !tvResponse.ok) {
-                    throw new Error('API request failed');
+                    throw new Error(`API request failed: movies ${moviesResponse.status}, tv ${tvResponse.status}`);
                 }
                 
                 const moviesData = await moviesResponse.json();
                 const tvData = await tvResponse.json();
                 
-                renderMovies(moviesData.results?.slice(0, 6) || []);
-                renderTvShows(tvData.results?.slice(0, 6) || []);
+                console.log('Movies data:', moviesData);
+                console.log('TV data:', tvData);
+                
+                const movies = moviesData.results?.slice(0, 6) || [];
+                const tvShows = tvData.results?.slice(0, 6) || [];
+                
+                console.log('Movies to render:', movies.length);
+                console.log('TV shows to render:', tvShows.length);
+                
+                renderMovies(movies);
+                renderTvShows(tvShows);
             } catch (error) {
                 console.error('Error loading popular content:', error);
                 // Hide the popular section if there's an error
@@ -513,6 +532,8 @@
             const moviesGrid = document.getElementById('moviesGrid');
             if (!moviesGrid) return;
             
+            console.log('Rendering movies:', movies.length);
+            
             moviesGrid.innerHTML = movies.map(movie => `
                 <a href="/movie/${movie.id}" class="content-link">
                     <div class="content-card">
@@ -522,7 +543,8 @@
                             alt="${movie.title || 'Movie'}" 
                             class="content-poster" 
                             loading="lazy" 
-                            decoding="async">
+                            decoding="async"
+                            onerror="this.src='https://via.placeholder.com/300x450/cccccc/666666?text=No+Image'">
                     </div>
                 </a>
             `).join('');
@@ -531,6 +553,8 @@
         function renderTvShows(tvShows) {
             const tvGrid = document.getElementById('tvGrid');
             if (!tvGrid) return;
+            
+            console.log('Rendering TV shows:', tvShows.length);
             
             tvGrid.innerHTML = tvShows.map(show => `
                 <a href="/tv/${show.id}" class="content-link">
@@ -541,7 +565,8 @@
                             alt="${show.name || 'TV Show'}" 
                             class="content-poster" 
                             loading="lazy" 
-                            decoding="async">
+                            decoding="async"
+                            onerror="this.src='https://via.placeholder.com/300x450/cccccc/666666?text=No+Image'">
                     </div>
                 </a>
             `).join('');
