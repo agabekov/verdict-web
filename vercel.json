@@ -13,6 +13,10 @@
       "destination": "/api/sitemap"
     },
     {
+      "source": "/privacy-policy",
+      "destination": "/privacy-policy.html"
+    },
+    {
       "source": "/movie/(.*)",
       "destination": "/api/movie?id=$1"
     },
