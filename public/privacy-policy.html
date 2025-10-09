@@ -185,27 +185,39 @@
             <ul>
                 <li><strong>Apple Sign-In</strong>: When you choose to sign in with Apple, we receive your Apple ID and optionally your name and email address</li>
                 <li><strong>Device Identifiers</strong>: We generate and store a unique device identifier for app functionality</li>
+                <li><strong>User Profile</strong>: Profile statistics, viewing preferences, and account settings</li>
             </ul>
 
             <h3>Usage Data</h3>
             <ul>
                 <li><strong>Movie and TV Show Ratings</strong>: Your ratings and reviews are stored locally and optionally synced via iCloud</li>
-                <li><strong>Watchlists</strong>: Your saved movies and TV shows</li>
-                <li><strong>App Preferences</strong>: Language settings, region preferences, and app configuration</li>
+                <li><strong>Watchlists</strong>: Your saved movies and TV shows across both content types</li>
+                <li><strong>Viewing History</strong>: Movies and TV series you've rated or added to your watchlist</li>
+                <li><strong>Preference Patterns</strong>: Genre preferences and rating patterns used for personalized recommendations</li>
+                <li><strong>Streaming Provider Preferences</strong>: Your selected region for streaming availability information</li>
+                <li><strong>App Preferences</strong>: Language settings (43 languages supported), region preferences, and app configuration</li>
+                <li><strong>Notification Preferences</strong>: Your movie premiere notification settings and preferences</li>
             </ul>
 
             <h3>Technical Data</h3>
             <ul>
                 <li><strong>iCloud Sync</strong>: If enabled, your profile data is stored in your private iCloud account</li>
-                <li><strong>Network Requests</strong>: API calls to The Movie Database (TMDb) to fetch content information</li>
+                <li><strong>Network Requests</strong>: API calls to The Movie Database (TMDb) to fetch content information and streaming availability</li>
+                <li><strong>ML Model Data</strong>: On-device machine learning models trained on your local rating patterns for personalized recommendations (this data never leaves your device)</li>
+                <li><strong>Cache Data</strong>: Temporary storage of images, search results, and API responses for improved performance</li>
                 <li><strong>Purchase Information</strong>: Transaction details for in-app donations processed through Apple's StoreKit</li>
             </ul>
 
             <h2>2. How We Use Your Information</h2>
             <ul>
                 <li><strong>Core Functionality</strong>: To provide movie/TV show discovery, ratings, and watchlist features</li>
-                <li><strong>Personalization</strong>: To remember your preferences and sync data across your devices</li>
-                <li><strong>Content Discovery</strong>: To fetch movie and TV show information from TMDb API</li>
+                <li><strong>Personalization</strong>: To remember your preferences and sync data across your devices via iCloud</li>
+                <li><strong>Content Discovery</strong>: To fetch movie and TV show information, actor details, and trailers from TMDb API</li>
+                <li><strong>ML Recommendations</strong>: To generate personalized movie and TV show recommendations using on-device machine learning based on your rating patterns</li>
+                <li><strong>Streaming Information</strong>: To display streaming availability for content on platforms like Netflix, Disney+, Apple TV+, Amazon Prime Video, Max, Hulu, Paramount+, and Peacock</li>
+                <li><strong>Notifications</strong>: To send you alerts about upcoming movie premieres based on your notification preferences</li>
+                <li><strong>Regional Content</strong>: To provide localized content and streaming availability based on your selected region</li>
+                <li><strong>Statistics & Analytics</strong>: To show you personal viewing statistics, rating distributions, and genre preferences</li>
             </ul>
 
             <h2>3. Data Storage and Sharing</h2>
@@ -214,48 +226,71 @@
             <ul>
                 <li>App preferences, ratings, and watchlists are stored locally on your device using iOS UserDefaults</li>
                 <li>TMDb API key is securely stored in iOS Keychain</li>
+                <li>ML recommendation models and training data remain on your device and are never uploaded</li>
+                <li>Image cache and search cache stored temporarily on device for performance</li>
+                <li>Notification preferences stored locally</li>
             </ul>
 
             <h3>iCloud Storage (Optional)</h3>
             <ul>
                 <li>If you enable iCloud sync, your profile data is stored in your private iCloud account</li>
                 <li>Only you have access to this data through your Apple ID</li>
+                <li>Synced data includes: ratings, watchlists, preferences, and profile statistics</li>
+                <li>Delta synchronization ensures only changed data is synced for efficiency</li>
             </ul>
 
             <h3>Third-Party Services</h3>
             <ul>
-                <li><strong>The Movie Database (TMDb)</strong>: We use TMDb API to fetch movie and TV show information. This requires network requests but no personal data is shared</li>
-                <li><strong>Apple Services</strong>: Sign-in with Apple and in-app purchases are processed by Apple</li>
-                <li><strong>Google Ad Networks</strong>: We integrate with Google's advertising network for potential future ad display</li>
+                <li><strong>The Movie Database (TMDb)</strong>: We use TMDb API to fetch movie and TV show information, actor details, trailers, and streaming availability. This requires network requests but no personal data is shared</li>
+                <li><strong>Apple Services</strong>: Sign-in with Apple, in-app purchases, push notifications, and iCloud sync are processed by Apple</li>
+                <li><strong>Google Ad Networks</strong>: We integrate with Google's advertising network (AdMob) with GDPR-compliant consent management</li>
+                <li><strong>JustWatch</strong>: Streaming availability data is provided by JustWatch through TMDb's API</li>
             </ul>
 
             <h2>4. Advertising</h2>
-            <p>The app includes Google Ad Network identifiers for potential advertising functionality. Currently, no ads are displayed, but this may change in future versions.</p>
+            <p>The app integrates with Google's AdMob platform with GDPR-compliant consent management through ConsentService. We use Google's User Messaging Platform (UMP) to handle consent for users in regions requiring it. Currently, banner ads may be displayed with user consent, and this functionality may expand in future versions.</p>
 
             <h2>5. Data Retention</h2>
             <ul>
                 <li><strong>Local Data</strong>: Stored on your device until you delete the app or clear the data</li>
                 <li><strong>iCloud Data</strong>: Retained in your iCloud account according to Apple's iCloud terms</li>
-                <li><strong>Account Data</strong>: Apple Sign-In information is managed by Apple and can be revoked at any time</li>
+                <li><strong>Account Data</strong>: Apple Sign-In information is managed by Apple and can be revoked at any time through your Apple ID settings</li>
+                <li><strong>Cache Data</strong>: Images and search results are cached temporarily and automatically cleared based on memory pressure</li>
+                <li><strong>ML Models</strong>: On-device models are stored locally and retrained as needed based on your rating patterns</li>
+                <li><strong>Notification Data</strong>: Notification preferences persist until manually changed or the app is deleted</li>
             </ul>
 
             <h2>6. Your Rights</h2>
             <ul>
-                <li><strong>Access</strong>: You can view all data stored locally in the app</li>
+                <li><strong>Access</strong>: You can view all data stored locally in the app, including your ratings, watchlists, preferences, and profile statistics</li>
                 <li><strong>Deletion</strong>: You can delete your account and all associated data through the app settings</li>
                 <li><strong>iCloud Management</strong>: You can disable iCloud sync and delete synced data through iOS settings</li>
+                <li><strong>ML Model Control</strong>: On-device ML models can be reset by clearing app data or reinstalling the app</li>
+                <li><strong>Notification Control</strong>: You can enable/disable movie premiere notifications at any time through the app or iOS settings</li>
+                <li><strong>Consent Management</strong>: You can modify your advertising consent preferences through the app's consent settings</li>
+                <li><strong>Data Export</strong>: Your ratings and watchlist data can be viewed within the app and is accessible in iCloud if sync is enabled</li>
             </ul>
 
-            <h2>7. Children's Privacy</h2>
+            <h2>7. Machine Learning and Data Privacy</h2>
+            <p>The app uses on-device machine learning to provide personalized recommendations:</p>
+            <ul>
+                <li><strong>On-Device Processing</strong>: All ML model training and predictions occur locally on your device</li>
+                <li><strong>No Data Upload</strong>: Your rating patterns and ML models are never transmitted to external servers</li>
+                <li><strong>Privacy-First</strong>: ML features work entirely offline and respect your privacy</li>
+                <li><strong>User Control</strong>: You can reset ML models by clearing app data or reinstalling the app</li>
+                <li><strong>Adaptive Learning</strong>: Models improve over time based on your ratings, but all processing remains local</li>
+            </ul>
+
+            <h2>8. Children's Privacy</h2>
             <p>While the app does not specifically target children, if children under 13 use the app with parental permission, the same privacy protections apply. Parents can contact us with any concerns about their child's data.</p>
 
-            <h2>8. Changes to This Privacy Policy</h2>
+            <h2>9. Changes to This Privacy Policy</h2>
             <p>We may update this Privacy Policy from time to time. Any changes will be reflected in this document, and the updated policy will take effect immediately upon being published within the App or on our website.</p>
 
-            <h2>9. Contact Us</h2>
+            <h2>10. Contact Us</h2>
             <p>If you have any questions about this Privacy Policy, please contact us at:</p>
             <p><strong>Email:</strong> agabekovd@gmail.com</p>
-            <p><strong>Postal Address:</strong> Kazakhstan, Almaty, Abaya street, 202/1, 30, 050046</p>
+            <p><strong>Postal Address:</strong> Kazakhstan, Almaty, 050046</p>
             <p>Thank you for using Verdict: Watch. Rate. Share.</p>
         </div>
     </div>
