@@ -1,6 +1,7 @@
 {
   "name": "verdict-web",
   "version": "1.0.0",
+  "type": "module",
   "description": "Verdict web server for Universal Links",
   "scripts": {
     "dev": "vercel dev",
