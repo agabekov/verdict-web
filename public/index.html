@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verdict – Watch. Rate. Share with friends.</title>
-    <meta name="description" content="Verdict is the iOS app that helps cinephiles rate movies, manage watchlists, and get ML-powered recommendations. Discover what to watch next and share it with friends.">
+    <title>Verdict – Watch. Rate. Share with&nbsp;friends.</title>
+    <meta name="description" content="Verdict is the iOS&nbsp;app that helps cinephiles rate movies, manage watchlists, and get ML-powered recommendations. Discover what to&nbsp;watch next and share it&nbsp;with friends.">
     <link rel="canonical" href="https://verdict.daniyar.link">
 
-    <meta property="og:title" content="Verdict – Watch. Rate. Share with friends.">
-    <meta property="og:description" content="Create beautiful watchlists, track ratings, and unlock ML-powered recommendations. Verdict keeps your movie life in one place.">
+    <meta property="og:title" content="Verdict – Watch. Rate. Share with&nbsp;friends.">
+    <meta property="og:description" content="Create beautiful watchlists, track ratings, and unlock ML-powered recommendations. Verdict keeps your movie life in&nbsp;one place.">
     <meta property="og:image" content="https://verdict.daniyar.link/AppIcon.png">
     <meta property="og:url" content="https://verdict.daniyar.link">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Verdict">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Verdict – Watch. Rate. Share with friends.">
-    <meta name="twitter:description" content="A smarter way to discover and organize movies and TV shows with ML recommendations.">
+    <meta name="twitter:title" content="Verdict – Watch. Rate. Share with&nbsp;friends.">
+    <meta name="twitter:description" content="A&nbsp;smarter way to&nbsp;discover and organize movies and TV&nbsp;shows with ML&nbsp;recommendations.">
     <meta name="twitter:image" content="https://verdict.daniyar.link/AppIcon.png">
     <meta name="twitter:creator" content="@daniyar_ag">
 
@@ -69,9 +69,7 @@
             inset: 0;
             background-position: center;
             background-size: cover;
-            filter: blur(40px) saturate(1.25);
-            transform: scale(1.08);
-            opacity: 0.65;
+            filter: blur(30px);
             z-index: -2;
             transition: opacity 400ms ease-in-out;
         }
@@ -294,7 +292,7 @@
         }
 
         .section {
-            padding: 120px 24px;
+            padding: 80px 24px;
         }
 
         .section-inner {
@@ -361,7 +359,7 @@
 
         .feature-showcase {
             display: grid;
-            gap: 80px;
+            gap: 200px;
         }
 
         .split {
@@ -369,6 +367,11 @@
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 48px;
             align-items: center;
+            padding-bottom: 50px;
+        }
+
+        .split:last-child {
+            padding-bottom: 0;
         }
 
         .split h3 {
@@ -385,15 +388,16 @@
         }
 
         .bullet-list li {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
+            display: block;
             color: var(--text-muted);
+            line-height: 1.6;
         }
 
         .bullet-list span {
+            display: block;
             font-weight: 600;
             color: #fff;
+            margin-bottom: 4px;
         }
 
         .split-visual {
@@ -484,7 +488,7 @@
         }
 
         .popular-section {
-            padding: 120px 24px;
+            padding: 80px 24px;
             position: relative;
         }
 
@@ -680,7 +684,7 @@
 
         .final-cta {
             text-align: center;
-            padding: 120px 24px 80px;
+            padding: 20px 24px 80px;
         }
 
         .final-cta h2 {
@@ -815,12 +819,6 @@
         <div class="nav-inner">
             <a href="#top" class="brand">Verdict</a>
             <div class="nav-links">
-                <a href="#features">Features</a>
-                <a href="#rating">Ratings</a>
-                <a href="#recommendations">Recommendations</a>
-                <a href="#workflow">How it works</a>
-                <a href="#verdict-plus">Verdict+</a>
-                <a href="#faq">FAQ</a>
                 <a class="nav-download" href="https://go.daniyar.link/verdict-web" target="_blank" rel="noopener noreferrer">
                     Download
                 </a>
@@ -831,24 +829,14 @@
     <main>
         <header class="hero" id="top">
             <div class="hero-content">
-                <div class="hero-badge">Now live on the App Store</div>
-                <h1>Verdict makes it effortless to capture every movie night.</h1>
+                <h1>Every movie you watch becomes part of&nbsp;your story</h1>
                 <p>
-                    Rate films with intention, build the watchlists you actually use, and unlock ML-powered recommendations crafted from your taste. Verdict is your personal command center for cinema.
+                    Rate, discover, and never forget what moved you. Build watchlists you'll actually use and unlock recommendations crafted from your unique taste.
                 </p>
                 <div class="hero-ctas">
                     <a href="https://go.daniyar.link/verdict-web" class="app-store-badge" target="_blank" rel="noopener">
                         <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&releaseDate=1559347200" alt="Download Verdict on the App Store">
                     </a>
-                    <button class="cta-secondary" type="button" onclick="document.getElementById('features').scrollIntoView({ behavior: 'smooth' });">
-                        Explore features
-                    </button>
-                </div>
-                <div class="hero-highlights">
-                    <div class="highlight-pill">Granular rating breakdowns</div>
-                    <div class="highlight-pill">iCloud-synced watchlists</div>
-                    <div class="highlight-pill">Foundation ML recommendations</div>
-                    <div class="highlight-pill">Streaming availability in your region</div>
                 </div>
             </div>
             <div class="hero-media">
@@ -858,59 +846,18 @@
             </div>
         </header>
 
-        <section class="section" id="features">
-            <div class="section-inner">
-                <div class="section-header">
-                    <h2>Everything your film brain needs, in one beautifully organized place.</h2>
-                    <p>Verdict pairs delightful SwiftUI design with a powerful service stack: TMDb discovery, iCloud sync, streaming availability, and background ML that keeps learning from your tastes.</p>
-                </div>
-                <div class="feature-card-grid">
-                    <article class="feature-card">
-                        <h3>Deep rating engine</h3>
-                        <p>Log ratings in seconds and revisit rich analytics across genres, directors, and moods. See how your taste evolves over time.</p>
-                        <ul>
-                            <li>Personal rating history &amp; distribution</li>
-                            <li>Actor &amp; crew insights on every title</li>
-                        </ul>
-                    </article>
-                    <article class="feature-card">
-                        <h3>Living watchlists</h3>
-                        <p>Keep multiple watchlists in sync across devices with CloudKit. Share discoveries, or stash releases for specific nights.</p>
-                        <ul>
-                            <li>Smart sorting with filters &amp; priorities</li>
-                            <li>Offline-first with automatic background sync</li>
-                        </ul>
-                    </article>
-                    <article class="feature-card">
-                        <h3>ML recommendations</h3>
-                        <p>On-device Foundation ML models blend collaborative filtering, content features, and your own ratings to surface what to watch next.</p>
-                        <ul>
-                            <li>Adaptive strategies that evolve with your taste</li>
-                            <li>Transparency with strategy &amp; confidence logs</li>
-                        </ul>
-                    </article>
-                    <article class="feature-card">
-                        <h3>Streaming ready</h3>
-                        <p>See where to watch instantly. Verdict pulls regional availability, provider lists, and real-time release calendars.</p>
-                        <ul>
-                            <li>Regional streaming providers at a glance</li>
-                            <li>Upcoming premiers with push notifications</li>
-                        </ul>
-                    </article>
-                </div>
-            </div>
-        </section>
-
         <section class="section feature-showcase" id="rating">
             <div class="section-inner">
+                <div class="section-header" style="text-align: center; max-width: 100%;">
+                    <h2>Your complete cinema companion, beautifully organized</h2>
+                </div>
                 <div class="split">
                     <div>
-                        <h3>Ratings that feel more like a film journal.</h3>
-                        <p>Verdict's RatingViewModel and analytics combine to capture context the moment you tap a score. Track how each genre lands, revisit trends, and celebrate your all-time favorites with automatically generated stats.</p>
+                        <h3>Turn ratings into lasting memories</h3>
+                        <p>Each rating you log becomes part of&nbsp;your personal movie story. Track how your taste evolves, discover patterns in&nbsp;what you love, and celebrate your all-time favorites with stats that actually mean something to&nbsp;you.</p>
                         <ul class="bullet-list">
-                            <li><span>Instant detail pages</span> with cast, crew, trailers, and streaming options powered by TMDb.</li>
-                            <li><span>Profile statistics</span> that visualize rating distribution, genre heatmaps, and director streaks.</li>
-                            <li><span>Sync across devices</span> through iCloud and CloudKit so every rating is waiting on your next screen.</li>
+                            <li><span>Rich detail pages</span> with cast, crew, trailers, and where to&nbsp;watch — all in&nbsp;one place.</li>
+                            <li><span>Beautiful insights</span> that show your rating patterns, favorite genres, and director deep dives.</li>
                         </ul>
                     </div>
                     <div class="split-visual">
@@ -922,32 +869,21 @@
                         Drop a watchlist or Upcoming screen mockup in this frame.
                     </div>
                     <div>
-                        <h3>Watchlists that finally match how you plan nights in.</h3>
-                        <p>Curate by mood, keep studio marathons organized, or follow what's coming soon. Verdict gives you the control without the busywork.</p>
+                        <h3>Watchlists you'll actually use</h3>
+                        <p>Curate by&nbsp;mood, keep studio marathons organized, or&nbsp;follow what's coming soon. It gives you the control without the busywork — just simple lists that work the way you think.</p>
                         <ul class="bullet-list">
-                            <li><span>Flexible collections</span> that can be filtered, searched, and re-ordered with a swipe.</li>
-                            <li><span>Upcoming alerts</span> driven by PushNotificationManager so you never miss a theatrical or streaming release.</li>
-                            <li><span>Shareable lists</span> to inspire friends and keep the group chat aligned.</li>
+                            <li><span>Flexible collections</span> you can filter, search, and rearrange with a&nbsp;swipe.</li>
+                            <li><span>Smart alerts</span> so&nbsp;you never miss a&nbsp;theatrical premiere or&nbsp;streaming release.</li>
                         </ul>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section class="section" id="recommendations">
-            <div class="section-inner">
-                <div class="section-header">
-                    <h2>Beloved by machine learning—and the cinephiles training it.</h2>
-                    <p>Verdict's PersonalizedRecommendationEngine blends heuristic, hybrid, and Core ML strategies. Once you've logged a few films, it promotes you to fully personalized insights with transparency along the way.</p>
-                </div>
-                <div class="split">
+                <div class="split" id="recommendations">
                     <div>
-                        <h3>Foundation ML + collaborative filtering</h3>
-                        <p>The RecommendationFusionEngine looks at similar viewers, your historical ratings, and content attributes to surface films that match your taste profile. Strategy transitions are logged, so you always know why a pick appears.</p>
+                        <h3>Beloved by&nbsp;machine learning</h3>
+                        <p>Algorithm learns what you love by&nbsp;looking at&nbsp;movies similar to&nbsp;your favorites and what viewers with similar tastes are watching. The more you rate, the smarter your recommendations become.</p>
                         <ul class="bullet-list">
-                            <li><span>On-device training</span> keeps your data private while the model learns.</li>
-                            <li><span>Adaptive fallback</span> automatically blends popular picks when you need a reset.</li>
-                            <li><span>A/B testing ready</span> with built-in instrumentation for future experiments.</li>
+                            <li><span>Evolving taste profile</span> that adapts as&nbsp;your preferences change over time.</li>
+                            <li><span>Complete privacy</span> with all learning happening on&nbsp;your device, never on&nbsp;a&nbsp;server.</li>
                         </ul>
                     </div>
                     <div class="split-visual">
@@ -961,10 +897,8 @@
             <div class="popular-inner">
                 <div class="popular-header">
                     <div>
-                        <h2>What's popular now</h2>
-                        <p>Fresh picks charting on Verdict this hour. Pulled directly from TMDb so you always see what's buzzing.</p>
+                        <h2>Trending</h2>
                     </div>
-                    <span class="popular-updated">Updated hourly</span>
                 </div>
                 <div class="popular-rows">
                     <div class="popular-row">
@@ -993,125 +927,13 @@
             </div>
         </section>
 
-        <section class="section" id="workflow">
-            <div class="section-inner">
-                <div class="section-header">
-                    <h2>The Verdict flow</h2>
-                    <p>Every touchpoint is designed to be quick, intentional, and shareable. Here's how a movie night moves through Verdict.</p>
-                </div>
-                <div class="timeline">
-                    <div class="timeline-step">
-                        <strong>1</strong>
-                        <h4>Discover</h4>
-                        <p>Browse popular, trending, or curated streaming lists. Search spans movies, TV, and actors with fuzzy matching powered by TMDb.</p>
-                    </div>
-                    <div class="timeline-step">
-                        <strong>2</strong>
-                        <h4>Decide</h4>
-                        <p>Read full detail pages—trailers, cast, reviews, and where to watch. Invite friends by sharing deep links that open in the app.</p>
-                    </div>
-                    <div class="timeline-step">
-                        <strong>3</strong>
-                        <h4>Watch &amp; rate</h4>
-                        <p>Log a rating right after the credits. Your profile updates instantly with distribution charts and reels-friendly highlights.</p>
-                    </div>
-                    <div class="timeline-step">
-                        <strong>4</strong>
-                        <h4>Get smarter</h4>
-                        <p>PersonalizedRecommendationEngine processes your latest mood, then refreshes picks and upcoming reminders for the next session.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section" id="verdict-plus">
-            <div class="section-inner">
-                <div class="verdict-plus">
-                    <div>
-                        <h3>Verdict+ unlocks premium perks.</h3>
-                        <p>Upgrade to Verdict+ to support ongoing development and access exclusive features. Monthly at $1 or yearly at $10—designed to stay accessible.</p>
-                        <ul class="verdict-plus-features">
-                            <li>Advanced profile insights and export tools</li>
-                            <li>Early access to experimental recommendation models</li>
-                            <li>Priority slots for upcoming notification drops</li>
-                            <li>More customization for your public profile link</li>
-                        </ul>
-                    </div>
-                    <div class="split-visual">
-                        Reserve this frame for your Verdict+ paywall design or pricing comparisons.
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="section-inner">
-                <div class="section-header">
-                    <h2>Loved by film obsessives, crafted by one.</h2>
-                    <p>Verdict is made by Daniyar Agabekov—a cinephile who wanted a calmer, smarter home for movie memories. Early users are already sharing their hype.</p>
-                </div>
-                <div class="testimonial-grid">
-                    <div class="testimonial-card">
-                        “Verdict replaced my notes app, Letterboxd spreadsheets, and a dozen reminders. The recommendations actually surface hidden gems.”
-                        <strong>— Future testimonial</strong>
-                    </div>
-                    <div class="testimonial-card">
-                        “The ML explanations are wild. Knowing why a movie was suggested helps me trust it—and it nails my vibe every week.”
-                        <strong>— Future testimonial</strong>
-                    </div>
-                    <div class="testimonial-card">
-                        “I use watchlists for everything: horror nights, family picks, festival prep. Verdict keeps them all synced and ready to go.”
-                        <strong>— Future testimonial</strong>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section" id="faq">
-            <div class="section-inner">
-                <div class="section-header">
-                    <h2>FAQs</h2>
-                    <p>A few of the questions film lovers ask before they make Verdict part of their routine.</p>
-                </div>
-                <div class="faq-grid">
-                    <article class="faq-item">
-                        <h4>How personal are recommendations?</h4>
-                        <p>The app trains an on-device Foundation ML model once you log a handful of ratings. You can see which strategy (heuristic, hybrid, or Core ML) delivered each pick.</p>
-                    </article>
-                    <article class="faq-item">
-                        <h4>Do watchlists sync across devices?</h4>
-                        <p>Yes. Verdict uses CloudKit and a local-first approach, so every change is saved offline and synced the moment you're back online.</p>
-                    </article>
-                    <article class="faq-item">
-                        <h4>Can I follow streaming availability in my country?</h4>
-                        <p>Absolutely. Provider lists respect your region, and you can filter by stream, rent, or buy—plus receive release notifications.</p>
-                    </article>
-                    <article class="faq-item">
-                        <h4>Is Verdict available worldwide?</h4>
-                        <p>Verdict supports 43 languages and localized TMDb content. App Store availability expands as we complete regional compliance.</p>
-                    </article>
-                    <article class="faq-item">
-                        <h4>How does Verdict make money?</h4>
-                        <p>Through optional donations, Verdict+ subscriptions, and thoughtfully placed AdMob banners that respect GDPR consent.</p>
-                    </article>
-                    <article class="faq-item">
-                        <h4>Can I export my data?</h4>
-                        <p>Yes. Verdict+ subscribers can generate formatted exports for ratings and watchlists, perfect for sharing or backup.</p>
-                    </article>
-                </div>
-            </div>
-        </section>
-
         <section class="final-cta">
-            <h2>Ready for smarter movie nights?</h2>
-            <p>Verdict is the calm, powerful companion for people who live for cinema. Track what you love, discover what's next, and bring your friends along.</p>
+            <h2>Your next great watch awaits</h2>
+            <p>Verdict is&nbsp;the calm, powerful companion for people who live for cinema. Track what you love, discover what's next, and bring your friends along.</p>
             <div class="hero-ctas" style="justify-content: center;">
                 <a href="https://go.daniyar.link/verdict-web" class="app-store-badge" target="_blank" rel="noopener">
                     <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&releaseDate=1559347200" alt="Download Verdict on the App Store">
                 </a>
-                <button class="cta-secondary" type="button" onclick="window.open('https://go.daniyar.link/x-verdictweb', '_blank', 'noopener');">
-                    Follow the build journey
-                </button>
             </div>
         </section>
     </main>
@@ -1121,22 +943,22 @@
             <div class="footer-top">
                 <div>
                     <strong style="font-size: 1.1rem;">Verdict</strong>
-                    <p>Made with enthusiasm for cinema by Daniyar Agabekov.</p>
+                    <p>Made with enthusiasm for cinema by&nbsp;Daniyar Agabekov.</p>
                 </div>
                 <div class="footer-links">
-                    <a href="https://go.daniyar.link/x-verdictweb" target="_blank" rel="noopener">Twitter / X</a>
+                    <a href="https://go.daniyar.link/x-verdictweb" target="_blank" rel="noopener">Twitter&nbsp;/&nbsp;X</a>
                     <a href="mailto:hi@daniyar.link">Email</a>
                     <a href="/terms-of-service">Terms</a>
                     <a href="/privacy-policy">Privacy</a>
                 </div>
             </div>
             <div>
-                <p style="margin: 0 0 12px; color: var(--text-muted);">Want to support development directly? Tips keep Verdict indie.</p>
+                <p style="margin: 0 0 12px; color: var(--text-muted);">Want to&nbsp;support development directly? Tips keep Verdict indie.</p>
                 <div class="donation-chips">
-                    <button class="donation-chip" type="button" data-copy="bc1qhxrw9h0f9uavnt0anakgav4qek4ph45yw4f68n">BTC: bc1qhxrw9h0f9uavnt0anakgav4qek4ph45yw4f68n</button>
-                    <button class="donation-chip" type="button" data-copy="0xDf69430735C406Bb29B90c35B9C5193F018183CA">ETH: 0xDf69430735C406Bb29B90c35B9C5193F018183CA</button>
-                    <button class="donation-chip" type="button" data-copy="HyE3ydPkpxr7SZdm5uk8EKv7ruxTwDH7vLYF2PW3jABW">SOL: HyE3ydPkpxr7SZdm5uk8EKv7ruxTwDH7vLYF2PW3jABW</button>
-                    <button class="donation-chip" type="button" data-copy="TPN3m8bQdfkwYjYg66t5gtqj9MvY2dpqdQ">TRX: TPN3m8bQdfkwYjYg66t5gtqj9MvY2dpqdQ</button>
+                    <button class="donation-chip" type="button" data-copy="bc1qhxrw9h0f9uavnt0anakgav4qek4ph45yw4f68n">BTC:&nbsp;bc1qhxrw9h0f9uavnt0anakgav4qek4ph45yw4f68n</button>
+                    <button class="donation-chip" type="button" data-copy="0xDf69430735C406Bb29B90c35B9C5193F018183CA">ETH:&nbsp;0xDf69430735C406Bb29B90c35B9C5193F018183CA</button>
+                    <button class="donation-chip" type="button" data-copy="HyE3ydPkpxr7SZdm5uk8EKv7ruxTwDH7vLYF2PW3jABW">SOL:&nbsp;HyE3ydPkpxr7SZdm5uk8EKv7ruxTwDH7vLYF2PW3jABW</button>
+                    <button class="donation-chip" type="button" data-copy="TPN3m8bQdfkwYjYg66t5gtqj9MvY2dpqdQ">TRX:&nbsp;TPN3m8bQdfkwYjYg66t5gtqj9MvY2dpqdQ</button>
                 </div>
             </div>
             <p style="color: rgba(255, 255, 255, 0.4); font-size: 0.8rem; margin: 0;">© <span id="year"></span> Verdict. All rights reserved.</p>
@@ -1249,7 +1071,7 @@
                 }
 
                 return `
-                    <a class="popular-card" href="${linkTarget}">
+                    <a class="popular-card" href="${linkTarget}" target="_blank" rel="noopener noreferrer">
                         <img src="${image}" alt="${label}" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/300x450/0b0f19/ffffff?text=No+Image';">
                         <div class="popular-card-meta">
                             <div class="popular-card-title">${label}</div>
@@ -1283,7 +1105,7 @@
 
             if (backdropUrl) {
                 background.style.backgroundImage = `url('${backdropUrl}')`;
-                background.style.opacity = '0.5';
+                background.style.opacity = '1';
             }
         }
 
