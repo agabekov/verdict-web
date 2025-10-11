@@ -3,601 +3,1297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verdict - Download App</title>
-    <meta name="description" content="Watch, rate, and share movies and TV shows with friends. Download Verdict app now.">
+    <title>Verdict – Watch. Rate. Share with friends.</title>
+    <meta name="description" content="Verdict is the iOS app that helps cinephiles rate movies, manage watchlists, and get ML-powered recommendations. Discover what to watch next and share it with friends.">
     <link rel="canonical" href="https://verdict.daniyar.link">
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Verdict - Watch. Rate. Share with friends">
-    <meta property="og:description" content="Discover, rate, and share your favorite movies and TV shows with friends. Available now on the App Store.">
+
+    <meta property="og:title" content="Verdict – Watch. Rate. Share with friends.">
+    <meta property="og:description" content="Create beautiful watchlists, track ratings, and unlock ML-powered recommendations. Verdict keeps your movie life in one place.">
     <meta property="og:image" content="https://verdict.daniyar.link/AppIcon.png">
     <meta property="og:url" content="https://verdict.daniyar.link">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Verdict">
-    
-    <!-- Twitter Card Meta Tags -->
+
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Verdict - Watch. Rate. Share with friends">
-    <meta name="twitter:description" content="Discover, rate, and share your favorite movies and TV shows with friends. Available now on the App Store.">
+    <meta name="twitter:title" content="Verdict – Watch. Rate. Share with friends.">
+    <meta name="twitter:description" content="A smarter way to discover and organize movies and TV shows with ML recommendations.">
     <meta name="twitter:image" content="https://verdict.daniyar.link/AppIcon.png">
     <meta name="twitter:creator" content="@daniyar_ag">
-    
-    <!-- Additional Meta Tags -->
-    <meta name="keywords" content="movies, tv shows, rating, social, entertainment, app">
+
+    <meta name="keywords" content="movies, tv shows, rating app, watchlist, recommendations, iOS, Verdict">
     <meta name="author" content="Daniyar Agabekov">
-    <meta name="theme-color" content="#1a1a1a">
+    <meta name="theme-color" content="#06080d">
     <link rel="sitemap" type="application/xml" href="/sitemap.xml">
-    
+
     <link rel="icon" type="image/png" href="./favicon.ico">
     <link rel="apple-touch-icon" href="./AppIcon.png">
-    
-    <!-- Performance optimizations -->
-    <link rel="preconnect" href="https://tools.applemediaservices.com">
-    <link rel="preconnect" href="https://scripts.simpleanalyticscdn.com">
-    <link rel="dns-prefetch" href="https://go.daniyar.link">
-    
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "MobileApplication",
-      "name": "Verdict",
-      "description": "Watch, rate, and share movies and TV shows with friends",
-      "applicationCategory": "Entertainment",
-      "operatingSystem": "iOS",
-      "url": "https://verdict.daniyar.link",
-      "downloadUrl": "https://go.daniyar.link/verdict-web",
-      "author": {
-        "@type": "Person",
-        "name": "Daniyar Agabekov"
-      },
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      }
-    }
-    </script>
-    
+
     <style>
+        :root {
+            --background: #05070f;
+            --background-alt: #0b1220;
+            --surface: rgba(255, 255, 255, 0.04);
+            --surface-alt: rgba(255, 255, 255, 0.08);
+            --text: rgba(255, 255, 255, 0.92);
+            --text-muted: rgba(255, 255, 255, 0.68);
+            --accent: #4f7dff;
+            --accent-soft: rgba(79, 125, 255, 0.2);
+            --accent-gradient: linear-gradient(135deg, #4f7dff, #7f58ff);
+            --border: rgba(255, 255, 255, 0.12);
+            --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+            --transition: 200ms ease;
+            --max-width: 1100px;
+        }
+
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
         }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #000;
-            min-height: 100vh;
-            color: white;
-            position: relative;
-            overflow-x: hidden;
-            overflow-y: auto;
+
+        html, body {
             margin: 0;
             padding: 0;
+            font-family: var(--font-family);
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
         }
-        
+
+        body {
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
         .background {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
+            inset: 0;
             background-position: center;
-            filter: blur(30px);
+            background-size: cover;
+            filter: blur(40px) saturate(1.25);
+            transform: scale(1.08);
+            opacity: 0.65;
             z-index: -2;
+            transition: opacity 400ms ease-in-out;
         }
-        
+
         .background-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 70%, rgba(0,0,0,1) 100%);
+            inset: 0;
+            background:
+                radial-gradient(circle at 18% 8%, rgba(79, 125, 255, 0.28), transparent 50%),
+                radial-gradient(circle at 82% -10%, rgba(127, 88, 255, 0.22), transparent 55%),
+                linear-gradient(180deg, rgba(5, 7, 15, 0.45) 0%, rgba(5, 7, 15, 0.86) 60%, #05070f 100%);
             z-index: -1;
             pointer-events: none;
+            overflow: hidden;
         }
-        
-        .container {
-            text-align: center;
-            max-width: 1200px;
+
+        .background-overlay::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='rgba(255,255,255,0.02)'/%3E%3Ccircle cx='6' cy='6' r='1.15' fill='rgba(255,255,255,0.05)'/%3E%3Ccircle cx='50' cy='18' r='0.9' fill='rgba(255,255,255,0.04)'/%3E%3Ccircle cx='92' cy='12' r='1.2' fill='rgba(79,125,255,0.09)'/%3E%3Ccircle cx='12' cy='58' r='0.8' fill='rgba(255,255,255,0.05)'/%3E%3Ccircle cx='70' cy='70' r='1.1' fill='rgba(127,88,255,0.08)'/%3E%3Ccircle cx='34' cy='88' r='0.95' fill='rgba(255,255,255,0.04)'/%3E%3C/svg%3E");
+            mix-blend-mode: soft-light;
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        nav.top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(24px);
+            background: rgba(3, 5, 8, 0.72);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .nav-inner {
+            max-width: var(--max-width);
             margin: 0 auto;
-            padding: 60px 20px 40px;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+        }
+
+        .nav-download {
+            padding: 10px 18px;
+            border-radius: 999px;
+            background: var(--accent-gradient);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            transition: transform var(--transition), box-shadow var(--transition);
+            box-shadow: 0 10px 30px rgba(79, 125, 255, 0.35);
+        }
+
+        .nav-download:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 14px 40px rgba(79, 125, 255, 0.5);
+        }
+
+        main {
             position: relative;
             z-index: 1;
-            width: 100%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
-        
-        .main-content {
-            max-width: 400px;
-            margin: 0 auto 40px;
-            flex-shrink: 0;
+
+        .hero {
+            padding: 120px 24px 80px;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 56px;
+            align-items: center;
         }
-        
-        .app-icon {
-            width: 120px;
-            height: 120px;
-            background-image: url('./AppIcon.png');
-            background-size: cover;
-            background-position: center;
-            border-radius: 24px;
-            margin: 0 auto 24px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 16px;
+
+        .hero-content h1 {
+            font-size: clamp(2.8rem, 5vw, 3.6rem);
+            margin: 12px 0 20px;
+            line-height: 1.1;
             font-weight: 700;
+            letter-spacing: -0.02em;
         }
-        
-        .subtitle {
+
+        .hero-content p {
+            color: var(--text-muted);
             font-size: 1.1rem;
-            margin-bottom: 32px;
-            opacity: 0.9;
-            line-height: 1.5;
+            max-width: 520px;
         }
-        
-        .download-button {
-            display: inline-block;
-            padding: 16px 32px;
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
-            text-decoration: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(79, 125, 255, 0.18);
+            color: #dce6ff;
             font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-        }
-        
-        .download-button:hover {
-            background: white;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        }
-        
-        .coming-soon {
-            margin-top: 24px;
-            font-size: 0.9rem;
-            opacity: 0.7;
-        }
-        
-        .credit {
-            margin-top: 24px;
             font-size: 0.85rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
         }
-        
-        .credit a {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 6px 12px;
-            border-radius: 16px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            transition: all 0.3s ease;
-            display: inline-block;
+
+        .hero-ctas {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 32px 0 24px;
         }
-        
-        .credit a:hover {
-            color: white;
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.25);
-            transform: translateY(-1px);
-        }
-        
-        .crypto-addresses {
-            margin-top: 16px;
-            margin-bottom: 40px;
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.6);
-            line-height: 1.8;
-            text-align: left;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 0 20px;
-        }
-        
-        .crypto-address {
-            margin-bottom: 8px;
-            cursor: pointer;
-            padding: 4px;
-            border-radius: 4px;
-            transition: background 0.2s;
-            outline: none;
-        }
-        
-        .crypto-address:hover,
-        .crypto-address:focus {
-            background: rgba(255,255,255,0.1);
-            outline: 2px solid rgba(255,255,255,0.3);
-        }
-        
-        .crypto-address:last-child {
-            margin-bottom: 0;
-        }
-        
+
         .app-store-badge {
             display: inline-block;
+            border-radius: 14px;
             overflow: hidden;
-            border-radius: 13px;
-            width: 250px;
-            height: 83px;
+            width: 220px;
+            height: 72px;
             max-width: 100%;
+            background: rgba(255, 255, 255, 0.05);
         }
-        
+
         .app-store-badge img {
-            border-radius: 13px;
             width: 100%;
-            height: auto;
-            max-width: 250px;
-        }
-        
-        @media (max-width: 480px) {
-            .app-store-badge {
-                width: 200px;
-                height: 66px;
-            }
-        }
-        
-        .popular-section {
-            margin-top: 24px;
-            margin-bottom: 24px;
-            width: 100%;
-            max-width: 1200px;
-            padding: 0 20px;
-            flex-grow: 1;
-        }
-        
-        .popular-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 32px;
-            color: rgba(255,255,255,0.95);
-        }
-        
-        .content-row {
-            margin-bottom: 32px;
-        }
-        
-        .row-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: rgba(255,255,255,0.9);
-            text-align: left;
-        }
-        
-        .content-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 16px;
-            width: 100%;
-        }
-        
-        .content-card {
-            position: relative;
-            transition: all 0.3s ease;
-            min-width: 120px;
-        }
-        
-        .content-card:hover {
-            transform: translateY(-4px);
-        }
-        
-        .content-poster {
-            width: 100%;
-            aspect-ratio: 2/3;
-            object-fit: cover;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            background: rgba(255,255,255,0.1);
-        }
-        
-        .content-link {
-            text-decoration: none;
-            color: inherit;
+            height: 100%;
             display: block;
         }
-        
-        .loading-placeholder {
-            width: 100%;
-            aspect-ratio: 2/3;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+
+        .cta-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 22px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: transparent;
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background var(--transition), transform var(--transition);
+        }
+
+        .cta-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .hero-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 14px;
+            margin-top: 32px;
+        }
+
+        .highlight-pill {
+            padding: 14px 16px;
             border-radius: 12px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .hero-media {
+            background: linear-gradient(180deg, rgba(79, 125, 255, 0.25), rgba(127, 88, 255, 0.08));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            padding: 32px;
+            min-height: 440px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: rgba(255,255,255,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .placeholder-frame {
+            border: 1px dashed rgba(255, 255, 255, 0.22);
+            border-radius: 24px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 0.95rem;
+            text-align: center;
+            padding: 24px;
+            backdrop-filter: blur(4px);
+        }
+
+        .section {
+            padding: 120px 24px;
+        }
+
+        .section-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .section-header {
+            max-width: 760px;
+            margin-bottom: 48px;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            line-height: 1.2;
+            margin-bottom: 16px;
+            letter-spacing: -0.015em;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        .feature-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 26px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            transition: transform var(--transition), border-color var(--transition), background var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(79, 125, 255, 0.35);
+            background: rgba(79, 125, 255, 0.08);
+        }
+
+        .feature-card h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            margin: 0;
+            color: var(--text-muted);
+        }
+
+        .feature-card ul {
+            margin: 0;
+            padding-left: 20px;
+            color: var(--text-muted);
+        }
+
+        .feature-showcase {
+            display: grid;
+            gap: 80px;
+        }
+
+        .split {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 48px;
+            align-items: center;
+        }
+
+        .split h3 {
+            font-size: 2rem;
+            margin-bottom: 18px;
+        }
+
+        .bullet-list {
+            list-style: none;
+            padding: 0;
+            margin: 24px 0 0;
+            display: grid;
+            gap: 14px;
+        }
+
+        .bullet-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            color: var(--text-muted);
+        }
+
+        .bullet-list span {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .split-visual {
+            min-height: 360px;
+            border-radius: 28px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px dashed rgba(255, 255, 255, 0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            padding: 24px;
+        }
+
+        .timeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .timeline-step {
+            position: relative;
+            padding: 28px;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .timeline-step strong {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: var(--accent);
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .timeline-step h4 {
+            margin: 0 0 12px;
+            font-size: 1.1rem;
+        }
+
+        .timeline-step p {
+            margin: 0;
+            color: var(--text-muted);
+        }
+
+        .verdict-plus {
+            background: rgba(79, 125, 255, 0.12);
+            border: 1px solid rgba(79, 125, 255, 0.3);
+            border-radius: 30px;
+            padding: 48px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 40px;
+            align-items: center;
+        }
+
+        .verdict-plus h3 {
+            font-size: 2rem;
+            margin: 0 0 16px;
+        }
+
+        .verdict-plus p {
+            color: rgba(222, 232, 255, 0.9);
+        }
+
+        .verdict-plus-features {
+            list-style: none;
+            padding: 0;
+            margin: 24px 0 0;
+            display: grid;
+            gap: 12px;
+        }
+
+        .verdict-plus-features li {
+            padding: 18px 20px;
+            background: rgba(8, 13, 22, 0.75);
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: rgba(225, 234, 255, 0.85);
+        }
+
+        .popular-section {
+            padding: 120px 24px;
+            position: relative;
+        }
+
+        .popular-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 48px 40px;
+            border-radius: 32px;
+            background: radial-gradient(circle at top, rgba(79, 125, 255, 0.25), rgba(11, 18, 30, 0.85) 55%, rgba(6, 9, 15, 0.95) 100%);
+            border: 1px solid rgba(79, 125, 255, 0.22);
+            box-shadow: 0 40px 80px rgba(3, 6, 12, 0.6);
+        }
+
+        .popular-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 32px;
+            flex-wrap: wrap;
+            margin-bottom: 36px;
+        }
+
+        .popular-header h2 {
+            margin: 0 0 12px;
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+        }
+
+        .popular-header p {
+            margin: 0;
+            color: rgba(224, 233, 255, 0.78);
+            max-width: 520px;
+        }
+
+        .popular-updated {
+            font-size: 0.85rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(219, 229, 255, 0.6);
+            padding: 10px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(219, 229, 255, 0.25);
+            background: rgba(3, 6, 12, 0.45);
+        }
+
+        .popular-rows {
+            display: grid;
+            gap: 32px;
+        }
+
+        .popular-row {
+            display: grid;
+            gap: 18px;
+        }
+
+        .popular-row-label {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(219, 229, 255, 0.72);
+        }
+
+        .popular-row-list {
+            display: flex;
+            gap: 18px;
+            overflow-x: auto;
+            padding-bottom: 6px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+        }
+
+        .popular-empty {
+            color: rgba(219, 229, 255, 0.65);
             font-size: 0.9rem;
+            display: inline-flex;
+            padding: 10px 0;
         }
-        
-        @media (max-width: 768px) {
-            .content-grid {
-                grid-template-columns: repeat(4, 1fr);
+
+        .popular-row-list::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .popular-row-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 999px;
+        }
+
+        .popular-card {
+            position: relative;
+            display: block;
+            min-width: 160px;
+            max-width: 200px;
+            aspect-ratio: 2 / 3;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 25px 40px rgba(8, 12, 22, 0.6);
+            transition: transform var(--transition), box-shadow var(--transition), border var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .popular-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 30px 54px rgba(8, 12, 22, 0.8);
+            border-color: rgba(79, 125, 255, 0.4);
+        }
+
+        .popular-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .popular-card-meta {
+            position: absolute;
+            inset: auto 0 0 0;
+            padding: 14px;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.6) 40%, rgba(0, 0, 0, 0.92) 100%);
+            color: #fff;
+        }
+
+        .popular-card-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 4px;
+        }
+
+        .popular-card-subtitle {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .popular-skeleton {
+            min-width: 160px;
+            max-width: 200px;
+            aspect-ratio: 2 / 3;
+            border-radius: 20px;
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.16));
+            animation: pulse 1.6s ease-in-out infinite;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.35; }
+            50% { opacity: 0.6; }
+            100% { opacity: 0.35; }
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+        }
+
+        .testimonial-card {
+            padding: 28px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-muted);
+        }
+
+        .testimonial-card strong {
+            display: block;
+            color: #ffffff;
+            margin-top: 18px;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 26px;
+        }
+
+        .faq-item {
+            padding: 26px;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .faq-item h4 {
+            margin: 0 0 12px;
+            font-size: 1.1rem;
+        }
+
+        .faq-item p {
+            margin: 0;
+            color: var(--text-muted);
+        }
+
+        .final-cta {
+            text-align: center;
+            padding: 120px 24px 80px;
+        }
+
+        .final-cta h2 {
+            font-size: clamp(2.2rem, 4vw, 3rem);
+            margin-bottom: 18px;
+        }
+
+        .final-cta p {
+            max-width: 520px;
+            margin: 0 auto 32px;
+            color: var(--text-muted);
+        }
+
+        footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 48px 24px 32px;
+            background: rgba(3, 5, 8, 0.85);
+        }
+
+        .footer-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: grid;
+            gap: 32px;
+        }
+
+        .footer-top {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-top p {
+            margin: 0;
+            color: var(--text-muted);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: #ffffff;
+        }
+
+        .donation-chips {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .donation-chip {
+            padding: 10px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.04);
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background var(--transition), transform var(--transition);
+        }
+
+        .donation-chip:focus-visible {
+            outline: 2px solid rgba(79, 125, 255, 0.8);
+            outline-offset: 2px;
+        }
+
+        .donation-chip:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 880px) {
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: flex-end;
             }
-            .popular-title {
-                font-size: 1.7rem;
+
+            .hero {
+                padding-top: 100px;
             }
-            .row-title {
-                font-size: 1.1rem;
+
+            .verdict-plus {
+                padding: 32px;
             }
         }
-        
-        @media (max-width: 480px) {
-            .content-grid {
-                grid-template-columns: repeat(3, 1fr);
+
+        @media (max-width: 560px) {
+            .nav-inner {
+                flex-direction: column;
+                align-items: flex-start;
             }
-            .popular-section {
-                padding: 0 16px;
+
+            .hero-ctas {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .cta-secondary {
+                justify-content: center;
+            }
+
+            .hero-media {
+                min-height: 320px;
+            }
+
+            .section {
+                padding: 90px 20px;
+            }
+
+            footer {
+                padding: 40px 20px 28px;
             }
         }
     </style>
-    
 </head>
 <body>
     <div class="background" id="dynamicBackground"></div>
     <div class="background-overlay"></div>
-    <main class="container">
-        <div class="main-content">
-            <header>
-                <div class="app-icon" role="img" aria-label="Verdict app icon"></div>
-                <h1>Verdict</h1>
-                <p class="subtitle">Watch. Rate. Share with friends</p>
-            </header>
-            <a href="https://go.daniyar.link/verdict-web" class="app-store-badge">
-                <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&releaseDate=1559347200" alt="Download on the App Store">
-            </a>
-            <p class="credit">
-                <a href="https://go.daniyar.link/x-verdictweb" target="_blank" rel="noopener">made by Daniyar Agabekov</a>
-            </p>
+
+    <nav class="top-nav">
+        <div class="nav-inner">
+            <a href="#top" class="brand">Verdict</a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#rating">Ratings</a>
+                <a href="#recommendations">Recommendations</a>
+                <a href="#workflow">How it works</a>
+                <a href="#verdict-plus">Verdict+</a>
+                <a href="#faq">FAQ</a>
+                <a class="nav-download" href="https://go.daniyar.link/verdict-web" target="_blank" rel="noopener noreferrer">
+                    Download
+                </a>
+            </div>
         </div>
-        
-        <section class="popular-section">
-            <div class="content-row">
-                <div class="content-grid" id="moviesGrid">
-                    <!-- Loading placeholders -->
-                    <div class="content-card">
-                        <div class="loading-placeholder">Loading...</div>
-                    </div>
-                    <div class="content-card">
-                        <div class="loading-placeholder">Loading...</div>
-                    </div>
-                    <div class="content-card">
-                        <div class="loading-placeholder">Loading...</div>
-                    </div>
-                    <div class="content-card">
-                        <div class="loading-placeholder">Loading...</div>
-                    </div>
-                    <div class="content-card">
-                        <div class="loading-placeholder">Loading...</div>
-                    </div>
-                    <div class="content-card">
-                        <div class="loading-placeholder">Loading...</div>
-                    </div>
+    </nav>
+
+    <main>
+        <header class="hero" id="top">
+            <div class="hero-content">
+                <div class="hero-badge">Now live on the App Store</div>
+                <h1>Verdict makes it effortless to capture every movie night.</h1>
+                <p>
+                    Rate films with intention, build the watchlists you actually use, and unlock ML-powered recommendations crafted from your taste. Verdict is your personal command center for cinema.
+                </p>
+                <div class="hero-ctas">
+                    <a href="https://go.daniyar.link/verdict-web" class="app-store-badge" target="_blank" rel="noopener">
+                        <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&releaseDate=1559347200" alt="Download Verdict on the App Store">
+                    </a>
+                    <button class="cta-secondary" type="button" onclick="document.getElementById('features').scrollIntoView({ behavior: 'smooth' });">
+                        Explore features
+                    </button>
+                </div>
+                <div class="hero-highlights">
+                    <div class="highlight-pill">Granular rating breakdowns</div>
+                    <div class="highlight-pill">iCloud-synced watchlists</div>
+                    <div class="highlight-pill">Foundation ML recommendations</div>
+                    <div class="highlight-pill">Streaming availability in your region</div>
                 </div>
             </div>
-            
-            <div class="content-row">
-                <div class="content-grid" id="tvGrid">
-                    <!-- Loading placeholders -->
-                    <div class="content-card">
-                        <div class="loading-placeholder">Loading...</div>
+            <div class="hero-media">
+                <div class="placeholder-frame">
+                    Hero mockup placeholder – drop your main Verdict screen here.
+                </div>
+            </div>
+        </header>
+
+        <section class="section" id="features">
+            <div class="section-inner">
+                <div class="section-header">
+                    <h2>Everything your film brain needs, in one beautifully organized place.</h2>
+                    <p>Verdict pairs delightful SwiftUI design with a powerful service stack: TMDb discovery, iCloud sync, streaming availability, and background ML that keeps learning from your tastes.</p>
+                </div>
+                <div class="feature-card-grid">
+                    <article class="feature-card">
+                        <h3>Deep rating engine</h3>
+                        <p>Log ratings in seconds and revisit rich analytics across genres, directors, and moods. See how your taste evolves over time.</p>
+                        <ul>
+                            <li>Personal rating history &amp; distribution</li>
+                            <li>Actor &amp; crew insights on every title</li>
+                        </ul>
+                    </article>
+                    <article class="feature-card">
+                        <h3>Living watchlists</h3>
+                        <p>Keep multiple watchlists in sync across devices with CloudKit. Share discoveries, or stash releases for specific nights.</p>
+                        <ul>
+                            <li>Smart sorting with filters &amp; priorities</li>
+                            <li>Offline-first with automatic background sync</li>
+                        </ul>
+                    </article>
+                    <article class="feature-card">
+                        <h3>ML recommendations</h3>
+                        <p>On-device Foundation ML models blend collaborative filtering, content features, and your own ratings to surface what to watch next.</p>
+                        <ul>
+                            <li>Adaptive strategies that evolve with your taste</li>
+                            <li>Transparency with strategy &amp; confidence logs</li>
+                        </ul>
+                    </article>
+                    <article class="feature-card">
+                        <h3>Streaming ready</h3>
+                        <p>See where to watch instantly. Verdict pulls regional availability, provider lists, and real-time release calendars.</p>
+                        <ul>
+                            <li>Regional streaming providers at a glance</li>
+                            <li>Upcoming premiers with push notifications</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section feature-showcase" id="rating">
+            <div class="section-inner">
+                <div class="split">
+                    <div>
+                        <h3>Ratings that feel more like a film journal.</h3>
+                        <p>Verdict's RatingViewModel and analytics combine to capture context the moment you tap a score. Track how each genre lands, revisit trends, and celebrate your all-time favorites with automatically generated stats.</p>
+                        <ul class="bullet-list">
+                            <li><span>Instant detail pages</span> with cast, crew, trailers, and streaming options powered by TMDb.</li>
+                            <li><span>Profile statistics</span> that visualize rating distribution, genre heatmaps, and director streaks.</li>
+                            <li><span>Sync across devices</span> through iCloud and CloudKit so every rating is waiting on your next screen.</li>
+                        </ul>
                     </div>
-                    <div class="content-card">
-                        <div class="loading-placeholder">Loading...</div>
+                    <div class="split-visual">
+                        Add a screenshot of your rating flow or profile statistics here.
                     </div>
-                    <div class="content-card">
-                        <div class="loading-placeholder">Loading...</div>
+                </div>
+                <div class="split" id="watchlists">
+                    <div class="split-visual">
+                        Drop a watchlist or Upcoming screen mockup in this frame.
                     </div>
-                    <div class="content-card">
-                        <div class="loading-placeholder">Loading...</div>
-                    </div>
-                    <div class="content-card">
-                        <div class="loading-placeholder">Loading...</div>
-                    </div>
-                    <div class="content-card">
-                        <div class="loading-placeholder">Loading...</div>
+                    <div>
+                        <h3>Watchlists that finally match how you plan nights in.</h3>
+                        <p>Curate by mood, keep studio marathons organized, or follow what's coming soon. Verdict gives you the control without the busywork.</p>
+                        <ul class="bullet-list">
+                            <li><span>Flexible collections</span> that can be filtered, searched, and re-ordered with a swipe.</li>
+                            <li><span>Upcoming alerts</span> driven by PushNotificationManager so you never miss a theatrical or streaming release.</li>
+                            <li><span>Shareable lists</span> to inspire friends and keep the group chat aligned.</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </section>
-        
-        <section class="crypto-addresses">
-            <div class="crypto-address" tabindex="0" onclick="copyToClipboard('bc1qhxrw9h0f9uavnt0anakgav4qek4ph45yw4f68n', this)" onkeydown="handleKeyDown(event, 'bc1qhxrw9h0f9uavnt0anakgav4qek4ph45yw4f68n', this)" aria-label="Click to copy Bitcoin address">BTC: bc1qhxrw9h0f9uavnt0anakgav4qek4ph45yw4f68n</div>
-            <div class="crypto-address" tabindex="0" onclick="copyToClipboard('0xDf69430735C406Bb29B90c35B9C5193F018183CA', this)" onkeydown="handleKeyDown(event, '0xDf69430735C406Bb29B90c35B9C5193F018183CA', this)" aria-label="Click to copy Ethereum address">ETH: 0xDf69430735C406Bb29B90c35B9C5193F018183CA</div>
-            <div class="crypto-address" tabindex="0" onclick="copyToClipboard('HyE3ydPkpxr7SZdm5uk8EKv7ruxTwDH7vLYF2PW3jABW', this)" onkeydown="handleKeyDown(event, 'HyE3ydPkpxr7SZdm5uk8EKv7ruxTwDH7vLYF2PW3jABW', this)" aria-label="Click to copy Solana address">SOL: HyE3ydPkpxr7SZdm5uk8EKv7ruxTwDH7vLYF2PW3jABW</div>
-            <div class="crypto-address" tabindex="0" onclick="copyToClipboard('TPN3m8bQdfkwYjYg66t5gtqj9MvY2dpqdQ', this)" onkeydown="handleKeyDown(event, 'TPN3m8bQdfkwYjYg66t5gtqj9MvY2dpqdQ', this)" aria-label="Click to copy TRX address">TRX: TPN3m8bQdfkwYjYg66t5gtqj9MvY2dpqdQ</div>
+
+        <section class="section" id="recommendations">
+            <div class="section-inner">
+                <div class="section-header">
+                    <h2>Beloved by machine learning—and the cinephiles training it.</h2>
+                    <p>Verdict's PersonalizedRecommendationEngine blends heuristic, hybrid, and Core ML strategies. Once you've logged a few films, it promotes you to fully personalized insights with transparency along the way.</p>
+                </div>
+                <div class="split">
+                    <div>
+                        <h3>Foundation ML + collaborative filtering</h3>
+                        <p>The RecommendationFusionEngine looks at similar viewers, your historical ratings, and content attributes to surface films that match your taste profile. Strategy transitions are logged, so you always know why a pick appears.</p>
+                        <ul class="bullet-list">
+                            <li><span>On-device training</span> keeps your data private while the model learns.</li>
+                            <li><span>Adaptive fallback</span> automatically blends popular picks when you need a reset.</li>
+                            <li><span>A/B testing ready</span> with built-in instrumentation for future experiments.</li>
+                        </ul>
+                    </div>
+                    <div class="split-visual">
+                        Showcase Recommendation screen mockups or ML strategy logs here.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="popular-section" id="popular">
+            <div class="popular-inner">
+                <div class="popular-header">
+                    <div>
+                        <h2>What's popular now</h2>
+                        <p>Fresh picks charting on Verdict this hour. Pulled directly from TMDb so you always see what's buzzing.</p>
+                    </div>
+                    <span class="popular-updated">Updated hourly</span>
+                </div>
+                <div class="popular-rows">
+                    <div class="popular-row">
+                        <div class="popular-row-label">Movies</div>
+                        <div class="popular-row-list" id="popularMovies">
+                            <div class="popular-skeleton"></div>
+                            <div class="popular-skeleton"></div>
+                            <div class="popular-skeleton"></div>
+                            <div class="popular-skeleton"></div>
+                            <div class="popular-skeleton"></div>
+                            <div class="popular-skeleton"></div>
+                        </div>
+                    </div>
+                    <div class="popular-row">
+                        <div class="popular-row-label">Series</div>
+                        <div class="popular-row-list" id="popularTv">
+                            <div class="popular-skeleton"></div>
+                            <div class="popular-skeleton"></div>
+                            <div class="popular-skeleton"></div>
+                            <div class="popular-skeleton"></div>
+                            <div class="popular-skeleton"></div>
+                            <div class="popular-skeleton"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="workflow">
+            <div class="section-inner">
+                <div class="section-header">
+                    <h2>The Verdict flow</h2>
+                    <p>Every touchpoint is designed to be quick, intentional, and shareable. Here's how a movie night moves through Verdict.</p>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-step">
+                        <strong>1</strong>
+                        <h4>Discover</h4>
+                        <p>Browse popular, trending, or curated streaming lists. Search spans movies, TV, and actors with fuzzy matching powered by TMDb.</p>
+                    </div>
+                    <div class="timeline-step">
+                        <strong>2</strong>
+                        <h4>Decide</h4>
+                        <p>Read full detail pages—trailers, cast, reviews, and where to watch. Invite friends by sharing deep links that open in the app.</p>
+                    </div>
+                    <div class="timeline-step">
+                        <strong>3</strong>
+                        <h4>Watch &amp; rate</h4>
+                        <p>Log a rating right after the credits. Your profile updates instantly with distribution charts and reels-friendly highlights.</p>
+                    </div>
+                    <div class="timeline-step">
+                        <strong>4</strong>
+                        <h4>Get smarter</h4>
+                        <p>PersonalizedRecommendationEngine processes your latest mood, then refreshes picks and upcoming reminders for the next session.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="verdict-plus">
+            <div class="section-inner">
+                <div class="verdict-plus">
+                    <div>
+                        <h3>Verdict+ unlocks premium perks.</h3>
+                        <p>Upgrade to Verdict+ to support ongoing development and access exclusive features. Monthly at $1 or yearly at $10—designed to stay accessible.</p>
+                        <ul class="verdict-plus-features">
+                            <li>Advanced profile insights and export tools</li>
+                            <li>Early access to experimental recommendation models</li>
+                            <li>Priority slots for upcoming notification drops</li>
+                            <li>More customization for your public profile link</li>
+                        </ul>
+                    </div>
+                    <div class="split-visual">
+                        Reserve this frame for your Verdict+ paywall design or pricing comparisons.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-inner">
+                <div class="section-header">
+                    <h2>Loved by film obsessives, crafted by one.</h2>
+                    <p>Verdict is made by Daniyar Agabekov—a cinephile who wanted a calmer, smarter home for movie memories. Early users are already sharing their hype.</p>
+                </div>
+                <div class="testimonial-grid">
+                    <div class="testimonial-card">
+                        “Verdict replaced my notes app, Letterboxd spreadsheets, and a dozen reminders. The recommendations actually surface hidden gems.”
+                        <strong>— Future testimonial</strong>
+                    </div>
+                    <div class="testimonial-card">
+                        “The ML explanations are wild. Knowing why a movie was suggested helps me trust it—and it nails my vibe every week.”
+                        <strong>— Future testimonial</strong>
+                    </div>
+                    <div class="testimonial-card">
+                        “I use watchlists for everything: horror nights, family picks, festival prep. Verdict keeps them all synced and ready to go.”
+                        <strong>— Future testimonial</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="faq">
+            <div class="section-inner">
+                <div class="section-header">
+                    <h2>FAQs</h2>
+                    <p>A few of the questions film lovers ask before they make Verdict part of their routine.</p>
+                </div>
+                <div class="faq-grid">
+                    <article class="faq-item">
+                        <h4>How personal are recommendations?</h4>
+                        <p>The app trains an on-device Foundation ML model once you log a handful of ratings. You can see which strategy (heuristic, hybrid, or Core ML) delivered each pick.</p>
+                    </article>
+                    <article class="faq-item">
+                        <h4>Do watchlists sync across devices?</h4>
+                        <p>Yes. Verdict uses CloudKit and a local-first approach, so every change is saved offline and synced the moment you're back online.</p>
+                    </article>
+                    <article class="faq-item">
+                        <h4>Can I follow streaming availability in my country?</h4>
+                        <p>Absolutely. Provider lists respect your region, and you can filter by stream, rent, or buy—plus receive release notifications.</p>
+                    </article>
+                    <article class="faq-item">
+                        <h4>Is Verdict available worldwide?</h4>
+                        <p>Verdict supports 43 languages and localized TMDb content. App Store availability expands as we complete regional compliance.</p>
+                    </article>
+                    <article class="faq-item">
+                        <h4>How does Verdict make money?</h4>
+                        <p>Through optional donations, Verdict+ subscriptions, and thoughtfully placed AdMob banners that respect GDPR consent.</p>
+                    </article>
+                    <article class="faq-item">
+                        <h4>Can I export my data?</h4>
+                        <p>Yes. Verdict+ subscribers can generate formatted exports for ratings and watchlists, perfect for sharing or backup.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="final-cta">
+            <h2>Ready for smarter movie nights?</h2>
+            <p>Verdict is the calm, powerful companion for people who live for cinema. Track what you love, discover what's next, and bring your friends along.</p>
+            <div class="hero-ctas" style="justify-content: center;">
+                <a href="https://go.daniyar.link/verdict-web" class="app-store-badge" target="_blank" rel="noopener">
+                    <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&releaseDate=1559347200" alt="Download Verdict on the App Store">
+                </a>
+                <button class="cta-secondary" type="button" onclick="window.open('https://go.daniyar.link/x-verdictweb', '_blank', 'noopener');">
+                    Follow the build journey
+                </button>
+            </div>
         </section>
     </main>
-    
-    <!-- Simple Analytics - 100% privacy-first analytics -->
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div>
+                    <strong style="font-size: 1.1rem;">Verdict</strong>
+                    <p>Made with enthusiasm for cinema by Daniyar Agabekov.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://go.daniyar.link/x-verdictweb" target="_blank" rel="noopener">Twitter / X</a>
+                    <a href="mailto:hi@daniyar.link">Email</a>
+                    <a href="/terms-of-service">Terms</a>
+                    <a href="/privacy-policy">Privacy</a>
+                </div>
+            </div>
+            <div>
+                <p style="margin: 0 0 12px; color: var(--text-muted);">Want to support development directly? Tips keep Verdict indie.</p>
+                <div class="donation-chips">
+                    <button class="donation-chip" type="button" data-copy="bc1qhxrw9h0f9uavnt0anakgav4qek4ph45yw4f68n">BTC: bc1qhxrw9h0f9uavnt0anakgav4qek4ph45yw4f68n</button>
+                    <button class="donation-chip" type="button" data-copy="0xDf69430735C406Bb29B90c35B9C5193F018183CA">ETH: 0xDf69430735C406Bb29B90c35B9C5193F018183CA</button>
+                    <button class="donation-chip" type="button" data-copy="HyE3ydPkpxr7SZdm5uk8EKv7ruxTwDH7vLYF2PW3jABW">SOL: HyE3ydPkpxr7SZdm5uk8EKv7ruxTwDH7vLYF2PW3jABW</button>
+                    <button class="donation-chip" type="button" data-copy="TPN3m8bQdfkwYjYg66t5gtqj9MvY2dpqdQ">TRX: TPN3m8bQdfkwYjYg66t5gtqj9MvY2dpqdQ</button>
+                </div>
+            </div>
+            <p style="color: rgba(255, 255, 255, 0.4); font-size: 0.8rem; margin: 0;">© <span id="year"></span> Verdict. All rights reserved.</p>
+        </div>
+    </footer>
+
     <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
     <script>
-        function copyToClipboard(text, element) {
+        function copyToClipboard(text) {
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(function() {
-                    showCopyFeedback(element, true);
-                }).catch(function(err) {
-                    console.error('Clipboard API failed: ', err);
-                    fallbackCopyToClipboard(text, element);
+                return navigator.clipboard.writeText(text);
+            }
+            return new Promise((resolve, reject) => {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.left = '-9999px';
+                document.body.appendChild(textarea);
+                textarea.focus();
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    resolve();
+                } catch (error) {
+                    reject(error);
+                } finally {
+                    document.body.removeChild(textarea);
+                }
+            });
+        }
+
+        function attachDonationListeners() {
+            const chips = document.querySelectorAll('.donation-chip');
+            chips.forEach((chip) => {
+                chip.addEventListener('click', async () => {
+                    const original = chip.textContent;
+                    try {
+                        await copyToClipboard(chip.dataset.copy);
+                        chip.textContent = 'Copied!';
+                        setTimeout(() => {
+                            chip.textContent = original;
+                        }, 2000);
+                    } catch (error) {
+                        chip.textContent = 'Copy failed';
+                        setTimeout(() => {
+                            chip.textContent = original;
+                        }, 2000);
+                    }
                 });
-            } else {
-                fallbackCopyToClipboard(text, element);
-            }
+
+                chip.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        chip.click();
+                    }
+                });
+            });
         }
-        
-        function fallbackCopyToClipboard(text, element) {
-            const textArea = document.createElement('textarea');
-            textArea.value = text;
-            textArea.style.position = 'fixed';
-            textArea.style.left = '-999999px';
-            textArea.style.top = '-999999px';
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            
-            try {
-                const successful = document.execCommand('copy');
-                showCopyFeedback(element, successful);
-            } catch (err) {
-                console.error('Fallback copy failed: ', err);
-                showCopyFeedback(element, false);
-            }
-            
-            document.body.removeChild(textArea);
-        }
-        
-        function showCopyFeedback(element, success) {
-            const originalText = element.innerHTML;
-            const message = success ? '✓ Copied!' : '✗ Copy failed';
-            const color = success ? '#4CAF50' : '#f44336';
-            
-            element.innerHTML = originalText + ' <span style="color: ' + color + ';">' + message + '</span>';
-            setTimeout(function() {
-                element.innerHTML = originalText;
-            }, 2000);
-        }
-        
-        function handleKeyDown(event, text, element) {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                copyToClipboard(text, element);
-            }
-        }
-        
-        // Load popular content
+
         async function loadPopularContent() {
+            const moviesRow = document.getElementById('popularMovies');
+            const tvRow = document.getElementById('popularTv');
+            if (!moviesRow || !tvRow) {
+                return;
+            }
+
             try {
-                console.log('Loading popular content...');
-                // Use the existing API endpoints that already handle TMDB API calls
                 const [moviesResponse, tvResponse] = await Promise.all([
                     fetch('/api/popular-movies'),
                     fetch('/api/popular-tv')
                 ]);
-                
-                console.log('API responses:', moviesResponse.status, tvResponse.status);
-                
+
                 if (!moviesResponse.ok || !tvResponse.ok) {
-                    throw new Error(`API request failed: movies ${moviesResponse.status}, tv ${tvResponse.status}`);
+                    throw new Error('Popular endpoints returned an error');
                 }
-                
+
                 const moviesData = await moviesResponse.json();
                 const tvData = await tvResponse.json();
-                
-                console.log('Movies data:', moviesData);
-                console.log('TV data:', tvData);
-                
-                const movies = moviesData.results?.slice(0, 6) || [];
-                const tvShows = tvData.results?.slice(0, 6) || [];
-                
-                console.log('Movies to render:', movies.length);
-                console.log('TV shows to render:', tvShows.length);
-                
-                renderMovies(movies);
-                renderTvShows(tvShows);
-                
-                // Set background from first movie with good backdrop/poster
-                setDynamicBackground([...movies, ...tvShows]);
+
+                renderPopularRow(moviesRow, moviesData.results || [], 'movie');
+                renderPopularRow(tvRow, tvData.results || [], 'tv');
+
+                setDynamicBackground([...(moviesData.results || []), ...(tvData.results || [])]);
             } catch (error) {
                 console.error('Error loading popular content:', error);
-                // Hide the popular section if there's an error
-                const popularSection = document.querySelector('.popular-section');
-                if (popularSection) {
-                    popularSection.style.display = 'none';
-                }
+                renderPopularRow(moviesRow, [], 'movie');
+                renderPopularRow(tvRow, [], 'tv');
             }
         }
-        
-        function renderMovies(movies) {
-            const moviesGrid = document.getElementById('moviesGrid');
-            if (!moviesGrid) return;
-            
-            console.log('Rendering movies:', movies.length);
-            
-            moviesGrid.innerHTML = movies.map(movie => `
-                <a href="/movie/${movie.id}" class="content-link">
-                    <div class="content-card">
-                        <img src="${movie.poster_path 
-                            ? `https://image.tmdb.org/t/p/w300${movie.poster_path}` 
-                            : 'https://via.placeholder.com/300x450/cccccc/666666?text=No+Image'}" 
-                            alt="${movie.title || 'Movie'}" 
-                            class="content-poster" 
-                            loading="lazy" 
-                            decoding="async"
-                            onerror="this.src='https://via.placeholder.com/300x450/cccccc/666666?text=No+Image'">
-                    </div>
-                </a>
-            `).join('');
+
+        function renderPopularRow(container, items, fallbackType) {
+            if (!container) return;
+            if (!items.length) {
+                container.innerHTML = '<span class="popular-empty">No titles available right now.</span>';
+                return;
+            }
+
+            container.innerHTML = items.slice(0, 10).map((item) => {
+                const mediaType = item.media_type || fallbackType || 'movie';
+                const linkTarget = mediaType === 'tv' ? `/tv/${item.id}` : `/movie/${item.id}`;
+                const label = item.title || item.name || 'Untitled';
+                const image = item.poster_path
+                    ? `https://image.tmdb.org/t/p/w342${item.poster_path}`
+                    : 'https://via.placeholder.com/300x450/0b0f19/ffffff?text=No+Image';
+                const dateValue = item.release_date || item.first_air_date || '';
+                let yearLabel = '';
+                if (dateValue) {
+                    const parsedYear = new Date(dateValue).getFullYear();
+                    yearLabel = Number.isNaN(parsedYear) ? '' : parsedYear;
+                }
+
+                return `
+                    <a class="popular-card" href="${linkTarget}">
+                        <img src="${image}" alt="${label}" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/300x450/0b0f19/ffffff?text=No+Image';">
+                        <div class="popular-card-meta">
+                            <div class="popular-card-title">${label}</div>
+                            ${yearLabel ? `<div class="popular-card-subtitle">${yearLabel}</div>` : ''}
+                        </div>
+                    </a>
+                `;
+            }).join('');
         }
-        
-        function renderTvShows(tvShows) {
-            const tvGrid = document.getElementById('tvGrid');
-            if (!tvGrid) return;
-            
-            console.log('Rendering TV shows:', tvShows.length);
-            
-            tvGrid.innerHTML = tvShows.map(show => `
-                <a href="/tv/${show.id}" class="content-link">
-                    <div class="content-card">
-                        <img src="${show.poster_path 
-                            ? `https://image.tmdb.org/t/p/w300${show.poster_path}` 
-                            : 'https://via.placeholder.com/300x450/cccccc/666666?text=No+Image'}" 
-                            alt="${show.name || 'TV Show'}" 
-                            class="content-poster" 
-                            loading="lazy" 
-                            decoding="async"
-                            onerror="this.src='https://via.placeholder.com/300x450/cccccc/666666?text=No+Image'">
-                    </div>
-                </a>
-            `).join('');
-        }
-        
-        function setDynamicBackground(allContent) {
-            if (!allContent || allContent.length === 0) return;
-            
-            // Find first item with a good backdrop
+
+        function setDynamicBackground(items) {
+            const background = document.getElementById('dynamicBackground');
+            if (!background || !items.length) return;
+
             let backdropUrl = '';
-            for (const item of allContent) {
-                if (item.backdrop_path) {
+            for (const item of items) {
+                if (item && item.backdrop_path) {
                     backdropUrl = `https://image.tmdb.org/t/p/w1280${item.backdrop_path}`;
                     break;
                 }
             }
-            
-            // Fallback to poster if no backdrop found
+
             if (!backdropUrl) {
-                for (const item of allContent) {
-                    if (item.poster_path) {
-                        backdropUrl = `https://image.tmdb.org/t/p/w500${item.poster_path}`;
+                for (const item of items) {
+                    if (item && item.poster_path) {
+                        backdropUrl = `https://image.tmdb.org/t/p/w780${item.poster_path}`;
                         break;
                     }
                 }
             }
-            
+
             if (backdropUrl) {
-                console.log('Setting dynamic background:', backdropUrl);
-                const backgroundElement = document.getElementById('dynamicBackground');
-                
-                if (backgroundElement) {
-                    backgroundElement.style.backgroundImage = `url('${backdropUrl}')`;
-                }
+                background.style.backgroundImage = `url('${backdropUrl}')`;
+                background.style.opacity = '0.5';
             }
         }
-        
-        // Load popular content when the page loads
-        document.addEventListener('DOMContentLoaded', function() {
+
+        document.addEventListener('DOMContentLoaded', () => {
+            attachDonationListeners();
             loadPopularContent();
+            const yearSpan = document.getElementById('year');
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
         });
     </script>
 </body>
