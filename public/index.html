@@ -1080,12 +1080,21 @@
 
         function setDynamicBackground(items) {
             const background = document.getElementById('dynamicBackground');
-            if (!background || !items.length) return;
+            if (!background) {
+                console.log('Background element not found');
+                return;
+            }
+
+            if (!items.length) {
+                console.log('No items to set background from');
+                return;
+            }
 
             let backdropUrl = '';
             for (const item of items) {
                 if (item && item.backdrop_path) {
                     backdropUrl = `https://image.tmdb.org/t/p/w1280${item.backdrop_path}`;
+                    console.log('Found backdrop:', backdropUrl);
                     break;
                 }
             }
@@ -1094,6 +1103,7 @@
                 for (const item of items) {
                     if (item && item.poster_path) {
                         backdropUrl = `https://image.tmdb.org/t/p/w780${item.poster_path}`;
+                        console.log('Found poster fallback:', backdropUrl);
                         break;
                     }
                 }
@@ -1102,6 +1112,9 @@
             if (backdropUrl) {
                 background.style.backgroundImage = `url('${backdropUrl}')`;
                 background.style.opacity = '1';
+                console.log('Background set successfully');
+            } else {
+                console.log('No backdrop or poster found');
             }
         }
 
